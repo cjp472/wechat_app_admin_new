@@ -1,0 +1,16 @@
+
+
+.mainHeader {
+    height: 60px;
+    line-height: 60px;
+    width: 100%;
+    padding-left: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background: #fafbfc;
+    border-bottom: 1px solid #eceff1;
+}
+.go_back {
+    float: left;
+    color: #353535 !important;
+}

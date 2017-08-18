@@ -1,0 +1,49 @@
+
+
+.navbar-fixed-bottom{
+    left:120px;
+    background-color: #fff;
+    height: 80px;
+    line-height: 80px;
+    border: none;
+    box-shadow: 0 0 8px 0 rgba(189, 189, 189, 0.5)
+}
+.navbar-left{
+    margin-top: 0;
+    cursor: pointer;
+    font-size: 18px;
+    color: #000 !important;
+    margin-left: 40px;
+}
+
+.navbar-left:hover{
+    color: #5aa7f3 !important;
+}
+
+
+
+.user_checkbox{
+    width: 15px;
+    height: 15px;
+}
+
+.modal-content{
+    width: 800px;
+    height: 650px;
+}
+.modal-header{
+    border: none;
+    margin-top: 20px;
+}
+.modal-footer{
+    border: none;
+    text-align: left;
+    margin-top: 20px;
+}
+.long {
+    text-overflow: ellipsis !important;
+    max-width: 100px !important;
+    overflow: hidden!important;
+    white-space: nowrap!important;
+}
+

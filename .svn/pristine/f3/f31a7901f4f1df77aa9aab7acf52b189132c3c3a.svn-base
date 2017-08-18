@@ -1,0 +1,187 @@
+
+select:disabled {
+    color: #b2b2b2;
+}
+
+.mainHeader {
+    height: 60px;
+    line-height: 60px;
+    width: 100%;
+    padding-left: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background: #fafbfc;
+    border-bottom: 1px solid #eceff1;
+}
+.go_back {
+    float: left;
+    color: #353535 !important;
+}
+
+.mainContent {
+    width: 100%;
+    height: auto;
+    padding: 0 20px 50px 40px;
+}
+.baseInfoTag {
+    width: 100%;
+    height: 22px;
+    margin-top: 30px;
+    position: relative;
+}
+.tagIcon {
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 2px;
+    height: 14px;
+    margin: 4px 8px 0 0;
+    background-color: #2a75ed;
+}
+.tagText {
+    height: 22px;
+    line-height: 22px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #353535;
+}
+.singleItem {
+    width: 100%;
+    margin-top: 30px;
+}
+.itemTitle {
+    float: left;
+    width: 128px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    color: #243042;
+}
+.itemContent {
+    float: left;
+    width: 820px;
+    position: relative;
+}
+.startKey {
+    vertical-align: top;
+    position: relative;
+    left: 0;
+    top: 0;
+    font-size: 20px;
+    color: red;
+    padding-left: 3px;
+}
+
+.exerciseBookNameInput {
+    width: 500px;
+    padding-right: 50px;
+}
+.characterNumLimit {
+    position: absolute;
+    top: 0;
+    right: 5px;
+    height: 36px;
+    line-height: 36px;
+    color: #b2b2b2;
+}
+.relevantCourseTip {
+    color: #b2b2b2;
+    font-size: 14px;
+    height: 36px;
+    line-height: 36px;
+}
+.selectorWrapper {
+    width: 100%;
+    height: auto;
+}
+.resTypeSelector {
+    float: left;
+    width: 150px;
+    margin-right: 20px;
+}
+.resItemSelector {
+    float: left;
+    width: 200px;
+
+}
+.communitySelector {
+    width: 200px;
+}
+
+/*********** 直播提醒 - start ***********/
+.remindRadioWrapper {
+    display: inline-block;
+    font-size: 14px;
+    color: #243042;
+}
+.remindRadio {
+    height: 36px;
+    line-height: 36px;
+    cursor: pointer;
+}
+.remindTip {
+    color: #b2b2b2;
+    font-size: 14px;
+}
+.circleRadio {
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid #dcdcdc;
+    margin-right: 10px;
+}
+.radioActive {
+    position: relative;
+    border: 1px solid #2a75ed !important;
+}
+.radioActive:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #2a75ed;
+}
+
+/*********** 直播提醒 - end ***********/
+
+
+.mainFooter {
+    height: auto;
+    margin-left: 30px;
+    padding-left: 138px;
+    border-top: 1px solid #f2f2f2;
+}
+.footerTip {
+    color: #2a75ed;
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 10px;
+}
+.footerBtnWrapper {
+    margin-top: 10px;
+    width: 100%;
+    height: 36px;
+}
+.cancelSaveExerciseBtn {
+    margin-right: 20px;
+    float: left;
+}
+.confirmSaveExerciseBtn {
+    float: left;
+}
+
+
+
+
+
+
+
+

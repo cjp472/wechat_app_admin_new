@@ -1,0 +1,285 @@
+td, th {
+    padding: 0;
+}
+
+label{
+    color: #243042;
+}
+
+.base_mainContent {
+    padding: 0;
+}
+
+.resAddContent {
+    float: left;
+    height: auto;
+    margin-left: 40px;
+    padding-bottom: 30px;
+    font-size: 14px;
+}
+
+.resAddPart {
+    float: left;
+    height: auto;
+    padding-bottom: 20px;
+    margin: 0 40px 30px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.resAddPart2 {
+    margin-top: 60px;
+}
+
+.resAddPartTitle {
+    width: 100%;
+    float: left;
+    line-height: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    padding-left: 8px;
+    margin: 30px 0 0 -10px;
+    border-left: 2px solid #2a75ed;
+}
+.titleInfo{
+    font-size: 12px;
+    color: #888888;
+    font-weight: normal;
+}
+
+.resAddSection {
+    width: 100%;
+    margin-top: 30px;
+    float: left;
+}
+
+.resAddSectionT {
+    float: left;
+    width: 126px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    color: #243042;
+}
+
+.resAddSectionC {
+    float: left;
+}
+.radioGroup {
+    margin-left: -5px;
+}
+
+.startKey {
+    vertical-align: top;
+    position: relative;
+    left: 0;
+    top: 0;
+    font-size: 20px;
+    color: red;
+}
+
+.communityName {
+    width: 640px;
+}
+
+/* 社群简介 */
+.communityInfo{
+    width: 640px;
+    height: 72px;
+}
+
+/*图片预览与上传*/
+.previewPic {
+    float: left;
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f7f8f9;
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.previewPic img {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+.previewInfo{
+    float: left;
+}
+.coverUpbtn {
+    cursor: pointer;
+    position: relative;
+    margin-left: 20px;
+    margin-right: 80px;
+    overflow: hidden;
+}
+.coverUpbtn span {
+    cursor: pointer;
+}
+.coverUpbtn input {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.coverUpTip {
+    width: 300px;
+    line-height: 20px;
+    margin-left: 20px;
+    margin-top: 10px;
+    color: #b2b2b2;
+}
+
+input[disabled]{
+    color: #c5c5c5;
+}
+/* 复选框的样式 */
+input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0
+}
+
+input[type=checkbox]+label {
+    position: relative;
+    padding-left: 30px;
+    line-height: 36px!important;
+    margin-bottom: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+    font-size: 14px;
+    color: #666;
+    user-select:none;
+}
+
+input[type=checkbox]+label:before {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    cursor: pointer;
+    display: inline-block;
+    content: '\a0';
+    background: #fff;
+    color: #fff;
+    border-radius: 3px;
+    border: 2px solid #999;
+    width: 15px;
+    height: 15px;
+    line-height: 12px;
+    text-align: center
+}
+
+input[type=checkbox]:checked+label:before {
+    content: '\2713';
+    background: #2a75ed;
+    border-color: #2a75ed
+}
+
+.priceInput{
+    width: 190px;
+    margin-left: 10px;
+}
+.yuan{
+    line-height: 36px;
+    margin-left: 10px;
+}
+
+.secondCheckbox{
+    margin-top: 25px;
+}
+
+
+.relevanceContent {
+    margin: 45px 0 0 30px;
+}
+.oneRelevance{
+    margin-top: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.oneRelevance>div{
+    float: left;
+    line-height: 36px;
+    width: 96px;
+    padding-left: 16px;
+}
+
+.oneRelevance .packageName{
+    width: 400px;
+    margin-left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.cancelRelevance {
+    margin-left: 10px;
+}
+
+.saveBtn{
+    margin: 0 0 90px 126px;
+
+}
+
+/*********************** 新建关联 - start *************************/
+.newRelevanceWrapper {
+    height: 36px;
+    margin-bottom: 10px;
+}
+.newRelevance {
+    cursor: pointer;
+    width: 320px;
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    color: #3078ea;
+    border: dashed 1px #ccc;
+    float: left;
+}
+.newRelevance .add {
+    display: inline-block;
+    vertical-align: bottom;
+    line-height: 36px;
+    height: 36px;
+    font-size: 20px;
+    margin-right: 10px;
+}
+.addRelevanceBtn, .removeRelevanceBtn {
+    float: left;
+    margin-left: 10px;
+}
+
+.selectRelevance {
+    height: 36px;
+    float: left;
+}
+.packageTypeSelector {
+    width: 96px;
+    float: left;
+}
+.packageSelect {
+    width: 400px;
+    margin-left: 10px;
+    float: left;
+}
+
+/*********************** 新建关联 - end *************************/
+
+
+
+
+
+
+
+
+
+
+

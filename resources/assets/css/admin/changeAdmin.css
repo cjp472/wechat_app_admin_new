@@ -1,0 +1,151 @@
+
+/*更换管理员*/
+.stepItem{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #c1c4ca;
+    color: #FFF;
+    line-height: 40px;
+    text-align: center;
+    margin:0 auto;
+    margin-bottom: 10px;
+}
+.stepBox{
+    text-align: center;
+    height: 76px;
+    color:#b2b2b2;
+    width: 11.4%;
+}
+.finStep{
+    color: #000;
+}
+.finStep .stepItem{
+    background-color: #2a75ed;
+}
+.line{
+    width: 32.5%;
+    height:1px;
+    margin:20px 0 40px 0;
+    background-color: #c1c4ca;
+}
+.titleBox{
+    width:80%;
+    overflow: auto;
+    padding:30px 0;
+    margin:0 auto;
+}
+.stepBox,.line{
+    float:right;
+}
+
+
+/*二维码样式*/
+.qrCode{
+    margin:0 auto;
+    width:350px;
+    text-align: center;
+
+}
+.qrCode span{
+    text-align: center;
+    display: block;
+    margin-top:60px;
+}
+#hasBind{
+    color:red;
+    display:none;
+}
+
+/*信管理员信息*/
+
+#step_2{
+    width:525px;
+    margin:70px auto;
+}
+#step_2 .inputDefault{
+    width:400px;
+}
+
+#step_2 .leftTitle{
+    width:120px;
+    display: inline-block;
+}
+.inputBox{
+    margin-bottom:30px;
+    position: relative;
+}
+
+#step_2 #current{
+    width:280px;
+    margin-right:15px;
+}
+.btnArea{
+    width: 224px;
+    margin: 0 auto;
+}
+.btnArea #save{
+    margin-left:18px;
+}
+.successTip,.errorTip{
+    position: absolute;
+    display: none;
+    right: 129px;
+    bottom: 7px;
+    width: 20px;
+    height: 20px
+}
+input.borderRed{
+    border: 1px solid red !important;
+}
+.preventClickBtn{
+    background: #ecedef;
+    color: #888888;
+    /*border:1px solid #e5e7eb;*/
+}
+.redMsg{
+    display:none;
+    color:red;
+    position: absolute;
+    top: 35px;
+    left: 125px;
+    font-size: 12px;
+}
+
+
+
+/*变更成功*/
+#step_3{
+    text-align: center;
+    width:500px;
+    margin:90px auto;
+
+}
+
+#step_3 #success{
+    width:24px;
+}
+#msgTitle{
+    font-size: 16px;
+    display: inline-block;
+    line-height: 24px;
+}
+#step_3 p{
+    margin:10px 0 30px 0;
+}
+.jump{
+    color:#666;
+}
+.secondJump{
+    color:#2a75ed;
+}
+
+/*导航栏蒙版*/
+.leftScreen{
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 162px;
+    z-index: 30;
+}

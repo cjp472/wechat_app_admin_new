@@ -1,0 +1,145 @@
+
+$(document).ready(function () {
+   $goodsList.init();
+});
+
+var $goodsList = (function () {
+
+    var $homePage = $("#_mainContentPart"),
+        setGradientInfo = {},
+        setGradientWindowState = "edit";         //"edit", "set"
+
+    var $goodsList = {
+
+        init: function () {
+            //打开设置梯度窗口
+            $homePage.on("click", ".setGradient", function () {
+                var resId = $(this).parents(".tableBodyItem").data("resource_id"),
+                    resType = $(this).parents(".tableBodyItem").data("resource_type"),
+                    type = $(this).data("type");
+                setGradientInfo = {
+                    resId : resId,
+                    resType: resType
+                }
+                if (type == "set") {
+                    $("#_setGoodsGradientWindow ._windowEditableValue").val("");
+                    setGradientWindowState = "set";
+                } else if (type == "edit") {
+                    setGradientWindowState = "edit";
+                    //回显原来的数据
+                    var distributeData = $(this).data("distribute_data");
+                    $("#_windowValue1").val(distributeData.end1);
+                    $("#_windowValue2").val(distributeData.start2);
+                    $("#_windowValue3").val(distributeData.end2);
+                    $("#_windowValue4").val(distributeData.start3);
+                    $("#_windowRatio1").val(distributeData.percent1);
+                    $("#_windowRatio2").val(distributeData.percent2);
+                    $("#_windowRatio3").val(distributeData.percent3);
+                }
+                baseUtils.showWindow("_setGoodsGradientWindow");
+
+            });
+
+            //关闭设置梯度窗口
+            $("#_setGoodsGradientWindow").on("click", "._HeaderIcon, #_windowCancelBtn", function () {
+                baseUtils.hideWindow("_setGoodsGradientWindow");
+            });
+
+            //关联设置梯度窗口input值
+            $("#_setGoodsGradientWindow").on("keyup", "._windowEditableValue", function () {
+                var id = $(this).attr("id");
+                if (id == "_windowValue1") {
+                    $("#_windowValue2").val(+$.trim($("#_windowValue1").val())+1);
+                } else if (id == "_windowValue3") {
+                    $("#_windowValue4").val(+$.trim($("#_windowValue3").val())+1);
+                }
+            });
+
+            //保存设置梯度
+            $("#_setGoodsGradientWindow").on("click", "#_windowConfirmBtn", function () {
+
+                var value1 = parseInt($("#_windowValue1").val()),
+                    value2 = parseInt($("#_windowValue2").val()),
+                    value3 = parseInt($("#_windowValue3").val()),
+                    value4 = parseInt($("#_windowValue4").val()),
+                    ratio1 = parseInt($("#_windowRatio1").val()),
+                    ratio2 = parseInt($("#_windowRatio2").val()),
+                    ratio3 = parseInt($("#_windowRatio3").val());
+
+                if (!value1 || !value2 || !value3 || !value4 || !ratio1 || !ratio2 || !ratio3) {
+                    baseUtils.show.redTip("数据没有填写完整哦");
+                    return false;
+                }
+                if((( value1 + 1) != value2) || (( value3 + 1) != value4) || (value2 >= value3) || (value1 <= 1)){
+                    baseUtils.show.redTip('区间填写有误，请检查后重试');
+                    return false;
+                }
+                if((ratio1 <= 0) || (ratio1 > ratio2) || (ratio2 > ratio3)){
+                    baseUtils.show.redTip('分成比例填写有误，请参考示例');
+                    return false;
+                }
+                if (ratio1>99 || ratio2 > 99 || ratio3 > 99) {
+                    baseUtils.show.redTip("分成比例不能超过99%");
+                    return false;
+                }
+                var params = {
+                    data1: {
+                        end_order_num: value1,
+                        distribute_percent: ratio1,
+                    },
+                    data2: {
+                        start_order_num: value2,
+                        end_order_num: value3,
+                        distribute_percent: ratio2,
+                    },
+                    data3: {
+                        start_order_num: value4,
+                        distribute_percent: ratio3,
+                    },
+                    resource_id: setGradientInfo.resId,
+                    resource_type: setGradientInfo.resType,
+                    edit: setGradientWindowState == "edit" ? "edit" : "set",
+                }
+
+                $.ajax("/chosen/set_xiaoe_distribute", {
+                    type: "POST",
+                    dataType: "json",
+                    data: params,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            baseUtils.show.blueTip("梯度设置成功");
+                            baseUtils.hideWindow("_setGoodsGradientWindow");
+                            $chosenShop.getNewPage("goods");
+                        } else {
+                            baseUtils.show.redTip("梯度设置失败，请稍后再试");
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        console.log(err);
+                        baseUtils.show.redTip("服务器出小差了，请稍后再试！");
+                    }
+                 });
+
+            });
+
+        },
+        checkInputValue: function (currentDom) {
+
+            var value = $(currentDom).val();
+
+            //清除"数字"和"."以外的字符
+            value = value.replace(/[^\d]/g, "");
+            //清除0后面的数字
+            value = value.replace(/^0[\d]+/g, "0");
+
+            $(currentDom).val(value);
+
+        },
+
+
+
+    };
+
+    return $goodsList;
+
+})();

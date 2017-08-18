@@ -1,0 +1,109 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'customerManage';
+$pageData['barTitle'] = '用户管理';
+$tabData = [];
+$tabData['tabTitle'] = 'messageList';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    <link type=text/css rel="stylesheet" href="../css/admin/message.css?{{env('timestamp')}}">
+    <link rel="stylesheet" type="text/css" href="../css/external/xcConfirm.css?{{env('timestamp')}}">
+@endsection
+
+@section('page_js')
+    <script src="../js/external/xcConfirm.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript" src="../js/admin/message.js?{{env('timestamp')}}"></script>
+@endsection
+
+@section('base_mainContent')
+
+    @include("admin.customerManage.baseTab", $tabData)
+
+    {{--头部--}}
+    <div class="header">
+        <div class="searchArea">
+            <div class="searchButtonArea">
+                <button type="button" class="btn btn-default" id="searchButton">查找内容</button>
+            </div>
+
+            <div class="searchInputArea">
+                <input type="text" class="form-control" placeholder="搜索" name="search"/>
+            </div>
+            <div class="searchSelectArea">
+                <select class="form-control" name="ruler">
+                    <option value="0">内容</option>
+                    <option value="1">发送人</option>
+                    <option value="2">接收人</option>
+                </select>
+            </div>
+            <div class="searchSelectArea">
+                <select class="form-control" name="typer">
+                    <option value="0">全部</option>
+                    <option value="1">私人</option>
+                    <option value="2">群发</option>
+                </select>
+            </div>
+
+            <button class="createButton">+推送全员消息</button>
+        </div>
+    </div>
+
+    {{--table区--}}
+    <div class="content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>类型</th>
+                    <th>发送人</th>
+                    <th>接收人</th>
+                    <th>消息内容</th>
+                    <th>发送时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($data as $key => $value)
+            <tr>
+                <td>{{$value['type']}}</td>
+                <td>{{$value['send_nick_name']}}</td>
+                <td>{{$value['receiver']}}</td>
+                <td>{{$value['content']}}</td>
+                <td>{{$value['send_at']}}</td>
+                <td>{{$value['state']}}</td>
+                <td class="operate_long">
+                    @if($value['state']=='已撤回')
+                    <button type="button" class="btn btn-default"  disabled="disabled" style="cursor:not-allowed;"
+                    onclick="messageEdit('{{$value['id']}}')">编辑</button>
+                    <button type="button" class="btn btn-default" disabled="disabled" style="cursor: not-allowed;"
+                    onclick="messageDelete('{{$value['id']}}')">撤回</button>
+                    @elseif($value['state']=='已发送')
+                    <button type="button" class="btn btn-default"  disabled="disabled" style="cursor:not-allowed;"
+                    onclick="messageEdit('{{$value['id']}}')">编辑</button>
+                    <button type="button" class="btn btn-default" style="cursor: pointer;"
+                    onclick="messageDelete('{{$value['id']}}')">撤回</button>
+                    @else
+                    <button type="button" class="btn btn-default"  style="cursor:pointer;"
+                    onclick="messageEdit('{{$value['id']}}')">编辑</button>
+                    <button type="button" class="btn btn-default" disabled="disabled" style="cursor:not-allowed;"
+                    onclick="messageDelete('{{$value['id']}}')">撤回</button>
+                    @endif
+                </td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+        {{--页标--}}
+        <div class="list-page">
+            @if(empty($search))
+                <?php echo $allInfo->appends(['ruler' => $ruler, 'typer' => $typer])->render(); ?>
+            @else
+                <?php echo $allInfo->appends(['ruler' => $ruler, 'typer'=>$typer, 'search'=> $search])->render(); ?>
+            @endif
+        </div>
+    </div>
+@stop
+

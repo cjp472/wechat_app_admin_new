@@ -1,0 +1,971 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2016/9/26 0026
+ * Time: 下午 2:47
+ */
+
+namespace App\Http\Controllers;
+
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\ExcelUtils;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Tools\Utils;
+use Maatwebsite\Excel\Facades\Excel;
+
+
+
+class TaskController extends Controller
+{
+    private $request;
+    private $app_id;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+        $this->app_id = AppUtils::getAppID();
+    }
+
+    //导出订单记录
+    public function exportOrderExcel(Request $request){
+        ini_set('memory_limit', '1024M');
+        ini_set('max_execution_time', 600);
+        // 月份和版本
+        $export_time = Input::get('export_time');
+        $version = $request->input('version',2003);
+        $export_time = $export_time? $export_time : date('Y-m');
+
+
+        // 筛选条件
+        $current_month = date('Y-m');
+        $start_time = date('Y-m-01 00:00:00', strtotime($export_time.'-01'));
+        if ($export_time == $current_month){
+            $end_time = date('Y-m-d H:i:s');
+        }else {
+            $end_time = date('Y-m-d H:i:s', strtotime($export_time.'-01 +1 month')-1);
+        }
+        $excelData[] = ['序号','订单号','头像','用户ID','昵称','手机号','真实姓名','公司','职位','地址','订单类型','订单内容','订单总额(元)','订单时间'];
+
+
+        //拆分sql;1.order;2.user
+        $orderInfo = DB::select("
+            SELECT
+                user_id,out_order_id,payment_type,resource_type,purchase_name,price,created_at
+            FROM
+                t_orders
+            WHERE
+                app_id = '$this->app_id'
+            AND order_state = '1'
+            AND created_at >= '$start_time'
+            AND created_at <= '$end_time'
+            ORDER BY
+                created_at DESC
+        ");
+
+        $userInfo = DB::select("
+            SELECT
+                user_id,wx_avatar,wx_nickname,phone,wx_name,company,job,address
+            FROM
+                t_users
+            WHERE
+                app_id = '$this->app_id'
+            AND user_id IN (
+                SELECT DISTINCT
+                    user_id
+                FROM
+                    t_orders
+                WHERE
+                    app_id = '$this->app_id'
+                AND order_state = '1'
+                AND created_at >= '$start_time'
+                AND created_at <= '$end_time')
+        ");
+
+        $userList = [];
+        foreach ($userInfo as $item) {
+            $userList[$item->user_id] = $item;
+        }
+
+        $i = 0;
+        foreach ($orderInfo as $value) {
+            $temp_text = "";
+            //判断资源类型
+            // 商品类型
+            if ($value->payment_type == 3 || $value->payment_type == 6) {
+                $temp_text = '专栏';
+            } elseif ($value->payment_type == 4) {
+                $temp_text = '团购';
+            } elseif($value->payment_type == 9 || $value->payment_type == 10){
+                $temp_text = '会员';
+            } elseif($value->payment_type == 11){
+                $temp_text = '活动';
+            } elseif($value->payment_type == 7 || $value->payment_type == 8){
+                $temp_text = '问答';
+            } elseif ($value->payment_type == 2 || $value->payment_type == 5) {
+                if ($value->resource_type == 1){
+                    $temp_text = '图文';
+                } elseif ($value->resource_type == 2){
+                    $temp_text = '音频';
+                } elseif ($value->resource_type == 3){
+                    $temp_text = '视频';
+                } elseif ($value->resource_type == 4){
+                    $temp_text = '直播';
+                }elseif ($value->resource_type == 7){
+                    $temp_text = '社群';
+                } else {
+                    $temp_text = '--';
+                }
+            } else {
+                $temp_text = '--';
+            }
+
+
+            if (array_key_exists($value->user_id,$userList)){
+                $rowData=[
+                    $i++,
+                    $value->out_order_id,
+                    $userList[$value->user_id]->wx_avatar,
+                    $value->user_id,
+                    $userList[$value->user_id]->wx_nickname,
+                    $userList[$value->user_id]->phone,
+                    $userList[$value->user_id]->wx_name,
+                    $userList[$value->user_id]->company,
+                    $userList[$value->user_id]->job,
+                    $userList[$value->user_id]->address,
+                    $temp_text,
+                    $value->purchase_name,
+                    $value->price/100,
+                    $value->created_at
+                ];
+            }else {
+                $userList[$value->user_id] = new \stdClass();
+                $rowData=[
+                    $value->out_order_id,
+                    $userList[$value->user_id]->wx_avatar = '未知',
+                    $value->user_id,
+                    $userList[$value->user_id]->wx_nickname = '未知',
+                    $userList[$value->user_id]->phone = '未知',
+                    $userList[$value->user_id]->wx_name = '未知',
+                    $userList[$value->user_id]->company = '未知',
+                    $userList[$value->user_id]->job = '未知',
+                    $userList[$value->user_id]->address = '未知',
+                    $temp_text,
+                    $value->purchase_name,
+                    $value->price/100,
+                    $value->created_at
+                ];
+            }
+            $excelData[]=$rowData;
+        }
+        unset($rowData);
+        unset($userList);
+        unset($userInfo);
+        unset($orderInfo);
+
+        // 插入订单导出记录
+        $excel_id = Utils::getExcelId('ex_');
+        $title_start = date('Ymd',strtotime($start_time));
+        $title_end = date('Ymd',strtotime($end_time));
+        $title = "{$title_start}--{$title_end}订单记录";
+        $add_export = [
+            'app_id' => $this->app_id,
+            'excel_id' => $excel_id,
+            'title' => $title,
+            'records_count' => count($excelData)-1,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        DB::connection('mysql')->table('t_excel_export')->insert($add_export);
+
+        // 处理数据格式
+        $excelData = ExcelUtils::getCorrectData($excelData);
+
+        // 下载
+        if ($excelData){
+            if ($version == 2003){
+                ExcelUtils::downExcel($title,$excelData);
+            }else {
+                ExcelUtils::downloadGbkCsv($title,$excelData);
+            }
+        }
+    }
+    //导出开通记录
+    public function exportExcel(Request $request){
+        ini_set('memory_limit', '1024M');
+        set_time_limit(600);
+
+        $export_time = $request->input('export_time','');
+        $version = $request->input('version',2003);
+        $export_time = $export_time? $export_time : date('Y-m', time());
+
+        $excelData[] = ['序号','用户ID','昵称','性别','手机号','真实姓名','公司','职位','地址','分享人姓名','订单类型','购买类型','订单内容','订单总额(元)','订单时间'];
+
+        //内容
+        /*$result = DB::select("
+            SELECT
+                tp.user_id,tp.payment_type,tp.resource_type,tp.generate_type,tp.purchase_name,tp.price,tp.created_at,tu.user_id,tu.wx_avatar,tu.wx_nickname,tu.phone,tu.wx_name,tu.company,tu.job,tu.address,tu.wx_gender
+            FROM
+                (
+                    SELECT
+                        user_id,payment_type,resource_type,generate_type,purchase_name,price,created_at
+                    FROM
+                        t_purchase
+                    WHERE
+                        app_id = '$this->app_id'
+                    AND is_deleted = '0'
+                    AND date(created_at) LIKE '$export_time%'
+                    ORDER BY
+                        created_at DESC
+                ) tp
+            LEFT JOIN (
+                SELECT
+                    user_id,wx_avatar,wx_nickname,phone,wx_name,company,job,address,wx_gender
+                FROM
+                    t_users
+                WHERE
+                    app_id = '$this->app_id'
+            ) tu ON tp.app_id = tu.app_id
+            AND tp.user_id = tu.user_id
+        ");*/
+        // 拆分sql
+        /*$purchase = "
+            SELECT
+                app_id,user_id,payment_type,resource_type,generate_type,share_user_id,purchase_name,price,created_at
+            FROM
+                t_purchase
+            WHERE
+                app_id = '$this->app_id'
+            AND is_deleted = '0'
+            AND date(created_at) LIKE '$export_time%'
+            ORDER BY
+                created_at DESC
+        ";*/
+        $purchase = DB::connection('mysql')->table('t_purchase')
+            ->select('app_id','user_id','payment_type','resource_type','generate_type','share_user_id','purchase_name','price','created_at')
+            ->where('app_id',$this->app_id)
+            ->where('is_deleted','0')
+            ->where('created_at','like',"{$export_time}%")
+            ->orderBy('created_at','desc')
+            ->get();
+        $user_id = [];
+        foreach ($purchase as $v){
+            if ($v->user_id){
+                $user_id[] = $v->user_id;
+            }
+            if ($v->share_user_id){
+                $user_id[] = $v->share_user_id;
+            }
+        }
+
+        $user_info = DB::connection('mysql')->table('t_users')
+            ->select('user_id','wx_nickname','wx_gender', 'phone', 'wx_name', 'company', 'job', 'address')
+            ->where('app_id',$this->app_id)->whereIn('user_id',$user_id)->get();
+        $user_data = [];
+        foreach ($user_info as $item) {
+            $user_data["$item->user_id"] = $item;
+        }
+
+        foreach ($purchase as $v) {
+            if (array_key_exists($v->user_id,$user_data)){
+                $v->wx_nickname = $user_data["$v->user_id"]->wx_nickname;
+                $v->wx_gender = $user_data["$v->user_id"]->wx_gender;
+                $v->phone = $user_data["$v->user_id"]->phone;
+                $v->wx_name = $user_data["$v->user_id"]->wx_name;
+                $v->company = $user_data["$v->user_id"]->company;
+                $v->job = $user_data["$v->user_id"]->job;
+                $v->address = $user_data["$v->user_id"]->address;
+            }else {
+                $v->wx_nickname = '未知';
+                $v->wx_gender = 0;
+                $v->phone = '';
+                $v->wx_name = '未知';
+                $v->company = '';
+                $v->job = '';
+                $v->address = '';
+            }
+
+            if (array_key_exists($v->share_user_id,$user_data)){
+                $v->share_user_name = $user_data["$v->share_user_id"]->wx_nickname;
+
+            }else {
+                $v->share_user_name = '';
+            }
+        }
+
+
+
+
+
+        $i = 0;
+        foreach ($purchase as $key => $value) {
+            $temp_text = "";
+            // 商品类型
+            if ($value->payment_type == 3) {
+                $temp_text = '专栏';
+            } elseif ($value->payment_type == 2) {
+                if ($value->resource_type == 1) {
+                    $temp_text = '图文';
+                } elseif ($value->resource_type == 2) {
+                    $temp_text = '音频';
+                } elseif ($value->resource_type == 3) {
+                    $temp_text = '视频';
+                } elseif ($value->resource_type == 4) {
+                    $temp_text = '直播';
+                }elseif ($value->resource_type == 5) {
+                    $temp_text = '活动';
+                }elseif ($value->resource_type == 7) {
+                    $temp_text = '社群';
+                } else {
+                    $temp_text = '--';
+                }
+            } else {
+                $temp_text = '--';
+            }
+
+            if($value->wx_gender == 0){
+                $value->wx_gender = '无';
+            }elseif($value->wx_gender == 1){
+                $value->wx_gender = '男';
+            }elseif($value->wx_gender == 2){
+                $value->wx_gender = '女';
+            }
+            $rowData=[
+                $i++,
+                $value->user_id,
+                $value->wx_nickname,
+                $value->wx_gender,
+                $value->phone,
+                $value->wx_name,
+                $value->company,
+                $value->job,
+                $value->address,
+                $value->share_user_name,
+                $temp_text,
+                $value->generate_type == 0 ? "现金购买" : "邀请码",
+                $value->purchase_name,
+                $value->price/100,
+                $value->created_at
+            ];
+            $excelData[]=$rowData;
+        }
+
+        $title = "{$export_time}开通记录";
+        // 处理数据格式
+        $excelData = ExcelUtils::getCorrectData($excelData);
+
+        // 下载
+        if ($excelData){
+            if ($version == 2003){
+                ExcelUtils::downExcel($title,$excelData);
+            }else {
+                ExcelUtils::downloadGbkCsv($title,$excelData);
+            }
+        }
+
+    }
+
+    // 导出订单记录 列表页
+    public function exportExcelList(){
+        $ListInfo = DB::connection('mysql')->table('t_excel_export')
+            ->select('excel_id','title','excel_url','content_type','start_time','end_time','created_at')
+            ->where('app_id',$this->app_id)
+            ->orderBy('created_at','desc')
+            ->paginate(10);
+
+        // 处理对应数据返回前端
+        foreach ($ListInfo as $v){
+            if ($v->content_type == 1){
+                $v->type = "订单记录";
+            }else {
+                $v->type = "其他";
+            }
+        }
+
+        return view('admin.orderExcelList',[
+            "ListInfo" => $ListInfo
+        ]);
+    }
+
+
+    // 请求导出记录
+//    public function requestExcel(Request $request){
+//        $export_time = $request->input('export_time');
+//        $export_time = $export_time? $export_time : date('Y-m', time());
+//        $start_time = date('Y-m-d H:i', strtotime($export_time.'-01'));
+////        dd($export_time);
+//
+//        $title_start = date('Ymd', strtotime($export_time.'-01'));
+//
+//        // 如果导出的是当月记录，则结束时间定位至当前时间（精确到分）
+//        $current_month = date('Y-m',time());
+//        if ($export_time == $current_month) {
+//            $end_time = date('Y-m-d H:i', time());
+//
+//            $title_end = date('Ymd',time());
+//        }else {
+//            $end_time = date('Y-m-d H:i:s', strtotime($export_time.'-01 +1 month')-1);
+//
+//            $title_end = date('Ymd', strtotime($export_time.'-01 +1 month')-1);
+//        }
+//        // 拼出文件名
+//        $title = $title_start . '--' . $title_end . 'orders';
+////        dump($start_time);
+////        dump($end_time);
+////        exit;
+//
+//        $excel_info = DB::connection('mysql')->table('t_excel_export')
+//            ->where('app_id',$this->app_id)
+//            ->where('title',$title)
+//            ->where('end_time',$end_time)
+//            ->first();
+//        if ($excel_info){
+//            if ($excel_info->excel_url == '' && $excel_info->records_count > 30000){
+//                return response(0);
+//            } else {
+////                return response(['ret'=>1,'mag'=>'申请成功，请到导出列表页下载']);
+//                // 提示需要直接跳转下载页
+//                return response(1);
+//            }
+//        } else {
+//            // 判断需要生成记录的大小
+//            $count = DB::connection('mysql')->table('t_orders')
+//                ->where('app_id',$this->app_id)->where('order_state',1)
+//                ->where('created_at','>=',$start_time)->where('created_at','<',$end_time)
+//                ->count('order_id');
+//
+//            Utils::log("count(order) = $count");
+//
+//            //生成导出记录
+//            $data['app_id'] = $this->app_id;
+//            $data['excel_id'] = Utils::getExcelId('ex_');
+//            $data['title'] = $title;
+//            $data['records_count'] = $count;
+//            $data['start_time'] = $start_time;
+//            $data['end_time'] = $end_time;
+//            $data['created_at'] = date('Y-m-d H:i:s',time());
+//            // 如果数据量小于一万  直接导出excel 记录
+//            if (($count < 30000)) {
+//                $data['state'] = 1;     // 记录状态  已生成
+//                $insert = DB::connection('mysql')->table('t_excel_export')
+//                    ->insert($data);
+//                if ($insert){
+//                    Utils::log('直接导出 start');
+//                    return response(0);
+//
+//                }else {
+//                    Utils::log('t_excel_export 插入数据失败');
+//                    return response(-1);
+//
+//                }
+//            }else {
+//                // 先创建一条记录，并返回信息，中间件后置操作完成离线上传文件到腾讯云
+//                // 记录状态默认未生成
+////                return response(['ret'=>2,'mag'=>'申请成功，请到导出列表页下载']);
+//                $insert = DB::connection('mysql')->table('t_excel_export')
+//                    ->insert($data);
+//                if ($insert){
+//                    // 设定一个一次性session，用于后置操作获取该记录信息
+//                    $request->session()->flash('excel_id', $data['excel_id']);
+//                    Utils::log('离线下载 start');
+//                    return response(1);
+//                }else {
+//                    Utils::log('t_excel_export 插入数据失败');
+//                    return response(-1);
+//                }
+//            }
+//        }
+//    }
+
+//    //导出订单记录
+//    public function exportOrderExcel(){
+//        ini_set('memory_limit', '1024M');
+//        ini_set('max_execution_time', 600);
+////        set_time_limit(600);
+//
+//        Utils::log('memory1='.memory_get_usage()/1024/1024);
+//
+//        $export_time = Input::get('export_time');
+//
+//        $export_time = $export_time? $export_time : date('Y-m', time());
+//        $start_time = date('Y-m-01 00:00:00', strtotime($export_time.'-01'));
+//        $end_time = date('Y-m-01 00:00:00', strtotime($export_time.'-01 +1 month'));
+//
+//        Utils::log($start_time. " ~ ". $end_time);
+//
+//        $excelData[] = ['订单号','头像','用户ID','昵称','手机号','真实姓名','公司','职位','地址','订单类型','订单内容','订单总额(元)','订单时间'];
+//
+//        //内容
+////        $result = DB::select("
+////SELECT tp.user_id, tp.out_order_id, tp.payment_type, tp.resource_type, tp.purchase_name, tp.price, tp.created_at,
+////tu.user_id, tu.wx_avatar, tu.wx_nickname, tu.phone, tu.wx_name, tu.company, tu.job, tu.address
+////from (
+////SELECT * FROM t_orders
+////WHERE app_id = '$this->app_id' and order_state = '1'
+////AND created_at >= '$start_time' and created_at < '$end_time'
+////order by created_at desc
+////) tp
+////LEFT JOIN (SELECT * from t_users where app_id = '$this->app_id' and user_id in (
+////SELECT DISTINCT user_id FROM t_orders
+////WHERE app_id = '$this->app_id' and order_state = '1'
+////AND created_at >= '$start_time' and created_at < '$end_time'
+////)) tu
+////on tp.app_id = tu.app_id and tp.user_id = tu.user_id
+////;");
+//        //拆分sql;1.order;2.user
+//        $orderInfo = DB::select("
+//SELECT user_id, out_order_id, payment_type, resource_type, purchase_name, price, created_at FROM t_orders
+//WHERE app_id = '$this->app_id' and order_state = '1'
+//AND created_at >= '$start_time' and created_at < '$end_time'
+//order by created_at desc
+//");
+////        dump($orderInfo);
+//        Utils::log('memory2='.memory_get_usage()/1024/1024);
+//
+//        $userInfo = DB::select("
+//SELECT user_id, wx_avatar, wx_nickname, phone, wx_name, company, job, address from t_users
+//where app_id = '$this->app_id' and user_id in (
+//SELECT DISTINCT user_id FROM t_orders
+//WHERE app_id = '$this->app_id' and order_state = '1'
+//AND created_at >= '$start_time' and created_at < '$end_time'
+//)");
+////        dump($userInfo);
+//        Utils::log('memory3='.memory_get_usage()/1024/1024);
+//
+//        $userList = [];
+//        foreach ($userInfo as $item) {
+//            $userList[$item->user_id] = $item;
+//        }
+////        dump($orderInfo);
+////        dump($userList);
+////      exit;
+//        Utils::log('memory4='.memory_get_usage()/1024/1024);
+//
+//        foreach ($orderInfo as $value) {
+//            $temp_text = "";
+//            //判断资源类型
+//            if($value->payment_type == 2){
+//                switch ($value->resource_type){
+//                    case 1:
+//                        $temp_text = '图文';
+//                        break;
+//                    case 2:
+//                        $temp_text = '音频';
+//                        break;
+//                    case 3:
+//                        $temp_text = '视频';
+//                        break;
+//                    case 4:
+//                        $temp_text = '直播';
+//                        break;
+//                }
+//            }else if($value->payment_type == 3){
+//                $temp_text = '付费产品包';
+//            }else if($value->payment_type == 4){
+//                $temp_text = '团购';
+//            }else if($value->payment_type == 6){
+//                $temp_text = '产品包的购买赠送';
+//            }else if($value->payment_type == 5){
+//                switch ($value->resource_type){
+//                    case 1:
+//                        $temp_text = '图文-购买赠送';
+//                        break;
+//                    case 2:
+//                        $temp_text = '音频-购买赠送';
+//                        break;
+//                    case 3:
+//                        $temp_text = '视频-购买赠送';
+//                        break;
+//                    case 4:
+//                        $temp_text = '直播-购买赠送';
+//                        break;
+//                }
+//            }
+//
+//            $value->created_at = is_numeric($value->created_at) ? $value->created_at."\t":  $value->created_at;
+//
+//            if (array_key_exists($value->user_id,$userList)){
+//                $rowData=[
+//                    $value->out_order_id,
+//                    $userList[$value->user_id]->wx_avatar,
+//                    $value->user_id,
+//                    $userList[$value->user_id]->wx_nickname,
+//                    $userList[$value->user_id]->phone,
+//                    $userList[$value->user_id]->wx_name,
+//                    $userList[$value->user_id]->company,
+//                    $userList[$value->user_id]->job,
+//                    $userList[$value->user_id]->address,
+//                    $temp_text,
+//                    $value->purchase_name,
+//                    $value->price/100,
+//                    $value->created_at . "\t"
+//                ];
+//
+//            }else {
+//                $userList[$value->user_id] = new \stdClass();
+//                $rowData=[
+//                    $value->out_order_id,
+//                    $userList[$value->user_id]->wx_avatar = '未知',
+//                    $value->user_id,
+//                    $userList[$value->user_id]->wx_nickname = '未知',
+//                    $userList[$value->user_id]->phone = '未知',
+//                    $userList[$value->user_id]->wx_name = '未知',
+//                    $userList[$value->user_id]->company = '未知',
+//                    $userList[$value->user_id]->job = '未知',
+//                    $userList[$value->user_id]->address = '未知',
+//                    $temp_text,
+//                    $value->purchase_name,
+//                    $value->price/100,
+//                    $value->created_at . "\t"
+//                ];
+//            }
+//            $excelData[]=$rowData;
+//
+//        }
+//        unset($rowData);
+//        unset($userList);
+//        unset($userInfo);
+//        unset($orderInfo);
+//        Utils::log('memory5='.memory_get_usage()/1024/1024);
+//
+////        dump($excelData);
+//        Excel::create($export_time."订单数据",function($excel) use($excelData)
+//        {
+//            $excel->sheet("订单数据",function($sheet) use($excelData)
+//            {
+//                //标题
+//                $rows=['A','B','C','D','E','F','G','H','I','J','K','L','M'];
+//                $widths=[20,20,20,20,20,20,20,20,20,20,20,20,20];
+//                for($i=0;$i<count($rows);$i++)
+//                {
+//                    //宽度
+//                    $sheet->setWidth([$rows[$i] => $widths[$i]]);
+//                }
+//                $sheet->fromArray($excelData);
+//                Utils::log('memory7='.memory_get_usage()/1024/1024);
+//
+//            });
+//        })->download("csv");
+//        Utils::log('memory6='.memory_get_usage()/1024/1024);
+//
+////        return response()->download(storage_path().'/exports/'.$export_time.'orders.csv');
+//    }
+
+//    //导出开通记录
+//    public function exportExcel(){
+//        ini_set('memory_limit', '1024M');
+//        set_time_limit(600);
+//
+//        $export_time = Input::get('export_time');
+//        $export_time = $export_time? $export_time : date('Y-m', time());
+//
+//        $excelData[] = ['头像','用户ID','昵称','性别','手机号','真实姓名','公司','职位','地址','订单类型','购买类型','订单内容','订单总额(元)','订单时间'];
+//
+//        //内容
+//        $result = DB::select("
+//SELECT tp.user_id, tp.payment_type, tp.resource_type, tp.generate_type, tp.purchase_name, tp.price, tp.created_at,
+//tu.user_id, tu.wx_avatar, tu.wx_nickname, tu.phone, tu.wx_name, tu.company, tu.job, tu.address,tu.wx_gender
+//from (
+//SELECT * FROM t_purchase
+//WHERE app_id = '$this->app_id' and is_deleted = '0' AND date(created_at) like '$export_time%' order by created_at desc
+//) tp
+//LEFT JOIN (SELECT * from t_users where app_id = '$this->app_id') tu
+//on tp.app_id = tu.app_id and tp.user_id = tu.user_id
+//;");
+//        foreach ($result as $key => $value) {
+//            $temp_text = "";
+//            //判断资源类型
+//            if($value->payment_type == 2){
+//                switch ($value->resource_type){
+//                    case 1:
+//                        $temp_text = '图文';
+//                        break;
+//                    case 2:
+//                        $temp_text = '音频';
+//                        break;
+//                    case 3:
+//                        $temp_text = '视频';
+//                        break;
+//                    case 4:
+//                        $temp_text = '直播';
+//                        break;
+//                }
+//            }
+//            else if($value->payment_type == 3){
+//                $temp_text = '付费产品包';
+//            }
+//            else if($value->payment_type == 4){
+//                $temp_text = '团购';
+//            }
+//            else if($value->payment_type == 6){
+//                $temp_text = '产品包的购买赠送';
+//            }
+//            else if($value->payment_type == 5){
+//                switch ($value->resource_type){
+//                    case 1:
+//                        $temp_text = '图文-购买赠送';
+//                        break;
+//                    case 2:
+//                        $temp_text = '音频-购买赠送';
+//                        break;
+//                    case 3:
+//                        $temp_text = '视频-购买赠送';
+//                        break;
+//                    case 4:
+//                        $temp_text = '直播-购买赠送';
+//                        break;
+//                }
+//            }
+////            //判断资源类型
+////            if($value->payment_type == 2){
+////                switch ($value->resource_type){
+////                    case 1:
+////                        $temp_text = '图文';
+////                        break;
+////                    case 2:
+////                        $temp_text = '音频';
+////                        break;
+////                    case 3:
+////                        $temp_text = '视频';
+////                        break;
+////                    case 4:
+////                        $temp_text = '直播';
+////                        break;
+////                }
+////            }else{
+////                $temp_text = '专栏';
+////            }
+//            if($value->wx_gender == 0){
+//                $value->wx_gender = '无';
+//            }elseif($value->wx_gender == 1){
+//                $value->wx_gender = '男';
+//            }elseif($value->wx_gender == 2){
+//                $value->wx_gender = '女';
+//            }
+//            $rowData=[
+//                $value->wx_avatar,
+//                $value->user_id,
+//                $value->wx_nickname,
+//                $value->wx_gender,
+//                $value->phone,
+//                $value->wx_name,
+//                $value->company,
+//                $value->job,
+//                $value->address,
+//                $temp_text,
+//                $value->generate_type == 0 ? "现金购买" : "邀请码",
+//                $value->purchase_name,
+//                $value->price/100,
+//                $value->created_at . "\t"
+//            ];
+//            $excelData[]=$rowData;
+//        }
+//
+//        Excel::create($export_time."订购数据",function($excel) use($excelData)
+//        {
+//            $excel->sheet("订单数据",function($sheet) use($excelData)
+//            {
+//                //标题
+//                $rows=['A','B','C','D','E','F','G','H','I','J','K','L','M','N'];
+//                $widths=[20,20,20,20,20,20,20,20,20,20,20,20,20,20];
+//                for($i=0;$i<count($rows);$i++)
+//                {
+//                    //宽度
+//                    $sheet->setWidth([$rows[$i] => $widths[$i]]);
+//                }
+//                $sheet->fromArray($excelData);
+//            });
+//        })->export("csv");
+//
+//    }
+
+    // 离线数据下载
+//    public function downloadExcel(Request $request){
+////        $url = "http://wechatappdev-10011692.file.myqcloud.com/appTCVlUyvG2205/image/4e1b9e6b2a4b45a4ec57c1d6e5c306e7.jpg";
+//        $excel_id = $request->input('excel_id','');
+//        if ($excel_id) {
+//            $excel_info = DB::connection('mysql')->table('t_excel_export')
+//                ->select('title','excel_url')
+//                ->where('app_id',$this->app_id)
+//                ->where('excel_id',$excel_id)
+//                ->where('state',1)
+//                ->first();
+//            if ($excel_info){
+//
+//                @$data = file_get_contents($excel_info->excel_url);
+////                $filesize = count($data);
+//                if ($data){
+//                    // 设定文件名
+//                    if (strpos($excel_info->excel_url,'.csv') !== FALSE){
+//                        $filename = $excel_info->title . ".csv";
+//                    }elseif(strpos($excel_info->excel_url,'.xlsx') !== FALSE){
+//                        $filename = $excel_info->title . ".xlsx";
+//                    }else {
+//                        return response()->json(['code'=>-1]);
+//                    }
+//
+////                    header("Content-Type:application/image-jpg");
+//
+////                    $filename = $excel_info->title . ".csv";
+//                    header("Content-Type:application/vnd.ms-excel");        //设定服务器端返回的文件形式：数据流
+//                    header("Accept-Ranges:bytes");                     //声明支持断点续传，以字节计算
+////                    header("Accept-Length:$filesize");                   告诉浏览器下载文件的大小
+//                    header("Pragma:no-cache");                          // 去缓存
+//                    header("Expires:0");                                // 去缓存
+//                    header("Content-Disposition:attachment;filename = $filename");
+//
+//                    exit($data) ;
+//                }
+//            }
+//        }else {
+//            return response()->json(['code'=>-1]);
+//        }
+//
+////        fopen 方式
+////        $handle = fopen($url,'r');
+////        if ($handle){
+////            fread($handle);
+////        }
+//
+//    }
+// 导出订单记录 列表页
+//
+//    public function exportExcelList(){
+//
+//        $ListInfo = DB::connection('mysql')->table('t_excel_export')
+//            ->select('excel_id','title','excel_url','content_type','start_time','end_time','state')
+//            ->where('app_id',$this->app_id)
+//            ->orderBy('created_at','desc')
+//            ->paginate(10);
+//
+//        // 处理对应数据返回前端
+//        foreach ($ListInfo as $v){
+//            if ($v->content_type == 1){
+//                $v->type = "订单记录";
+//            }else {
+//                $v->type = "其他";
+//            }
+//
+//            $v->time = date('Y-m', strtotime($v->start_time.'+01 day'));
+//
+//            if ($v->excel_url){
+//                $v->download = "/excel/download?excel_id={$v->excel_id}";
+//            }else {
+//                $v->download = "/excel/order?export_time={$v->time}";
+//            }
+//        }
+//
+//        return view('admin.orderExcelList',[
+//            "ListInfo" => $ListInfo
+//        ]);
+//    }
+
+    // 模拟插入十万数据
+    public function testInsert(){
+        ini_set('memory_limit', '1024M');
+        set_time_limit(600);
+
+
+        Utils::logFrom("test start","testDB.log");
+        echo 123;
+        DB::enableQueryLog();
+//        DB::disableQueryLog();
+
+
+
+        $info = DB::connection('mysql')->table('t_template_send')
+            ->where('id',355)
+            ->first();
+        Utils::logFrom('memory1='.memory_get_usage()/1024/1024,"testDB.log");
+
+        $arr = [
+            'app_id' => $info->app_id,
+            'batch_id' => $info->batch_id,
+            'user_id' => $info->user_id,
+            'user_open_id' => $info->user_open_id,
+            'template_id' => $info->template_id,
+            'target_url' => $info->target_url,
+            'json_data' => $info->json_data,
+            'schedule_at' => $info->schedule_at,
+            'created_at' => $info->created_at
+        ];
+        $data = [];
+        for ($i = 0; $i < 6000; $i++){
+            $data[] = $arr;
+        }
+//        dd($data);
+
+        Utils::logFrom('memory2='.memory_get_usage()/1024/1024,"testDB.log");
+        $insert = DB::connection('mysql')->table('t_template_send')->insert($data);
+
+        Utils::logFrom('memory3='.memory_get_usage()/1024/1024,"testDB.log");
+
+
+        $sql = DB::getQueryLog();
+//        dump($sql);
+//        exit;
+        Utils::logFrom("sql执行时间","testDB.log");
+        foreach ($sql as $v){
+////            if ($v->time > 1000){
+            Utils::logFrom($v['time'],"testDB.log");
+//            }
+        }
+
+        Utils::logFrom("test end","testDB.log");
+        echo 456;
+
+
+    }
+
+    // 模拟十万数据下载
+    public function downdown(){
+        ini_set('memory_limit', '1024M');
+        set_time_limit(600);
+        Utils::logFrom("export start","testDB.log");
+        Utils::logFrom(microtime(true),"testDB.log");
+        $info = DB::connection('mysql')->table('t_template_send')
+            ->select('app_id','batch_id','user_id','user_open_id','template_id','target_url','json_data','schedule_at','created_at')
+            ->get();
+
+        $data = [];
+        foreach ($info as $v){
+            $arr = [
+                'app_id' => $v->app_id,
+                'batch_id' => $v->batch_id,
+                'user_id' => $v->user_id,
+                'user_open_id' => $v->user_open_id,
+                'template_id' => $v->template_id,
+                'target_url' => $v->target_url,
+                'json_data' => $v->json_data,
+                'schedule_at' => $v->schedule_at,
+                'created_at' => $v->created_at
+            ];
+
+            $data[] = $arr;
+        }
+        $title = '测试十万数据下载';
+        Utils::logFrom('memory1='.memory_get_usage()/1024/1024,"testDB.log");
+        Utils::logFrom(microtime(true),"testDB.log");
+        $data = ExcelUtils::getCorrectData($data);
+
+
+        Utils::logFrom('memory2='.memory_get_usage()/1024/1024,"testDB.log");
+        Utils::logFrom(microtime(true),"testDB.log");
+        ExcelUtils::downExcel($title,$data);
+
+
+        Utils::logFrom('memory3='.memory_get_usage()/1024/1024,"testDB.log");
+        Utils::logFrom(microtime(true),"testDB.log");
+
+
+//        Utils::logFrom('memory4='.memory_get_usage()/1024/1024,"testDB.log");
+
+
+    }
+
+
+}

@@ -1,0 +1,431 @@
+
+.page{
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 1rem;
+    overflow: auto;
+    background-color: white;
+    -webkit-overflow-scrolling : touch;
+}
+
+/*搜索内容页面 - start*/
+
+.sale_content_title {
+    width: 100%;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.5rem;
+}
+
+.sale_content_search_wrapper {
+    margin: 0 0.3rem;
+}
+
+.sale_content_search {
+    width: 100%;
+    height: 0.8rem;
+    margin: 0.2rem 0;
+    padding: 0 0.3rem;
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+}
+
+.search_suggestion{
+    display: block;
+    margin: 0.2rem 0.3rem;
+}
+
+/*搜索内容页面 - end*/
+
+/*s搜索结果 - start*/
+.search_area{
+
+}
+
+.search_result{
+    display: none;
+}
+
+.search_result_title {
+    width: 100%;
+    height: 0.6rem;
+    background-color: #EFEFF4;
+    padding-left: 0.3rem;
+    line-height: 0.6rem;
+}
+
+.search_no_data{
+    width: 100%;
+    height: 0.6rem;
+    background-color: #EFEFF4;
+    line-height: 0.6rem;
+    text-align: center;
+}
+
+.sale_main_page{
+    width: 100%;
+    height: 2rem;
+    border-bottom: 1px solid #DCDCDC;
+}
+
+.sale_main_page_link{
+    width: 68%;
+    height: 2rem;
+    float: left;
+}
+
+.sale_main_page_desc {
+    width: 100%;
+    height: 100%;
+}
+
+.main_page_icon_wrapper{
+    width: 1.2rem;
+    height: 1.2rem;
+    float: left;
+    margin: 0.4rem;
+}
+
+.main_page_icon{
+    width: 100%;
+    height: 100%;
+    background: url(/images/default_image.jpg);
+    background-size: 100% 100%;
+}
+
+.main_page_name{
+    width: 2.8rem;
+    height: 1.5rem;
+    float: left;
+    line-height: 1.5rem;
+    margin: 0.25rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: black;
+    font-size: 0.3rem;
+}
+
+.main_page_sale_apply {
+    height: 0.7rem;
+    width: 28%;
+    float: right;
+    line-height: 0.7rem;
+    text-align: center;
+    border: 1px solid #59A1F3;
+    border-radius: 0.1rem;
+    margin: 0.65rem 4% 0.65rem 0;
+    color: #59A1F3;
+}
+
+.sale_column_number{
+    width: 100%;
+    height: 0.7rem;
+    line-height: 0.8rem;
+    padding: 0 0.4rem;
+}
+
+.sale_product{
+    width: 96%;
+    height: 2rem;
+    border-bottom: 1px solid #DCDCDC;
+    margin: 0 0 0 4%;
+}
+
+.sale_product_link{
+    width: 72%;
+    height: 2rem;
+    float: left;
+}
+
+.sale_product_desc{
+    width: 100%;
+    height: 100%;
+}
+
+.sale_product_icon_wrapper{
+    width: 1.6rem;
+    height: 1.2rem;
+    float: left;
+    margin: 0.4rem 0.1rem 0.4rem 0;
+}
+
+.sale_product_icon{
+    width: 100%;
+    height: 100%;
+    background: url(/images/default_image.jpg);
+    background-size: 100% 100%;
+}
+
+.sale_product_name{
+    width: 3.2rem;
+    height: 0.8rem;
+    float: left;
+    line-height: 0.4rem;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    color: black;
+    font-size: 0.25rem;
+}
+
+.sale_product_apply{
+    height: 0.7rem;
+    width: 20%;
+    float: right;
+    line-height: 0.7rem;
+    text-align: center;
+    margin: 0.65rem 4% 0.65rem 0;
+    color: #59A1F3;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.divide_line {
+    width: 100%;
+    height: 0.3rem;
+    background-color: #EFEFF4;
+}
+
+/*s搜索结果 - end*/
+
+
+/*底部tab栏 - start*/
+.tab_selector{
+    z-index: 999999;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 1rem;
+    width: 100%;
+    /*border-top: 0.3rem solid transparent;*/
+}
+
+.tab_selector_inner{
+    border-top: 1px solid rgba(53, 53, 53, 0.2);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #f7f6fb;
+}
+
+.tab_item{
+    float: left;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+#tab_item_search.searchOn{
+    color: #2f96e6;
+}
+#tab_item_search.searchOff{
+    color: #b2b2b2;
+}
+
+#tab_item_mine.mineOn{
+    color: #2f96e6;
+}
+#tab_item_mine.mineOff{
+    color: #b2b2b2;
+}
+
+.tab_icon_box {
+    width: 100%;
+    height: 0.42rem;
+    text-align: center;
+    margin-top: 0.1rem;
+}
+
+/*tabIcon*/
+.searchOn .tabIcon {
+    /*D:\PhpstormProjects\BackManage\wechat_app_admin\public\images\icon_fenxiao_search_pre.png*/
+    background: url(/images/icon_fenxiao_search_pre.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.searchOff .tabIcon {
+    background: url(/images/icon_fenxiao_search.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.mineOn .tabIcon {
+    background: url(/images/icon_fenxiao_mine_pre.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.mineOff .tabIcon {
+    background: url(/images/icon_fenxiao_mine.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.tab_hint {
+    text-align: center;
+    width: 100%;
+    margin-top: 0.1rem;
+}
+
+/*底部tab栏 - end*/
+
+/*{{--提交申请模块-start-}}*/
+
+/*实现透明背景*/
+.submit_application_page {
+    display: none;
+    width: 100%;
+    height: 100%;
+
+}
+
+.transparent_top_area {
+    position: absolute;
+    width: 100%;
+    height: 2rem;
+    top: 0;
+    left: 0;
+    background-color: black;
+
+    filter:alpha(opacity=50);  /*支持 IE 浏览器*/
+    -moz-opacity:0.50; /*支持 FireFox 浏览器*/
+    opacity:0.50;  /*支持 Chrome, Opera, Safari 等浏览器*/
+
+}
+
+.submit_application_area{
+    width: 100%;
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    background-color: white;
+    padding-top: 0.2rem;
+}
+
+.submit_list_item{
+    height: 0.8rem;
+    margin: 0.4rem 0;
+}
+
+.submit_list_item_remarks{
+    margin-top: 0.4rem;
+    height: inherit;
+}
+
+.title_left{
+    width: 20%;
+    height: 0.8rem;
+    float: left;
+    text-align: left;
+    line-height: 0.8rem;
+    margin-left: 0.2rem;
+}
+
+.submit_input{
+    width: 72%;
+    height: 0.8rem;
+    padding: 0 0.2rem;
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+}
+
+.phone_number_wrapper{
+    width: 72%;
+    height: 0.8rem;
+    border: 1px solid #DEDEDE;
+    border-radius: 3px;
+    float: left;
+}
+
+.phone_number{
+    width: 60%;
+    height: 0.7rem;
+    padding: 0 0 0 0.2rem;
+    margin: 0.05rem 0;
+    border: none;
+}
+
+.change_phone_number{
+    float: right;
+    text-align: center;
+    line-height: 0.6rem;
+    margin: 0.1rem 0.2rem 0.1rem 0;
+}
+
+.verify_code.submit_input{
+    width: 35%;
+    float: left;
+
+}
+
+.remarks{
+    height: 2.5rem;
+    padding: 0.2rem;
+}
+
+.acquire_verify_code{
+    float: left;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    background-color: #2A75ED;
+    border-radius: 0.1rem;
+    color: white;
+    padding: 0 0.2rem;
+    margin: 0 0 0 0.1rem;
+}
+
+.error_remind{
+    color: red;
+    margin: 0 0 0 22%;
+}
+
+.submit{
+    width: 30%;
+    height: 0.8rem;
+    text-align: center;
+    line-height: 0.8rem;
+    background-color: #2A75ED;
+    border-radius: 0.1rem;
+    color: white;
+    padding: 0 0.2rem;
+    margin: 0.3rem 35% 5rem;
+}
+
+
+/*{{--提交申请模块-end-}}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

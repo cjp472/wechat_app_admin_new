@@ -1,0 +1,213 @@
+.commentTable{
+    width: 100%;
+}
+/*.commentTable th{*/
+    /*font:normal bold normal 14px/1.5em 'Microsoft YaHei';*/
+    /*letter-spacing: -0.3px;*/
+    /*color: #353535;*/
+    /*height: 42px;*/
+    /*border-top:1px solid #ececec!important;*/
+    /*border-bottom:1px solid #ececec!important;*/
+    /*text-align: center;*/
+/*}*/
+/*!*第一栏比较宽，而且全部靠左*!*/
+/*.commentTable th:nth-child(1)*/
+/*{*/
+    /*min-width: 70px;*/
+    /*text-align: left;*/
+/*}*/
+/*体*/
+/*tbody tr*/
+/*{*/
+    /*border-bottom:1px solid #ececec!important;*/
+    /*text-align: center;*/
+    /*height: 70px;*/
+    /*font:normal normal normal 14px/1.5em 'Microsoft YaHei';*/
+    /*letter-spacing: -0.2px;*/
+    /*color: #3e3e3e;*/
+/*}*/
+/*!*所有的第一个td左对齐*!*/
+/*td:nth-child(1)*/
+/*{*/
+    /*text-align: left;*/
+/*}*/
+/*td:nth-child(5){*/
+    /*min-width: 100px;*/
+/*}*/
+/*td:nth-child(6){*/
+    /*min-width: 132px;*/
+    /*text-align: center;*/
+/*}*/
+/*头像及昵称*/
+.commentTable img
+{
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+    margin: 10px 11px 10px 0;
+    cursor: pointer;
+}
+.imgRight
+{
+    font:normal normal normal 14px/1.5em 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+    color: #3e3e3e;
+}
+
+
+.btn-danger{
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    width: 28px;
+    height: 20px;
+    font-size: 6px;
+}
+.btn-primary{
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    width: 28px;
+    height: 20px;
+    font-size: 6px;
+}
+
+.modal-content {
+    /*width: 800px;*/
+    /*height: 500px;*/
+    width: 800px;
+    height: 300px;
+}
+
+.modal-header {
+    border: none;
+}
+
+.modal-footer {
+    border: none;
+    text-align: left;
+}
+
+.long {
+    /*text-overflow: ellipsis !important;*/
+    /*overflow: hidden!important;*/
+    /*white-space: nowrap!important;*/
+    max-width: 300px !important;
+    word-break: break-all !important;
+    word-wrap: break-word !important;
+}
+
+.operate_dialog {
+    background-color: white;
+    /*border: 1px solid lightgray;*/
+    border: none;
+    position: absolute;
+    box-shadow: 0 0 5px lightgray;
+    z-index: 10;
+    width: 100px;
+    left: 50%;
+    top: 50%;
+    margin-top: 10px;
+    margin-left: -110px;
+    display: none;
+}
+
+.operate_item {
+    height: 40px;
+    line-height: 40px;
+}
+
+.operate_item:hover{
+    background-color:  #2c9de4;
+    color:#fff;
+    cursor: pointer;
+}
+
+
+.modal-footer{
+    margin-top: 20px;
+    text-align: left;
+    border: none;
+}
+
+/*td{*/
+    /*line-height: 30px!important;*/
+/*}*/
+
+.long {
+    max-width: 150px !important;
+    word-break:break-all !important;
+    word-wrap:break-word !important;
+}
+
+.searchSelect
+{
+    float: left;
+    width: 140px;
+    height: 42px;
+    margin: 18px 0 0 10px;
+    border-radius: 4px;
+    border: solid 1px #dcdcdc;
+    letter-spacing: -0.2px;
+    color: #333;
+    font:normal normal normal 14px/42px 'Microsoft YaHei';
+    padding-left: 25px;
+}
+.searchInputDiv
+{
+    float: left;
+    width: 240px;
+    height: 42px;
+    margin: 18px 10px 0 10px;
+    border-radius: 4px;
+    border: solid 1px #dcdcdc;
+    letter-spacing: -0.2px;
+    color: #333;
+    font:normal normal normal 14px/42px 'Microsoft YaHei';
+}
+.searchInputDiv img
+{
+    margin: 13px 8px 13px 16px;
+}
+.search
+{
+    border: none;
+    width: 192px;
+    height: 38px;
+    outline: medium;
+    margin-bottom: 2px;
+}
+
+.searchBtn
+{
+    display: block;
+    float: left;
+    width: 120px;
+    height: 42px;
+    border-radius: 4px;
+    border: solid 1px #dcdcdc;
+    font:normal normal normal 16px/40px 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+    color: #3e3e3e;
+    text-align: center;
+    background-color: white;
+    margin-top: 18px;
+    outline: none;
+}
+.tool_bar{
+    height: 34px;line-height: 34px;
+    margin:10px 0 20px 0;
+}
+.tool_bar_item{
+    float: right;
+}
+.tool_bar_item_left{
+    float: left;
+}
+
+.tool_bar_item_margin{
+    float: right;
+    margin-right: 10px;
+}

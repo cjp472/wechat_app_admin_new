@@ -1,0 +1,240 @@
+/**
+ * Created by jserk on 2017/3/23.
+ */
+
+$(function () {
+    manageAlive.init();
+});
+var manageAlive = function () {
+    var manageAlive = {};
+
+    var resUrl;
+
+    //检查直播提交表单
+    function checkAliveForm(info) {
+        if ($formCheck.emptyString(info.title)) {
+            baseUtils.show.redTip("直播名称不能为空！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.summary)) {
+            baseUtils.show.redTip("直播简介不能为空！");
+            return false;
+        }
+        if (info.alive_type==1&&(fileId == null)) {
+            baseUtils.show.redTip("请上传直播资源！");
+            return false;
+        }
+        if (is_edit) {
+            baseUtils.show.redTip("直播资源上传中！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.img_url)) {
+            baseUtils.show.redTip("请上传您的直播封面！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.start_at)) {
+            baseUtils.show.redTip("请填入您的直播上架时间！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.zb_start_at)) {
+            baseUtils.show.redTip("请填入您的直播开始时间！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.zb_stop_at)) {
+            baseUtils.show.redTip("请填入您的直播结束时间！");
+            return false;
+        }
+        if (!$formCheck.checkTime(info.start_at)) {
+            baseUtils.show.redTip("直播上架时间错误");
+            return false;
+        }
+        if (!$formCheck.checkTime(info.zb_start_at)) {
+            baseUtils.show.redTip("直播开始时间错误");
+            return false;
+        }
+        if (uploadChannelType==1 && info.payment_type == 2 && $formCheck.emptyString(info.piece_price)) {
+            baseUtils.show.redTip("您选择的付费形式为付费，请输入价格！");
+            return false;
+        }
+        if (uploadChannelType==1 && info.payment_type == 2 && !$formCheck.checkNum(info.piece_price)) {
+            baseUtils.show.redTip("您的价格输入格式有误，请重新输入！");
+            return false;
+        }
+        if(uploadChannelType== 1 && info.payment_type== 2 && info.piece_price > baseUtils.maxInputPrice * 100){
+            baseUtils.show.redTip("价格不能大于 " + baseUtils.maxInputPrice + " 元");
+            return false;
+        }
+        return true;
+    }
+    //提交信息
+    function submitForm(url, allParams) {
+        showLoading();
+        $.ajax(url, {
+            type: 'POST',
+            dataType: 'json',
+            data:allParams,
+            success:function (data) {
+                hideLoading();
+                if (parseInt(data.code) === 0) {
+                    var pageType = $("#_manageAlive").val();
+                    if (pageType == 0) {    //新增直播
+                        baseUtils.show.blueTip("创建成功，您可继续完成嘉宾（原讲师）设置");
+                        sessionStorage.setItem("inviteGuestAliveId", data.alive_id);
+                    } else {
+                        baseUtils.show.blueTip("保存成功");
+                    }
+                    setTimeout(function () {
+                        window.location.href = backURL;
+                    }, 1500);
+                }
+                else {
+                    hideLoading();
+                    baseUtils.show.redTip(data.msg);
+                    submitLimt = false;
+                }
+            },
+            error: function(xhr,status,err) {
+                hideLoading();
+                console.error(err);
+                baseUtils.show.redTip('网络错误，请稍后再试！');
+                submitLimt = false;
+            }
+        });
+    }
+
+
+    //置空分类数组
+    classArray=[];
+
+    manageAlive.init = function () {
+
+        aliveTimeConfig("#zb_start_at");
+        // aliveTimeConfig("#zb_stop_at");
+
+        // 提交直播表单
+        $(".completeBtn").click(function () {
+
+            //获取直播表单数据
+            //直播名称
+            var title = $.trim($(".resName").val());
+
+            //直播简介
+            var summary=$.trim($("#aliveAbstract").val());
+
+            //直播类型
+            var aliveType=aliveT;
+
+            //直播点播id
+            var AliveFileId = fileId;
+
+            //直播开始时间
+            var zbStartAt = $.trim($("#zb_start_at").val());
+
+            //直播时长
+            var aliveDuration = $("#_aliveDuration").val();
+
+            //直播大小
+            var AliveSize = videoGsize;
+
+            //直播封面地址
+            var image1Url = $.trim($("#Image1Url").val());
+
+            //直播贴片地址
+            var image3Url = $.trim($("#Image3Url").val());
+
+            //直播原始内容详情
+            var ue = UE.getEditor('resource_desc');
+            var orgContent = ue.getContent();
+
+            //直播内容描述
+            var describ = ue.getPlainTxt();
+            if (describ.length == 0) {
+                baseUtils.show.redTip('描述不能为空!');
+                return false;
+            }
+
+
+            //付费价格
+            var resPrize = $.trim($(".resPrize").val()) * 100;
+
+            //直播选择分类
+            $('input[name="aliveClass"]:checked').each(function(){
+                classArray.push($(this).attr('id'));
+            });
+            console.log(classArray);
+
+            //直播状态
+            var state=aliveState;
+            //上架时间
+            var startAt = $.trim($("#dateInput").val());
+
+            //直播单品上传信息
+            var resInfo = {
+                // 直播名称
+                title: title,
+                //直播简介
+                summary:summary,
+                //直播类型
+                alive_type:aliveType,
+                //   直播封面地址
+                img_url: image1Url,
+                //直播宣传封面地址
+                alive_img_url: image3Url,
+                //视频名称
+                file_name: VideoName,
+                //直播开始时间
+                zb_start_at:zbStartAt,
+                //直播结束时间
+                zb_stop_at:aliveDuration,
+                //直播详情
+                descrb: describ,
+                //原始文本
+                org_content: orgContent,
+                //付费价格
+                piece_price: resPrize,
+                //直播状态
+                state:state,
+                //上架时间
+                start_at: startAt,
+                //id
+                id: GetQueryString('id') || null
+            };
+            //直播额外信息
+            var resourceParams = {
+                //云点播直播id
+                public_video: AliveFileId,
+                //直播大小
+                public_size_text: AliveSize
+            }
+            //是否付费（1表示免费，2表示单笔）
+            if(resourceFree) {
+                resInfo.payment_type = resourceFree;
+            }
+
+            //直播提醒
+            resInfo.if_push = if_push;
+            if(if_push==0 || if_push==1){
+                resInfo.push_ahead = push_ahead;
+            }
+
+            //获取表单中的数据
+            if (checkAliveForm(resInfo)) {
+                var allParams = {
+                    params: resInfo,
+                    resource_type: resourceType,
+                    upload_channel_type: uploadChannelType,
+                    package_id: packageId,
+                    resource_params: resourceParams,
+                    package_name: packageName,
+                    category_type:classArray
+                };
+                submitForm(golbalUrl, allParams);
+                console.log(allParams);
+            } else {
+                return false;
+            }
+        })
+    }
+
+    return manageAlive;
+}();

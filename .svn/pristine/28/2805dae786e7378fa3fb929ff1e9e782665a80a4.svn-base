@@ -1,0 +1,421 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'goods_manage';
+$pageData['barTitle'] = '商品管理';
+$tabData = [];
+$tabData["tabTitle"] = "resourceList";
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section("page_css")
+    <link type="text/css" rel="stylesheet" href="../css/external/jquery-alert.css?{{env('timestamp')}}"/>
+    {{-- 扁平化框架 --}}
+    <link type="text/css" rel="stylesheet" href="../css/external/materialize.css?{{env('timestamp')}}"/>
+    <link type="text/css" rel="stylesheet"
+          href="../css/admin/resManage/resourceList.css?{{env('timestamp')}}"/>   {{--css--}}
+@stop
+
+@section("page_js")
+    <script type="text/javascript" src="../js/external/clipboard.min.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript" src="../js/external/jquery-alert.js?{{env('timestamp')}}"></script>
+    {{--materializeUI--}}
+    <script src="../js/external/materialize.js?{{env('timestamp')}}" type="text/javascript"></script>
+    <script type="text/javascript"
+            src="../js/admin/resManage/resourceList.js?{{env('timestamp')}}"></script>     {{--js--}}
+    <script type="text/javascript">
+        search_content = "{!! $search_content !!}";
+        resource_type = "{{$resource_type}}";
+        page_offset_json = '{!! $page_offset  !!}';
+    </script>
+@stop
+
+@section("base_mainContent")
+    {{--商品管理公共tab--}}
+    @include('admin.resManage.baseTab',$tabData)
+
+
+    <div class="content">
+        <div class="top_area">
+
+            <div class="addResourceBtn btnMid btnBlue">
+                <a href="/create_resource_page?upload_channel_type=1">新建单品</a>
+            </div>
+
+            <div class="right_operate">
+                <select class="selector_show_type browser-default">
+                    <option value="-1">状态</option>
+                    <option value="0">已上架</option>
+                    <option value="1">已下架</option>
+                </select>
+                <select class="selector_resource_type browser-default">
+                    <option value="0">类型</option>
+                    <option value="1">图文</option>
+                    <option value="2">音频</option>
+                    <option value="3">视频</option>
+                    <option value="4">直播</option>
+                </select>
+                <input class="inputSearchAll inputDefault" placeholder="输入名称">
+                <div class="searchAllBtn btnSmall xeBtnDefault">搜索</div>
+            </div>
+        </div>
+        <div class="resource_list_num">单品列表({{json_decode($page_offset)->total_count}}条)<span>注：这里不显示专栏/会员内专属单品</span>
+        </div>
+        <table class="table_resource_list">
+            <thead>
+            <tr class="tr_head">
+                <th class="th_resource_name">单品名称</th>
+                {{--<th class="th_resource_type">类型</th>--}}
+                <th class="th_resource_price">价格(元)</th>
+                <th class="th_resource_num">订阅量</th>
+                {{--<th class="th_resource_time">上架时间</th>--}}
+                <th class="th_information">相关</th>
+                <th class="th_resource_state">状态</th>
+                <th class="th_resource_operate">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($resourceList as $key => $value)
+
+                <tr class="tr_body"
+                    data-resource_type="{{$value->resource_type}}"
+                    data-resource_id="{{$value->id}}"
+                    data-resource_name="{{$value->title}}"
+                    data-piece_price="{{$value->piece_price / 100.00}}"
+                    data-is_transcode="{{$value->is_transcode}}">
+
+                    {{--单品名称--}}
+                    <td class="td_resource">
+                        <img class="member_type_icon"
+                             @if($value->resource_type == 1)
+                             src="/images/admin/resManage/res_type_article.png" title="图文"
+                             @elseif($value->resource_type == 2)
+                             src="/images/admin/resManage/res_type_audio.png" title="音频"
+                             @elseif($value->resource_type == 3)
+                             src="/images/admin/resManage/res_type_video.png" title="视频"
+                             @elseif($value->resource_type == 4)
+                             src="/images/admin/resManage/res_type_live.png" title="直播"
+                                @endif
+                        >
+                        <div class="icon_name_wrapper">
+                            <div class="icon_name">
+                                <div class="resource_icon_wrapper">
+                                    @if(empty($value->img_url_compressed))
+                                        <img class="resource_icon" src="{{$value->img_url}}">
+                                    @else
+                                        <img class="resource_icon" src="{{$value->img_url_compressed}}">
+                                    @endif
+                                </div>
+                                <div class="resource_item_desc">
+                                    <div class="resource_name_wrapper clearfix">
+                                        <div class="resource_name" title="{{$value->title}}">{{$value->title}}</div>
+                                        @if($value->resource_state == 1)
+                                            @if($value->is_transcode == 0)
+                                                <div class="resource_trans_code_state">转码中</div>
+                                            @elseif($value->is_transcode == 2)
+                                                <div class="resource_trans_code_state">转码失败</div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <div class="show_time">
+                                        @if(!empty($value->start_at))
+                                            上架时间：{{$value->start_at}}
+                                        @else
+                                            上架时间：--
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    {{--价格--}}
+                    <td>
+                        @if($value->piece_price == 0)
+                            免费
+                        @else
+                            ￥{{$value->piece_price / 100.00}}
+                        @endif
+                    </td>
+
+                    {{--订阅量--}}
+                    @if($value->resource_type == 2)
+                        <td class="purchase_count_td">
+                            <div class="purchase_count_div">{{($value->piece_price == 0) ? "--" : $value->purchase_count}}
+                                <img class="arrow_down_icon" src="/images/arrow_down.png">
+                            </div>
+                            <ul class="resource_details">
+                                <li class="detail_item">评论数 : {{$value->comment_counts}}</li>
+                                <li class="detail_item">播放量 : {{$value->playcount}}</li>
+                                <li class="detail_item">完播量 : {{$value->finishcount}}</li>
+                                <li class="detail_item">完播率 : {{$value->finishpercent}}%</li>
+                                <li class="detail_item">分享量 : {{$value->share_count}}</li>
+                                @if(\App\Http\Controllers\Tools\AppUtils::IsPageVisual("try_audio", "version_type"))
+                                    <li class="detail_item">试听数 : {{$value->try_sign_count }}</li>
+                                @endif
+
+                                @if(\App\Http\Controllers\Tools\AppUtils::IsPageVisual("daily_sign", "version_type"))
+                                    <li class="detail_item">日签点击量 : {{$value->click_sign_count}}</li>
+                                @endif
+                            </ul>
+                        </td>
+                    @elseif($value->resource_type == 4)
+                        <td class="purchase_count_td">
+                            <div class="purchase_count_div">{{($value->piece_price == 0) ? "--" : $value->purchase_count}}
+                                <img class="arrow_down_icon" src="/images/arrow_down.png">
+                            </div>
+                            <ul class="resource_details">
+                                <li class="detail_item">打赏总额 : {{ $resourceList[$key]->reward_sum}}</li>
+                                @foreach($value->lecturers as $lecturer)
+                                    <li class="detail_item">{{$lecturer->name}} : {{$lecturer->reward}}</li>
+                               @endforeach
+                            </ul>
+                        </td>
+                    @else <td class="purchase_count_td">{{($value->piece_price == 0) ? "--" : $value->purchase_count}}</td>
+                    @endif
+
+                    {{--相关信息--}}
+                    <td class="td_relative_info">
+                        @if(!empty($value->query_package_list) && count($value->query_package_list) > 0)
+                            @if(count($value->query_package_list) == 1)
+                                @if($value->query_package_list[0]['is_member'] == 1)
+                                    <div class="singleRelative">会员：{{$value->query_package_list[0]['title']}}</div>
+                                @else
+                                    <div class="singleRelative">专栏：{{$value->query_package_list[0]['title']}}</div>
+                                @endif
+                            @else
+                                <div class="productCountBox">
+                                    {{count($value->query_package_list)}}
+                                    <img class="downIcon" src="../images/arrow_down.png" alt="">
+                                </div>
+                                <div class="relevanceBox">
+                                    @foreach($value->query_package_list as $item)
+                                        <div>
+                                            @if($item['is_member'] == 1)
+                                                会员：{{$item['title']}}
+                                            @else
+                                                专栏：{{$item['title']}}
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        @else
+                            --
+                        @endif
+                    </td>
+
+
+                    {{--状态--}}
+                    <td class="resource_show_state">
+                        @if($value->resource_type == 3 || ($value->resource_type == 4 && $value->alive_type == 1))  {{--视频类直播 + 视频--}}
+                        @if($value->resource_state == 1)
+                            <div>已下架</div>
+                        @endif
+                        @else                                   {{--图文 + 音频--}}
+                        @if($value->resource_state == 1)
+                            <div>已下架</div>
+                        @endif
+                        @endif
+                    </td>
+                    {{--操作--}}
+                    <td class="td_event_operate">
+                        <div class="event_operate_div">
+                            <a class="copy_resource_link_btn copyHref" href="javascript:;"
+                               data-clipboard-text="{{$value->pageUrl}}">复制链接</a>
+                            <div class="verticalGapLine">&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+
+                            <div class="edit_resource_btn">编辑</div>
+                            <div class="verticalGapLine">&nbsp;&nbsp;|&nbsp;&nbsp;</div>
+
+                            <div class="more_operate_wrapper">
+                                <div class="more_btn">更多&nbsp;&nbsp;</div>
+
+                                <ul class="more_operate">
+                                    <li data-type="look_comment">查看评论</li>
+
+                                    @if($value->resource_type == 4)                 {{--直播类型--}}
+                                    @if($value->alive_type == 0)
+                                        <li class="export_audio" data-type="export_audio">导出音频</li>
+                                    @endif
+                                    @if(empty($value->manual_stop_at))
+                                        <li data-type="end_alive">结束直播</li>
+                                    @else
+                                        <li>直播已结束</li>
+                                    @endif
+                                    @if(\App\Http\Controllers\Tools\AppUtils::IsPageVisual("has_invite", "app_module"))
+                                        <li data-type="set_sale_ratio">分销设置</li>
+                                    @endif
+                                    @endif
+
+                                    @if($value->resource_type == 1)                 {{--图文类型--}}
+                                    @if($value->can_select == 0)
+                                        <li data-type="enable_copy">允许复制</li>
+                                    @else
+                                        <li data-type="forbid_copy">禁止复制</li>
+                                    @endif
+                                    @endif
+
+                                    @if($value->resource_state == 0)
+                                        <li data-type="hide_resource">下架</li>
+                                    @else
+                                        <li data-type="show_resource">上架</li>
+                                    @endif
+
+                                    <li data-type="remove_resource">移除</li>
+
+                                    @if($isHasLittleProgram)
+                                        <li data-type="copy_app_href" class="copyHref" id="copy_app_href"
+                                            data-clipboard-text="{{\App\Http\Controllers\Tools\Utils::resourceH5UrlTransToAppUrl($value->pageUrl)}}">
+                                            复制小程序链接
+                                        </li>
+                                    @endif
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+        @if(count($resourceList)==0)
+            <div class="contentNoneTip">没有相应的数据</div>
+        @endif
+
+        {{--实现 table 分页--}}
+        <div class="page_offset_div list-page" align="center">
+            <ul class="pagination">
+            </ul>
+        </div>
+    </div>
+
+
+@stop
+
+@section("base_modal")
+    <div class="select_good_window" style="display: none">
+        <div class="select_window">
+            <div class="window_top_area">
+                <div class="select_window_title">从专栏或会员中选择已有单品</div>
+                <div class="close_icon_wrapper">
+                    <img class="close_icon" src="/images/icon_Pop-ups_close.svg">
+                </div>
+            </div>
+            <div class="search_content_area">
+                <input class="inputSearchPart inputDefault" placeholder="输入名称">
+                <div class="searchPartBtn btnSmall xeBtnDefault">搜索</div>
+            </div>
+            <div class="select_content_area">
+                {{--<div class="resourceItemWrapper">--}}   {{--在js中添加--}}
+                {{--<input id="{{$i}}" class="with-gap resource_radio" name="select_resource" type="radio"/>--}}
+                {{--<label for="{{$i}}" class="radio_desc">--}}
+                {{--<div class="resource_icon_wrapper_2">--}}
+                {{--<img class="resource_icon_2" src="/images/icon_yunying.png">--}}
+                {{--</div>--}}
+                {{--吴晓波频道会员中心吴晓波频道会员中心--}}
+                {{--</label>--}}
+                {{--<span class="resource_type_2">音频</span>--}}
+                {{--<span class="resource_time_2">2017.03.12 12:21:00</span>--}}
+                {{--</div>--}}
+
+                {{--<div class="search_no_data">暂无数据，请重新搜索！</div>--}}
+
+                {{--实现 table 分页--}}
+                {{--<div class="page_offset_div_2" align="center">--}}
+                {{--<ul class="pagination">--}}
+                {{--</ul>--}}
+                {{--</div>--}}
+
+            </div>
+            <div class="button_area">
+                <div class="cancel_btn btnMid xeBtnDefault">取消</div>
+                <div class="next_step_btn btnMid btnBlue">下一步</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="set_price_window" style="display: none">
+        <div class="set_window">
+            <div class="window_top_area">
+                <div class="select_window_title">设置单品售价</div>
+                <div class="close_icon_wrapper_2">
+                    <img class="close_icon" src="/images/icon_Pop-ups_close.svg">
+                </div>
+            </div>
+            <div class="resource_desc_area">
+                <div class="resourceSingleWrapper">
+                    <div class="resource_desc">
+                        <div class="resource_icon_wrapper_3">
+                            <img class="resource_icon_3" src="/images/icon_yunying.png">
+                        </div>
+                        <span class="resource_title">--</span>
+                    </div>
+                    <span class="resource_type_3">--</span>
+                    <span class="resource_time_3">--</span>
+                </div>
+            </div>
+            <div class="set_price_area">
+                <span class="set_price_word_1">设置价格</span>
+                <input class="input_setting_price inputDefault" placeholder="请输入价格">
+                <span class="set_price_word_2">元</span>
+            </div>
+            <div class="button_area">
+                <div class="back_btn btnMid xeBtnDefault">上一步</div>
+                <div class="confirm_price_btn btnMid btnBlue">确定</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="set_sale_ratio_window" style="display: none">
+        <div class="set_sale_window">
+            <div class="window_top_area">
+                <div class="select_window_title">分销设置</div>
+                <div class="close_icon_wrapper_3">
+                    <img class="close_icon" src="/images/icon_Pop-ups_close.svg">
+                </div>
+            </div>
+            <div class="set_sale_content_area">
+                <div class="sale_goods_desc">
+                    <div class="set_sale_title_1">商品名称</div>
+                    <div class="sale_goods_name">--</div>
+                </div>
+                <div class="switch_sale">
+                    <span class="set_sale_title_2">邀请卡分销</span>
+                    <input id="set_radio_on" class="with-gap" name="set_sale_radio" type="radio" value="0"/>
+                    <label for="set_radio_on" class="label_1">开启</label>
+                    <input id="set_radio_off" class="with-gap" name="set_sale_radio" type="radio" value="1"/>
+                    <label for="set_radio_off" class="label_2">关闭</label>
+                </div>
+                <div class="set_percent">
+                    <span class="set_sale_title_3">设置分成比例</span>
+                    <input class="input_radio_value inputDefault" placeholder="请输入比例">
+                    <span>%</span>
+                </div>
+                <div class="set_radio_word">1.该值为分销者的分成比例</div>
+                <div class="set_radio_word">2.分成比例仅可设置为1%—50%</div>
+                <div class="set_radio_word">3.开启分销功能后，用户通过邀请卡购买商品，分销者即可获得收益</div>
+                <div class="set_radio_word">4.平台收益自动进入可提现余额中，您可在财务管理>提现记录中查看到该类型订单的收益，并提现至您的微信账户中</div>
+                <div class="set_radio_word">5.每张邀请卡有效期为30天</div>
+            </div>
+            <div class="right_area">
+                <div class="phone_preview">
+                    <img class="phone_preview_img" src="/images/admin/resManage/set_sale_preview.png">
+                    <div class="phone_preview_title">示意图</div>
+                </div>
+            </div>
+            <div class="button_area">
+                <div class="cancel_sale_btn btnMid xeBtnDefault">取消</div>
+                <div class="confirm_sale_btn btnMid btnBlue">确定</div>
+            </div>
+        </div>
+    </div>
+@stop
+
+
+
+
+
+
+

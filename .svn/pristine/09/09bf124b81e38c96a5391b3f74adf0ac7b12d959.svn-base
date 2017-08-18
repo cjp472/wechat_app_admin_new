@@ -1,0 +1,190 @@
+
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'marketing_admin';
+$pageData['barTitle'] = '内容分销';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--页面样式--}}
+    <link href="../css/admin/chosen/homepage.css?{{env('timestamp')}}" rel="stylesheet" type="text/css"/>
+    <link href="../css/admin/chosen/goodsList.css?{{env('timestamp')}}" rel="stylesheet" type="text/css"/>
+    <link href="../css/admin/chosen/recordList.css?{{env('timestamp')}}" rel="stylesheet" type="text/css"/>
+@stop
+
+@section('page_js')
+    {{--生成二维码--}}
+    <script type="text/javascript" src="../js/external/qrcode.js?{{env('timestamp')}}"></script>
+
+    <script src="../js/admin/chosen/homepage.js?{{env('timestamp')}}" type="text/javascript"></script>
+    <script src="../js/admin/chosen/goodsList.js?{{env('timestamp')}}" type="text/javascript"></script>
+    <script src="../js/admin/chosen/recordList.js?{{env('timestamp')}}" type="text/javascript"></script>
+@stop
+
+@section("base_mainContent")
+
+    <div class="pageTopTitle"><a>内容分销</a></div>
+
+    <div class="_chosenShopDescPart" id="chosenShopDescPart">
+        <div class="_chosenShopDescWrapper">
+            <div class="_chosenShopIntro">
+                <div class="_chosenShopTitle">小鹅通内容分销
+                    <a href="https://h5b.xiaoe-tech.com/?channel_info=guanwang_pc" target="_blank">点击前往小鹅通内容分销</a>
+                </div>
+                <div class="_chosenShopDetail">
+                    小鹅通精选介绍：小鹅通内容分销汇聚了众多优质知识商品，您开启了参与上架小鹅通内容分销之后，您参与推广分销的知识商品将有机会入选商城。
+                    在商城内您的商品将会展示给众多渠道商，渠道商可以在内容分销内选择推广您的商品。如您的商品成功入选了内容分销，小鹅通将帮您把商品推荐给优质的渠道商，借助更广泛的渠道，
+                    您将收获更多付费用户与收益。渠道商在商城内将获得推广链接和二维码，通过推广链接或二维码成交的订单，渠道商将获得对应的比例分成，所有订单分成会自动结算。
+                </div>
+                <a class="_chosenShopHelpDoc" href="https://admin.xiaoe-tech.com/help_document?id=d_5968c9090945a_f9OEe0nf" target="_blank">查看【小鹅通精选】上架说明</a>
+            </div>
+            @include("admin.functionManage.switchButton", [
+                "switchId" => "chosen_shop_switch", //默认显示<开启/关闭>，可不定义
+                "switchState" => $is_enable_chosen == 1 ? true : false,
+            ])
+        </div>
+    </div>
+
+    <div class="_tabSelectArea">
+        <ul class="_contentTabWrapper" id="_contentTabWrapper">
+            <li id="_goodsListTab" value="1" @if($page_type == "goods") class="_activeTab" @endif>推广商品</li>
+            <li id="_recordListTab" value="0" @if($page_type == "record") class="_activeTab" @endif>推广订单</li>
+            {{--<li id="_recordListTab">上架说明</li>--}}
+        </ul>
+    </div>
+
+    <div class="_mainContentWrapper">
+        <div class="_mainContentPart" id="_mainContentPart">
+            @if($page_type == "goods")
+                @include("admin.chosen.distributeGoodsList")
+            @elseif($page_type == "record")
+                @include("admin.chosen.distributeRecordList")
+            @endif
+        </div>
+
+        @include("admin.functionManage.localLoading", ["id" => "mainContentLoading"])
+
+    </div>
+
+@stop
+
+@section("base_modal")
+
+    <div class="_addDistributeGoodsWindow" id="_addDistributeGoodsWindow">
+        <div class="_Header">
+            <div class="_HeaderText_3">添加推广商品</div>
+            <div class="_HeaderIcon">
+                <img src="/images/icon_Pop-ups_close.svg">
+            </div>
+        </div>
+        <div class="_addGoodsWindowContent">
+            <div class="_windowSearchPart">
+                <img src="/images/icon_fenxiao_search.png" alt="Icon">
+                <input class="inputDefault _searchDistributeGoodsInput" id="_searchDistributeGoodsInput"
+                    placeholder="输入名称" value="">
+                <div class="btnMid xeBtnDefault _searchDistributeGoodsBtn" id="_searchDistributeGoods">搜索</div>
+            </div>
+            <div class="_addGoodsWindowTablePart">
+                <div class="_addGoodsWindowTableHeader">商品列表</div>
+                <div class="_addGoodsWindowTableBodyWrapper">
+                    <div class="_addGoodsWindowTableBody" id="_addGoodsWindowTableBody">
+
+                    </div>
+                    @include("admin.functionManage.localLoading", ["id" => "addDistributeGoodsLoading"])
+                </div>
+            </div>
+        </div>
+        <div class="_windowBtnWrapper clearfix">
+            <div class="btnMid xeBtnDefault _cancelAddDistributeGoodsBtn" id="_cancelAddDistributeGoods">取消</div>
+            <div class="btnMid btnBlue _confirmAddDistributeGoods" id="_confirmAddDistributeGoods">保存</div>
+        </div>
+
+    </div>
+
+    <div class="_setGoodsGradientWindow" id="_setGoodsGradientWindow">
+        <div class="_Header">
+            <div class="_HeaderText_1">梯度分成</div>
+            <div class="_HeaderIconTip">
+                <img src="/images/alert/blue_info_prompt.svg">
+                <div class="_chosenShopHoverBox">
+                    <span style="line-height: 12px">*小鹅通内容分销的渠道商在推广您的商品时，推⼴数量在您设置的区间内，将会获得对应的分成比例的金额。</span>
+                    <ul>
+                        <li style="line-height: 20px">例如：商品定价为100元，设置为：</li>
+                        <li style="line-height: 20px">1 - 100 &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 30%</li>
+                        <li style="line-height: 20px">101 - 500 &nbsp; &nbsp;&nbsp;&nbsp; 35%</li>
+                        <li style="line-height: 20px">501 - 以上 &nbsp;&nbsp;&nbsp;&nbsp; 50%</li>
+                    </ul>
+                    <br>
+                    <span>
+                            当渠道商分成数量量为1000笔，则第1-100笔的分成奖励为30元/笔，第101-500笔的分成奖励为35元/笔， 第501⾄至1000笔的分成奖励为50元/笔
+                        </span>
+                </div>
+            </div>
+            <div class="_HeaderText_2">商品上架后不可修改</div>
+            <div class="_HeaderIcon">
+                <img src="/images/icon_Pop-ups_close.svg">
+            </div>
+        </div>
+        <div class="_windowContent clearfix">
+            <div class="_windowLeftPart">
+                <div class="_windowPartTitle">区间</div>
+                <div class="_windowValueItem">
+                    <span class="_windowShowValue">1</span>
+                    <span class="_windowGapLine">一</span>
+                    <input class="inputDefault _windowEditableValue" id="_windowValue1"
+                           type="text" value="99" onkeyup="$goodsList.checkInputValue(this)">
+                </div>
+                <div class="_windowValueItem">
+                    <input class="inputDefault _windowEditableValue disabled" id="_windowValue2"
+                           type="text" value="100" disabled>
+                    <span class="_windowGapLine">一</span>
+                    <input class="inputDefault _windowEditableValue" id="_windowValue3"
+                           type="text" value="" onkeyup="$goodsList.checkInputValue(this)">
+                </div>
+                <div class="_windowValueItem">
+                    <input class="inputDefault _windowEditableValue disabled" id="_windowValue4"
+                           type="text" value="" disabled>
+                    <span class="_windowGapLine">一</span>
+                    <span class="_windowShowValue">以上</span>
+                </div>
+            </div>
+            <div class="_windowRightPart">
+                <div class="_windowPartTitle">分成比例/笔</div>
+                <div class="_windowRatioItem">
+                    <input class="inputDefault _windowEditableValue" id="_windowRatio1"
+                           type="text" value="" onkeyup="$goodsList.checkInputValue(this)">
+                    <span class="_windowMark">%</span>
+                </div>
+                <div class="_windowRatioItem">
+                    <input class="inputDefault _windowEditableValue" id="_windowRatio2"
+                           type="text" value="" onkeyup="$goodsList.checkInputValue(this)">
+                    <span class="_windowMark">%</span>
+                </div>
+                <div class="_windowRatioItem">
+                    <input class="inputDefault _windowEditableValue" id="_windowRatio3"
+                           type="text" value="" onkeyup="$goodsList.checkInputValue(this)">
+                    <span class="_windowMark">%</span>
+                </div>
+            </div>
+        </div>
+        <div class="_windowBtnWrapper clearfix">
+            <div class="btnMid xeBtnDefault _windowCancelBtn" id="_windowCancelBtn">取消</div>
+            <div class="btnMid btnBlue _windowConfirmBtn" id="_windowConfirmBtn">保存</div>
+        </div>
+
+    </div>
+
+@stop
+
+
+
+
+
+
+
+
+
+
+
+

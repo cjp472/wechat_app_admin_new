@@ -1,0 +1,34 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'knowledgeShop';
+$pageData['barTitle'] = '知识店铺';
+?>
+
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+@endsection
+
+
+@section('page_js')
+
+    <script type="text/javascript" src="sdk/cos-js-sdk-v4.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript" src="js/admin/utils/v4QcloudUpload.js?{{env('timestamp')}}"></script>
+    {{--获取文件MD5--}}
+    <script type="text/javascript" src="../js/external/browser-md5-file.js?{{env('timestamp')}}"></script>
+    {{--上传工具函数--}}
+    <script type="text/javascript" src="../js/admin/utils/upload.js?{{env('timestamp')}}"></script>
+
+    <script type="text/javascript" src="../vue/shopDiy/dist/shopDiyIndex.min.js?{{env('timestamp')}}"></script>
+@endsection
+
+
+
+@section('base_mainContent')
+    @include("admin.knowledgeShop.baseTab", ["tabTitle" => "shopIndexDiy"])
+
+    <input type="hidden" id="xcx_app_id" value="{{session("app_id","")}}" />
+
+    <div id="application"></div>
+@endsection
+

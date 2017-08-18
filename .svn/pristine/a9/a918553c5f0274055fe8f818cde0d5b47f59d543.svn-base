@@ -1,0 +1,552 @@
+
+table.table>tbody>tr>td {
+    height: 85px;
+}
+
+.pageTopTitle .help_document_link {
+    float: right;
+    margin-right: 22px;
+    color: #2a75ed;
+    font-size: 14px;
+}
+.content {
+    min-height: 600px;
+    padding: 20px 20px 50px 20px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.communityName {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #353535;
+}
+
+.content .baseManageTab {
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+.content .baseManageTab a {
+    line-height: 50px;
+}
+
+/* 顶部 */
+.top_area {
+    height: 36px;
+    margin-bottom: 20px;
+}
+
+.addBtn {
+    float: left;
+    position: relative;
+}
+
+.addBtn a {
+    color: white;
+    display: block;
+}
+
+/* 查询相关样式 */
+.right_operate {
+    height: 36px;
+    float: right;
+}
+
+.selector {
+    float: left;
+    width: 95px;
+    padding: 0 0 0 10px;
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+.inputSearchAll {
+    width: 240px;
+    float: left;
+    margin-right: 10px;
+}
+
+.searchAllBtn {
+    width: 80px;
+}
+
+.table tr td .downIcon {
+    width: 10px;
+    height: 6px;
+    position: relative;
+    top: 0;
+    left: 0;
+}
+
+.table .relevanceTd {
+    position: relative;
+}
+
+.table .relevanceTd span {
+    display: inline-block;
+    line-height: 40px;
+    max-width: 168px;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    margin: 0
+}
+
+.relevanceBox {
+    width: 260px;
+    height: auto;
+    z-index: 100;
+    position: absolute;
+    padding: 10px;
+    top: 56px;
+    left: 88px;
+    border: 1px #eeeeee solid;
+    background: white;
+    text-align: left;
+}
+
+.relevanceBox > div {
+    line-height: 25px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.productCountBox {
+    cursor: pointer;
+}
+
+/* 表格相关样式 */
+.table tr .td_left {
+    padding-left: 18px;
+}
+
+.table tr .td_right {
+    padding-right: 18px;
+}
+
+.table tr td img {
+    width: 40px;
+    height: 40px;
+}
+
+.table tr td img.userimg {
+    border-radius: 50%;
+}
+.communityIconName>.avatarIcon {
+    margin: 0;
+    width: 45px;
+    height: 45px;
+    float: left;
+}
+.table tr td .username {
+    display: inline-block;
+    line-height: 45px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    margin: 0 0 0 10px;
+    float: left;
+}
+
+.table tr th.textContent {
+    width: 325px;
+}
+
+.table tr td .text {
+    max-width: 325px;
+    margin: 0px !important;
+    position: relative;
+    line-height: 20px;
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.table tr td .text:after {
+    content: "...";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 40px;
+    background: -webkit-linear-gradient(to right, transparent, #fff 80%);
+    background: -o-linear-gradient(to right, transparent, #fff 80%);
+    background: -moz-linear-gradient(to right, transparent, #fff 80%);
+    background: linear-gradient(to right, transparent, #fff 80%);
+}
+
+/* 精选与隐藏 */
+span.tips {
+    display: inline-block;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #fff;
+}
+
+/*span.tips.hidded{
+    background-color: #E64340;
+}*/
+span.tips.quality {
+    background-color: #2A75ED;
+}
+
+.packageName {
+    padding: 0;
+    margin: 0;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 表格中操作部分的样式 */
+.toolTh {
+    width: 245px;
+}
+
+.dynamicToolTh {
+    width: 125px;
+}
+
+.caret {
+    margin-left: 5px;
+}
+
+.table > tbody > tr .td_left {
+    width: 232px;
+    padding: 20px 0 0 20px;
+}
+.communityIconName {
+    height: 100%;
+    min-width: 200px;
+    float: left;
+}
+
+.toolBox {
+    position: relative;
+    float: right;
+}
+
+.toolBox ul {
+    margin: 0;
+    padding: 0;
+}
+
+.toolBox ul li {
+    line-height: 34px;
+    cursor: pointer;
+    color: #2a75ed;
+    list-style: none;
+    float: left;
+}
+
+.toolBox ul li a {
+    color: #2a75ed;
+    display: block;
+}
+
+.moreBtn {
+    position: relative;
+}
+
+.moreBtn:hover .moreTool {
+    display: block;
+}
+
+.moreBtn .moreTool {
+    display: none;
+    position: absolute;
+    top: 33px;
+    left: -14px;
+    width: 80px;
+    z-index: 100;
+    padding: 0 0 10px 0;
+    border-radius: 2px;
+    background-color: #fff;
+    border: solid 1px #deeeff;
+    color: #2a75ed;
+}
+
+.moreBtn .moreTool li {
+    width: 78px;
+    float: left;
+    list-style: none;
+    line-height: 34px;
+    font-size: 12px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.moreBtn .moreTool li:hover {
+    background-color: #f6faff;
+}
+.newCommunityTipWrapper {
+    display: none;
+    position: absolute;
+    top: -60px;
+    left: -174px;
+    opacity: 0.9;
+}
+.newCommunityTip {
+    width: 300px;
+    color: white;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #7F7F7F;
+}
+.triangleIcon {
+    position: absolute;
+    top: 50px;
+    right: 78px;
+    z-index: 0;
+    border-top: 15px solid #7f7f7f;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+}
+
+/*********************** 动态列表 - start *************************/
+.baseManageTab li {
+    padding: 0 10px;
+    margin: 0 10px;
+}
+
+.baseManageTab a {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+.baseActiveTab a {
+    color: #2a75ed;
+}
+
+/*********************** 动态列表 - end *************************/
+
+/*群主设置弹出框*/
+.GroupHolderSetBox {
+    position: absolute;
+    width: 520px;
+    height: 451px;
+    top: 50%;
+    left: 50%;
+    margin-left: -260px;
+    margin-top: -256px;
+    border-radius: 10px;
+    background: white;
+    z-index: 100;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.holderSetClose {
+    width: 12px;
+    height: 12px;
+    float: right;
+    cursor: pointer;
+}
+
+.holderSetClose img {
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+
+.holderSearchContent {
+    position: relative;
+    width: 100%;
+    height: 36px;
+    margin-top: 10px;
+}
+
+.holderSearchContent input {
+    width: 240px;
+    height: 100%;
+    float: left;
+    z-index: 100;
+    padding-left: 29px;
+}
+
+.holderSearchBtn {
+    float: left;
+    margin-left: 10px;
+}
+
+.searchIcon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.holderList {
+    position: relative;
+    width: 100%;
+    height: 267px;
+    margin-top: 20px;
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
+
+.holderListPart {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    cursor: pointer;
+}
+
+.holderCheckBox {
+    float: left;
+    position: relative;
+    height: 60px;
+    top: 10px;
+}
+
+.holderListImg {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin-top: 8px;
+    margin-left: -1px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.holderListImg img {
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+
+.holderListName {
+    margin-left: 10px;
+}
+
+.boxConfirm {
+    float: right;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+
+.setWxFriend {
+    float: right;
+    margin-top: 30px;
+    width: 158px;
+}
+
+.qrCodePaper {
+    position: absolute;
+    width: 220px;
+    height: 288px;
+    bottom: 82px;
+    right: 107px;
+    background: white;
+    text-align: center;
+}
+
+.qrCodePaper p:nth-of-type(1) {
+    margin-top: 53px;
+}
+
+.searchNone{
+    margin-top: 30px;
+    text-align: center;
+}
+.qrImg {
+    width: 120px;
+    height: 120px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    /*background: grey;*/
+}
+
+.loadingS {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 0;
+    background: hsla(0,0%,100%,.9);
+}
+
+.loadingSContent {
+    position: absolute;
+    width: 100px;
+    height: 90px;
+    top: 50%;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    background: hsla(0,0%,100%,.9);
+}
+
+.loadingS .circular {
+    width: 42px;
+    height: 42px;
+    -webkit-animation: loading-rotate 2s linear infinite;
+    animation: loading-rotate 2s linear infinite;
+}
+
+.loadingS .loadingText {
+    text-align: center;
+    color: #20a0ff;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.loadingS .path {
+    stroke-dasharray: 90,150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #20a0ff;
+    stroke-linecap: round;
+    -webkit-animation: loading-dash 1.5s ease-in-out infinite;
+    animation: loading-dash 1.5s ease-in-out infinite;
+}
+
+.shakeAnimation {
+    -webkit-animation: shake 1s linear infinite alternate;
+    -moz-animation: shake 1s linear infinite alternate;
+    animation: shake 1s linear infinite alternate;
+}
+
+@-webkit-keyframes shake{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@-moz-keyframes shake{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@keyframes shake{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}

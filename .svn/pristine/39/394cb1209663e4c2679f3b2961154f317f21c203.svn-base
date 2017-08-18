@@ -1,0 +1,348 @@
+/*编辑器默认*/
+table.sortEnabled tr.firstRow th,table.sortEnabled tr.firstRow td{padding-right:20px;background-repeat:no-repeat;background-position:center right;}.selectTdClass{background-color:#edf5fa!important}table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd!important}table{margin-bottom:10px;border-collapse:collapse;display:table}caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center}th{border-top:1px solid #BBB;background-color:#f7f7f7}table tr.firstRow th{border-top-width:2px}.ue-table-interlace-color-single{background-color:#fcfcfc}.ue-table-interlace-color-double{background-color:#f7faff}td p{margin:0;padding:0}.pagebreak{display:block;clear:both!important;cursor:default!important;width:100%!important;margin:0}ol,ul{margin:0;pading:0;width:95%}li{clear:both}ol.custom_cn{list-style:none}ol.custom_cn li{background-position:0 3px;background-repeat:no-repeat}li.list-cn-paddingleft-1{padding-left:25px}li.list-cn-paddingleft-2{padding-left:40px}li.list-cn-paddingleft-3{padding-left:55px}ol.custom_cn1{list-style:none}ol.custom_cn1 li{background-position:0 3px;background-repeat:no-repeat}li.list-cn1-paddingleft-1{padding-left:30px}li.list-cn1-paddingleft-2{padding-left:40px}li.list-cn1-paddingleft-3{padding-left:55px}ol.custom_cn2{list-style:none}ol.custom_cn2 li{background-position:0 3px;background-repeat:no-repeat}li.list-cn2-paddingleft-1{padding-left:40px}li.list-cn2-paddingleft-2{padding-left:55px}li.list-cn2-paddingleft-3{padding-left:68px}ol.custom_num{list-style:none}ol.custom_num li{background-position:0 3px;background-repeat:no-repeat}li.list-num-paddingleft-1{padding-left:25px}ol.custom_num1{list-style:none}ol.custom_num1 li{background-position:0 3px;background-repeat:no-repeat}li.list-num1-paddingleft-1{padding-left:25px}ol.custom_num2{list-style:none}ol.custom_num2 li{background-position:0 3px;background-repeat:no-repeat}li.list-num2-paddingleft-1{padding-left:35px}li.list-num2-paddingleft-2{padding-left:40px}li.list-dash{}ul.custom_dash{list-style:none}ul.custom_dash li{background-position:0 3px;background-repeat:no-repeat}li.list-dash-paddingleft{padding-left:35px}li.list-dot{}ul.custom_dot{list-style:none}ul.custom_dot li{background-position:0 3px;background-repeat:no-repeat}li.list-dot-paddingleft{padding-left:20px}.list-paddingleft-1{padding-left:0}.list-paddingleft-2{padding-left:30px}.list-paddingleft-3{padding-left:60px}
+.preview_content table,.preview_content tbody{
+    width:100%!important;
+}
+#preview_content img{
+    max-width: 100%;
+}
+
+.preview_con{
+    display: flex;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index: 9999999;
+    top:0;
+    left:0;
+    visibility: hidden;
+    -webkit-transition-property: opacity,visibility;
+    transition-duration:0.5s;
+    opacity:0;
+}
+.preview_con.active{
+    visibility: visible;
+    opacity:1;
+}
+
+.preview_box{
+    width:350px;
+    overflow: hidden;
+    border-radius: 40px;
+    background-image:url("/images/admin/communityOperate/pic_mockup.png");
+    background-repeat:no-repeat;
+    background-size: cover;
+    height:730px;
+    position:relative;
+    margin:100px auto;
+    top:-200px;
+    transition-property:top,visibility,opacity;
+    transition-duration:0.5s;
+    visibility: hidden;
+    opacity:0;
+}
+.preview_box.active{
+    opacity:1;
+    visibility:visible;
+    top:0;
+}
+#preview_content{
+    width: 310px;
+    background: #fff;
+    height: 514px;
+    margin: 126px 0 0 21px;
+    overflow: auto;
+    padding:0 5px;
+}
+/*** final ***/
+
+
+.base_right {
+    min-width: 930px;
+}
+
+.base_mainContent {
+    padding:0;
+}
+
+.content {
+    min-height: 600px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+
+.manageMemberHeader {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fafbfc;
+    padding-left: 20px;
+    font-size: 16px;
+}
+.go_back {
+    color: #333;
+    cursor: pointer;
+    float: left;
+}
+
+/*********************** 公用样式 - start *************************/
+.memberAddTitle {
+    margin: 30px 0 0 30px;
+    height: 22px;
+}
+.titleBlueLine {
+    width: 2px;
+    height: 14px;
+    margin: 6px 0;
+    background: #2a75ed;
+    float: left;
+}
+.AddMemberTitleWords {
+    float: left;
+    height: 28px;
+    padding: 0 8px 0 8px;
+    line-height: 28px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.partTitleWrapper {
+    width: 168px;
+    float: left;
+}
+
+.partTitle {
+    height: 20px;
+    line-height: 20px;
+    margin: 8px 0 0 40px;
+    font-size: 14px;
+    color: #243042;
+}
+.starIcon {
+    color: #e64340;
+    margin-left: 3px;
+}
+
+/*********************** 公用样式 - end *************************/
+
+/*********** 会员名称 ***********/
+.memberNamePart {
+    width: 100%;
+    height: 66px;
+    margin-top: 30px;
+}
+.memberNameInput {
+    width: 640px;
+    float: left;
+    font-size: 14px;
+}
+
+/*********** 会员简介 ***********/
+.memberSummaryPart {
+    width: 100%;
+    height: 107px;
+}
+.memberSummaryTextArea {
+    resize: none;
+    width: 640px;
+    height: 72px;
+    font-size: 14px;
+    overflow: auto;
+    line-height: 14px;
+    border-radius: 2px;
+}
+
+/*********** 会员封面 ***********/
+.memberCoverPart {
+    width: 100%;
+    height: 180px;
+}
+.memberCoverWrapper {
+    width: 640px;
+    height: 150px;
+    float: left;
+}
+.memberCoverImg {
+    width: 200px;
+    height: 150px;
+    background-color: #f7f8f9;
+    float: left;
+    cursor: pointer;
+}
+.memberCoverImg img {
+    width: 200px;
+    height: 150px;
+}
+.uploadCoverBtn {
+    position: relative;
+    float: left;
+    margin-left: 20px;
+    overflow: hidden;
+    margin-right: 80px;
+}
+.uploadCoverBtn span {
+    cursor: pointer;
+}
+
+.uploadCoverBtn input {
+    position: absolute;
+    left: -65px;
+    top: 0;
+    width: 176%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+.addCoverTip {
+    float: left;
+    width: 320px;
+    height: 40px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-left: 20px;
+    margin-top: 10px;
+    color: #b2b2b2;
+}
+
+/*********** 会员详情 ***********/
+.memberDetailPart {
+    width: 100%;
+    height: 420px;
+}
+.resAddSectionC {
+    float: left;
+    width: 700px;
+}
+.resDescribe {
+    width: 700px;
+}
+
+
+/*********** 会员价格 ***********/
+.memberPricePart {
+    width: 100%;
+    height: 66px;
+    margin-top: 30px;
+}
+.memberPriceInput {
+    width: 240px;
+    float: left;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+/*********** 会员有效期 ***********/
+.memberValidPeriodPart {
+    width: 100%;
+    height: 66px;
+}
+.selectValidPeriod {
+    width: 240px;
+}
+.selectValidPeriod option {
+
+}
+/*********** 所属分类 ***********/
+.memberCategoryPart {
+    width: 100%;
+    height: 50px;
+}
+.partCategoryTitle {
+    height: 20px;
+    line-height: 20px;
+    margin: 0 0 0 40px;
+    font-size: 14px;
+    color: #243042;
+}
+.memberCategorySelect {
+    height: 20px;
+    line-height: 20px;
+    float: left;
+}
+
+.checkBoxWrapper{
+    width: 90px;
+    height: 20px;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+input.radio_category {
+    visibility: hidden;
+    vertical-align: top;
+    width: 16px;
+    height: 0px;
+    margin-left: -10000px;
+}
+.radio_category + label.checkboxLabel{
+    display: inline-block;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 5px;
+    left: 0;
+    background: url("/images/check_box_3_states.svg") left center;
+}
+.radio_category:checked + label.checkboxLabel{
+    background: url("/images/check_box_3_states.svg") -24px center;
+}
+.checkboxText{
+    position: absolute;
+    left: 20px;
+    top: 1px;
+    font-size: 14px;
+    color: #243042;
+}
+
+/*********** 是否上架 ***********/
+.memberShowOrHidePart {
+    width: 100%;
+    height: 90px;
+}
+.radiosWrapper {
+    line-height: 20px;
+    float: left;
+}
+.radioOne {
+    margin-bottom: 20px;
+    height: 20px;
+}
+.radioTwo {
+    margin-bottom: 30px;
+    height: 20px;
+}
+.radiosWrapper input {
+    height: 16px;
+    width: 16px;
+    line-height: 16px;
+    float: left;
+    margin-right: 13px;
+}
+.radiosWrapper label {
+    height: 20px;
+    font-size: 14px;
+    color: #243042;
+}
+.greyWord {
+    color: #888888;
+}
+/*********** 底部按钮 ***********/
+.bottomPart {
+    width: 100%;
+    height: 110px;
+    margin: 0 40px;
+    padding-top: 20px;
+    border-top: solid 1px #f2f2f2;
+}
+.cancelBtn {
+    margin: 0 20px 0 125px;
+    float: left;
+}
+.saveBtn {
+    float: left;
+}

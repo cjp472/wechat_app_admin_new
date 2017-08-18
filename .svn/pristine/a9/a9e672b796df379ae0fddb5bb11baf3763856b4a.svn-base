@@ -1,0 +1,36 @@
+/**
+ * Created by Administrator on 2017/7/31.
+ */
+
+$(document).ready(function () {
+    $manageExercise.init();
+});
+
+$manageExercise = (function () {
+    var $manageExercise = {
+
+
+    };
+    var $private = {
+
+    };
+
+    $manageExercise.init = function () {
+
+        // radio 按钮点击切换效果
+        $('.remindRadio').on('click', function() {
+            $('.remindRadio').children('.circleRadio').removeClass('radioActive');
+            $(this).children('.circleRadio').addClass('radioActive');
+        });
+
+    };
+
+    return $manageExercise;
+})();
+
+
+
+
+
+
+

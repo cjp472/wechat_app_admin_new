@@ -1,0 +1,270 @@
+
+.base_mainContent {
+    padding: 0;
+    background-color: #fff;
+    min-height: 600px;
+}
+.pageTopTitle a.help{
+    color: #337ab7;
+    margin-right: 20px;
+    font-size: 14px;
+}
+.manageHeaderPart {
+    width: 100%;
+    height: 36px;
+    margin-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.manageHeaderPart .createBtn {
+    color: #fff;
+}
+
+.activeSearch {
+    float: right;
+    height: 36px;
+}
+
+.activeSearchBtn {
+    float: left;
+    margin-left: 10px;
+}
+
+.actManageContent {
+    padding: 20px;
+}
+
+.actManageCPart {
+    position: relative;
+    height: 170px;
+    border: 1px solid #dcdcdc;
+    padding: 20px 20px 0 20px;
+    margin-bottom: 20px;
+}
+
+.activeNumGroup {
+    position: absolute;
+    height: 50px;
+    top: 20px;
+    right: 10px;
+}
+
+.activeNumGroup > div {
+    float: left;
+    height: 50px;
+    text-align: center;
+    box-sizing: border-box;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.activeNum1, .activeNum2 {
+    border-right: 1px solid #efefef;
+}
+
+.activeNumTitle {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    color: #888888;
+}
+
+.activeNumContent {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    color: #353535;
+    margin-top: 10px;
+}
+
+.activeEndIcon {
+    position: absolute;
+    width: 100px;
+    height: 80px;
+    top: 23px;
+    right: 20px;
+}
+
+.activeEndIcon img {
+    width: 100%;
+    height: 100%;
+}
+
+.cmContentPart1 {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #353535;
+}
+
+.cmContentPart2, .cmContentPart3 {
+    width: 100%;
+    height: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #888888;
+}
+
+.cmContentPartNum {
+    float: right;
+    color: #353535;
+}
+
+.cmContentPartLine {
+    float: left;
+    position: relative;
+    margin-right: 12px;
+    left: 4px;
+    top: 7px;
+    width: 200px;
+    height: 6px;
+    background: #ececec;
+    overflow: hidden;
+}
+
+.cmContentPartLineNow {
+    float: left;
+    width: 0;
+    height: 6px;
+    background: #2a75ed;
+    transition: all 1s infinite;
+}
+
+.cmContentPart4 {
+    position: absolute;
+    width: 100%;
+    height: 49px;
+    bottom: 0;
+    left: 0;
+    background: #fdfdfd;
+    border-top: 1px solid #dcdcdc;
+}
+
+.cmContentPart4 a {
+    position: relative;
+    display: block;
+    float: left;
+    padding: 0 20px;
+    height: 49px;
+    line-height: 49px;
+    text-align: center;
+    color: #2a75ed;
+    font-size: 14px;
+    text-underline: none;
+}
+
+.cmContentPartLine1 {
+    width: 1px;
+    height: 16px;
+    position: absolute;
+    right: 0;
+    top: 16px;
+    background: #dcdcdc;
+}
+
+.cmContentPart4Link1 {
+    float: left;
+}
+
+.cmContentPart4Link2 {
+    float: right;
+}
+
+/*取消活动弹出框*/
+.darkScreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    top: 0;
+    left: 0;
+}
+
+.activeCancelBox {
+    position: fixed;
+    width: 540px;
+    height: 280px;
+    left: 50%;
+    top: 50%;
+    padding: 20px;
+    margin-top: -140px;
+    margin-left: -270px;
+    background: white;
+    border-radius: 10px;
+    z-index: 101;
+}
+
+.CancelBoxClose {
+    float: right;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.CancelBoxClose img {
+    width: 100%;
+    height: 100%;
+}
+
+.CancelBoxIcon {
+    width: 50px;
+    height: 50px;
+    margin: 30px auto 0 auto;
+}
+
+.CancelBoxIcon img {
+    width: 100%;
+    height: 100%;
+}
+
+.CancelBoxWord1 {
+    width: 100%;
+    height: 22px;
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    color: #353535;
+}
+
+.CancelBoxWord2 {
+    width: 100%;
+    height: 22px;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    color: #888888;
+}
+
+.CancelBoxBtnGroup {
+    width: 234px;
+    height: 36px;
+    margin: 42px auto 0 auto;
+}
+
+.CancelBoxBtnDelete {
+    margin-left: 34px;
+}
+
+.mangerMenu {
+    position: relative;
+}
+
+.mangerMenu:after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 16px;
+    position: absolute;
+    right: 0;
+    top: 16px;
+    background: #dcdcdc;
+}
+
+.mangerMenu:last-child:after {
+    display: none;
+}

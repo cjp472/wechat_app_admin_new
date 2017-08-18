@@ -1,0 +1,427 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\Utils;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+
+class CustomerController extends Controller
+{
+	private $request;
+	private $app_id;
+
+	public function __construct (Request $request)
+	{
+		$this->request = $request;
+		$this->app_id  = AppUtils::getAppID();
+	}
+
+	//用户页面
+	public function customer ()
+	{
+		$is_pay = Input::get('is_pay', 0);
+		$ruler  = Input::get("ruler", 0);//维度
+		$search = Input::get("search", "");//搜索内容
+
+		//        $page = Input::get('page', 1);  //页表
+		//        $perPage = 10;
+		//        $offset = ($page - 1) * $perPage;
+
+		//        if ($ruler == 0 && !empty($search)) {
+		//            $allInfo = Searchy::search('t_users')->fields('wx_nickname')
+		//                ->select('app_id', 'user_id', 'wx_avatar', 'wx_nickname', 'wx_gender', 'birth', 'phone', 'created_at')
+		//                ->query($search)->getQuery()
+		//                ->where('app_id', '=', $this->app_id)->having('relevance', '>', 20)
+		//                ->offset($offset)->limit($perPage)->orderBy('created_at', 'desc')->get();
+		//            $total = Searchy::search('t_users')->fields('wx_nickname')->select('user_id')->query($search)->getQuery()
+		//                ->where('app_id', '=', $this->app_id)->having('relevance', '>', 20)->get();
+		//            $count = count($total);
+		//            $allInfo = new LengthAwarePaginator($allInfo, $count, $perPage, $page, [
+		//                'path' => Paginator::resolveCurrentPath(), //生成路径
+		//                'pageName' => 'page',
+		//            ]);
+		//        } else {
+		$allInfo = DB::table('t_users')
+			->select('app_id', 'user_id', 'wx_avatar', 'wx_nickname', 'wx_gender', 'birth', 'phone', 'created_at')
+			->where("app_id", "=", $this->app_id)
+			->whereExists(function($query) use ($is_pay) {
+				if ($is_pay == 1) { //已消费
+					$query->select(\DB::raw(1))
+						->from('t_purchase')
+						->whereRaw("t_purchase.user_id = t_users.user_id and t_purchase.app_id = '$this->app_id'");
+				}
+			})
+			->where(function($query) use ($ruler, $search) {
+				if (!empty($search)) {
+					if ($ruler == 0) {  //昵称
+						$query->where('wx_nickname', '=', $search);
+					}
+					if ($ruler == 1) {  //手机号
+						$query->where('phone', '=', $search);
+					}
+				}
+			})
+			->orderby("updated_at", "desc")
+			->paginate(10);
+		$count   = $allInfo->total();
+		//        }
+
+		$data = [];
+		if ($allInfo) {
+			foreach ($allInfo as $key => $value) {
+				//页面的显示信息
+				$data[ $key ]['avatar']   = empty($value->wx_avatar) ? '../images/default.png' : $value->wx_avatar;
+				$data[ $key ]['nickname'] = empty($value->wx_nickname) ? '无' : $value->wx_nickname;
+				$data[ $key ]['gender']   = empty($value->wx_gender) ? '无' : ($value->wx_gender == 1 ? '男' : '女');
+				$data[ $key ]['birth']    = empty($value->birth) ? '无' : $value->birth;
+				$data[ $key ]['phone']    = empty($value->phone) ? '无' :
+					substr($value->phone, 0, 3) . '&nbsp;' . substr($value->phone, 3, 4) . '&nbsp;' . substr($value->phone, 7, 4);
+				$purchase                 = \DB::select("select ifnull(sum(price),0) as sum from t_purchase
+                where app_id = ? and user_id = ? and generate_type=0 and is_deleted=0", [$value->app_id, $value->user_id]);
+				$data[ $key ]['sum']      = empty($purchase[0]->sum) ? '0' : $purchase[0]->sum;
+				//每条记录的唯一附带标识信息
+				$data[ $key ]['app_id']     = $value->app_id;
+				$data[ $key ]['user_id']    = $value->user_id;
+				$data[ $key ]['created_at'] = empty($value->created_at) ? '无' : $value->created_at;
+
+			}
+		}
+
+		//回复模板信息
+		$model     = [];
+		$modelInfo = \DB::select("select id , send_nick_name as name, content from t_messages_model where app_id = ?", [$this->app_id]);
+		if ($modelInfo) {
+			foreach ($modelInfo as $key => $value) {
+				$model[ $key ][] = $value->id;
+				$model[ $key ][] = $value->name;
+				$model[ $key ][] = $value->content;
+			}
+		}
+
+		$audioList = \DB::connection('mysql')->table('t_audio')->where('app_id', $this->app_id)->orderBy('created_at', 'desc')->get();
+
+		return View('admin.customer', compact('data', 'is_pay', 'search', 'ruler', 'allInfo', 'count', 'model', 'audioList'));
+	}
+
+	//返回user_id_array
+	public function getUserIdArray ($userIds)
+	{
+		$user_id_array = [];
+		if ($userIds) {
+			foreach ($userIds as $user) {
+				$user_id_array[] = $user->user_id;
+			}
+		}
+
+		return $user_id_array;
+	}
+
+	//处理user_id
+	public function useridsData ($queryData)
+	{
+		$tempData = "";
+		foreach ($queryData as $item) {
+			$tempData[] = $item->user_id;
+		}
+
+		return $tempData;
+	}
+
+	//手动分页
+	/* users array() 当前页数据
+	 * total 总条数
+	 * page 页码 1
+	 * perPage 每页条数 10
+	 * return  array('userlist' => $userlist, 'paginator' => $paginator);
+	 * */
+	public function pageInator ($users, $total, $page, $perPage)
+	{
+		$perPage = $perPage ? $perPage : 10;
+		if ($page) {
+			$current_page = $page;
+			$current_page = $current_page <= 0 ? 1 : $current_page;
+		} else {
+			$current_page = 1;
+		}
+		$item      = $users; //注释1
+		$paginator = new LengthAwarePaginator($item, $total, $perPage, $current_page, [
+			'path'     => Paginator::resolveCurrentPath(), //注释2
+			'pageName' => 'page',
+		]);
+		$userlist  = $paginator->toArray()['data'];
+
+		return ['userlist' => $userlist, 'paginator' => $paginator];
+	}
+
+	//用户详情页
+	public function customerDetail ()
+	{
+		$appId    = $this->app_id;
+		$userId   = Input::get("userId");
+		$userInfo = \DB::select("select * from t_users where app_id = ? and user_id = ?", [$appId, $userId]);
+
+		//用户信息
+		$avatar   = empty($userInfo[0]->wx_avatar) ? '../images/default.png' : $userInfo[0]->wx_avatar;
+		$nickname = empty($userInfo[0]->wx_nickname) ? '无' : $userInfo[0]->wx_nickname;
+		$gender   = empty($userInfo[0]->wx_gender) ? '无' : ($userInfo[0]->wx_gender == 1 ? '男' : '女');
+		$phone    = empty($userInfo[0]->phone) ? '无' : substr($userInfo[0]->phone, 0, 3) .
+			'-' . substr($userInfo[0]->phone, 3, 4) . '-' . substr($userInfo[0]->phone, 7, 4);
+		$name     = empty($userInfo[0]->wx_name) ? '无' : $userInfo[0]->wx_name;
+		$address  = empty($userInfo[0]->address) ? '无' : $userInfo[0]->address;
+		$company  = empty($userInfo[0]->company) ? '无' : $userInfo[0]->company;
+		$job      = empty($userInfo[0]->job) ? '无' : $userInfo[0]->job;
+		$industry = empty($userInfo[0]->industry) ? '无' : $userInfo[0]->industry;
+
+		//购买信息
+		$purchase     = [];
+		$channel_ids  = [];
+		$purchaseInfo = \DB::select("select created_at,purchase_name,resource_type,payment_type,generate_type,price,channel_id from t_purchase
+        where app_id = ? and user_id = ? and is_deleted = 0 order by created_at desc", [$appId, $userId]);
+		if ($purchaseInfo) {
+			foreach ($purchaseInfo as $key => $value) {
+				$purchase[ $key ][] = empty($value->created_at) ? '无' : $value->created_at;
+				$purchase[ $key ][] = empty($value->purchase_name) ? '无' : $value->purchase_name;
+
+				if ($value->payment_type == 2) //单笔
+				{
+					if ($value->resource_type == 1) {
+						$purchase[ $key ][] = '图文单笔';
+					} else if ($value->resource_type == 2) {
+						$purchase[ $key ][] = '音频单笔';
+					} else if ($value->resource_type == 3) {
+						$purchase[ $key ][] = '视频单笔';
+					} else {
+						$purchase[ $key ][] = '直播单笔';
+					}
+				} else if ($value->payment_type == 3) {
+					$purchase[ $key ][] = '专栏';
+				} else {
+					$purchase[ $key ][] = '无';
+				}
+
+				//生成类型：0-购买 1-使用邀请码 2-体验开通
+				if ($value->generate_type == 0) $purchase[ $key ][] = '购买';
+				else if ($value->generate_type == 1) $purchase[ $key ][] = '邀请码';
+				else if ($value->generate_type == 2) $purchase[ $key ][] = '体验开通';
+				else if ($value->generate_type == 3) $purchase[ $key ][] = '赠送开通';
+				else $purchase[ $key ][] = '其他开通';
+				//pay
+				$purchase[ $key ][] = empty($value->price) ? '无' : '￥' . round(($value->price / 100), 2);
+				//来源渠道id
+				if ($value->channel_id) $channel_ids[] = $value->channel_id;
+
+			}
+		}
+
+		//获取来源渠道信息
+		$channel_name    = '';
+		$first_channelid = count($channel_ids) > 0 ? $channel_ids[ count($channel_ids) - 1 ] : 0;
+		if ($first_channelid) {
+			$channelInfo = \DB::select("select name from t_channels where id = ? ", [$first_channelid]);
+			if ($channelInfo) {
+				$channel_name = $channelInfo[0]->name;
+			} else {
+				$channel_name = '';
+			}
+		}
+
+		//消息信息,筛出管理员的回复
+		$message     = [];
+		$messageInfo = \DB::select("select send_nick_name,content,send_at from t_messages where app_id = ?
+        and user_id = ? and type='0' and source in ('0','2','3') and state='0' order by send_at desc", [$this->app_id, $userId]);
+		if ($messageInfo) {
+			foreach ($messageInfo as $key => $value) {
+				$message[ $key ][] = $value->send_nick_name;
+				$message[ $key ][] = $value->content;
+				$message[ $key ][] = $value->send_at;
+			}
+		}
+		//用户评论，显示当前用户的评论数据
+		$comments     = [];
+		$commentsInfo = \DB::select("select record_title,t_comments.type,src_user_id,src_content,content,created_at from t_comments 
+        where app_id = ? and user_id = ? order by created_at desc", [$this->app_id, $userId]);
+		if ($commentsInfo) {
+			$typeinfo = [0 => '图文', 1 => '音频', 2 => '视频'];
+			foreach ($commentsInfo as $key => $value) {
+				$comments[ $key ][] = $value->record_title;
+				$comments[ $key ][] = $value->type == 0 ? $typeinfo[0] : $value->type == 1 ? $typeinfo[1] : $typeinfo[2];
+				$comments[ $key ][] = $value->src_user_id;
+				$comments[ $key ][] = $value->src_content;
+				$comments[ $key ][] = $value->content;
+				$comments[ $key ][] = $value->created_at;
+			}
+		}
+		//用户反馈信息
+		$feedbacks    = [];
+		$feedbackInfo = \DB::select("select content,created_at from t_user_feedback where app_id = ? and user_id = ? 
+          order by created_at desc", [$this->app_id, $userId]);
+		if ($feedbackInfo) {
+			foreach ($feedbackInfo as $key => $value) {
+				$feedbacks[ $key ][] = $value->content;
+				$feedbacks[ $key ][] = $value->created_at;
+			}
+		}
+		//回复模板信息
+		$model     = [];
+		$modelInfo = \DB::select("select id , send_nick_name as name, content from t_messages_model where app_id = ?", [$this->app_id]);
+		if ($modelInfo) {
+			foreach ($modelInfo as $key => $value) {
+				$model[ $key ][] = $value->id;
+				$model[ $key ][] = $value->name;
+				$model[ $key ][] = $value->content;
+			}
+		}
+
+		$audioList = \DB::connection('mysql')->table('t_audio')->where('app_id', $this->app_id)->orderBy('created_at', 'desc')->get();
+
+		return View('admin.customerDetail', compact('avatar', 'nickname', 'gender', 'phone', 'name', 'address', 'first_channelid', 'channel_name',
+			'company', 'job', 'industry', 'purchase', 'message', 'comments', 'feedbacks', 'model', 'audioList'));
+	}
+
+	//用户编辑页
+	public function customerEdit ()
+	{
+		$appId    = $this->app_id;
+		$userId   = Input::get("userId");
+		$userinfo = \DB::select("select wx_name,address,company,job,industry from t_users where app_id = ?
+        and user_id = ?", [$appId, $userId]);
+
+		$name     = $userinfo[0]->wx_name;
+		$address  = $userinfo[0]->address;
+		$company  = $userinfo[0]->company;
+		$job      = $userinfo[0]->job;
+		$industry = $userinfo[0]->industry;
+
+		return View('admin.customerEdit', compact('name', 'address', 'company', 'job', 'industry'));
+	}
+
+	//用户编辑功能
+	public function customerUpdate ()
+	{
+		$data   = Input::all();
+		$update = \DB::update("update t_users set wx_name = ?,address = ?,company = ?,job = ?,industry = ?
+        where app_id = ? and user_id = ?", [$data['name'], $data['address'], $data['company'],
+			$data['job'], $data['industry'], $this->app_id, $data['userId']]);
+		if ($update >= 0) {
+			return response()->json(['ret' => 0]);
+		} else {
+			return response()->json(['ret' => 1]);
+		}
+	}
+
+	//用户发消息
+	public function customerMsg ()
+	{
+		$data           = [];
+		$data['app_id'] = $this->app_id;
+		$feedback       = Input::get("feedbackId");
+		$comment        = Input::get("commentId");
+
+		//  私信添加外链
+		$params                    = Input::get("params");
+		$data["content_clickable"] = $params['skip_title'];
+		$data["skip_type"]         = $params['skip_type'];
+		$data["skip_target"]       = $params['skip_target'];
+
+		$data['source'] = 0;
+		if ($feedback > 0) {
+			$data['src_id'] = $feedback;
+			$data['source'] = 3;
+		}
+		if ($comment) {
+			$data['src_id'] = $comment;
+			$data['source'] = 2;
+		}
+		//        $data['src_id'] = $feedback? $feedback : $comment? $comment : null;
+		//        $data['source'] = $feedback? 3 : $comment? 2 : 0;
+		//        if($data['src_id'] == null) {
+		//            unsert($data['src_id']);
+		//            unsert($data['source']);
+		//        }
+		$data['type']    = '0';
+		$data['user_id'] = Input::get("userId");
+		//$data['source']='0';
+		//        $data['skip_type']='0';
+		$data['send_nick_name'] = Input::get("nickname");
+		$data['content']        = Input::get("content");
+		$data['state']          = '0';
+		$data['send_at']        = date('Y-m-d H:i:s', time());
+		$data['created_at']     = date('Y-m-d H:i:s', time());
+		//        var_dump($data);
+		//        exit;
+		$insert = \DB::table("t_messages")->insertGetId($data);
+		if ($insert) {
+			return response()->json(['ret' => 0]);
+		} else {
+			return response()->json(['ret' => 1]);
+		}
+	}
+
+	//模板更新/插入
+	public function modelChange ()
+	{
+		$model_id       = $_POST['model_id'];
+		$send_nick_name = $_POST['send_nick_name'];
+		$content        = $_POST['content'];
+
+		$model['id']             = $model_id;
+		$model['send_nick_name'] = $send_nick_name;
+		$model['content']        = $content;
+
+		//获取当前时间
+		$current_time = Utils::getTime();
+		if ($model_id == 0) {
+			//插入新模板
+			$sql_array = ['app_id'     => $this->app_id, 'type' => 0, 'send_nick_name' => $send_nick_name,
+						  'source'     => 0, 'title' => '消息模板', 'content' => $content,
+						  'created_at' => $current_time, 'updated_at' => $current_time];
+			//保存数据库
+			try {
+				$result = \DB::table('t_messages_model')->insert(
+					$sql_array
+				);
+
+				//还需要返回最新插入的id
+				$id_result = \DB::select("select max(id) as id from t_messages_model where app_id = '$this->app_id'");
+				$MaxId     = $id_result[0]->id;
+
+				return response()->json(['code' => 0, 'msg' => '添加成功', 'id' => $MaxId]);
+			} catch (\Exception $e) {
+				$message = $e->getMessage();
+				if (strstr($message, "Duplicate entry")) {
+					return response()->json(['code' => 1, 'msg' => '该模板已存在，请修改模板后再提交！']);
+				}
+			}
+		} else {
+			try {
+				//更新数据库
+				$result = \DB::update('update t_messages_model set send_nick_name = ? , content = ? 
+                  where app_id = ? and id = ?', [$send_nick_name, $content, $this->app_id, $model_id]);
+				if ($result) {
+					return response()->json(['code' => 2, 'msg' => '更新成功']);
+				} else {
+					return response()->json(['code' => 3, 'msg' => '更新失败，请联系技术小哥']);
+				}
+
+			} catch (\Exception $e) {
+				$message = $e->getMessage();
+				if (strstr($message, "Duplicate entry")) {
+					return response()->json(['code' => 1, 'msg' => '该模板已存在，请修改模板后再提交！']);
+				} else {
+					return response()->json(['code' => 1, 'msg' => '出现问题啦，请联系技术小哥！', 'errorMsg' => $message]);
+				}
+			}
+		}
+
+	}
+}
+
+
+
+
+

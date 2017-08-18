@@ -1,0 +1,46 @@
+table{
+    font-size: 14px;
+}
+.tab_div {
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.tab_type{
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.tab_active{
+    border-bottom: 2px solid #2e64cb;
+}
+
+.tool_bar{
+    height: 34px;
+    line-height: 34px;
+    margin: 20px 0 20px 0 ;
+}
+
+.tool_bar_item{
+    float: right;
+}
+.tool_bar_item_right{
+    float: right;
+}
+
+.tool_bar_item_margin{
+    float: right;
+    margin-right: 10px;
+}
+.tool_bar_item_left{
+    float: left;
+}
+.searchSelectArea
+{
+    float: right;
+    margin-right:10px;
+}

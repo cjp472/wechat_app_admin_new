@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * 开放平台
+ */
+
+namespace App\Http\Controllers\Users;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\StringConstants;
+use App\Http\Controllers\Tools\Utils;
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
+class OpenController extends Controller
+{
+
+    // 开放平台设置页面
+    public function openApiSetting()
+    {
+        $appId = AppUtils::getAppID();
+        $wxAppId = AppUtils::getWxAppId();
+        $app_secret = DB::connection('mysql_config')->select("SELECT secrete_key as app_secret from t_app_conf where app_id=? and wx_app_id=? and wx_app_type=? limit 1",
+                     [$appId,$wxAppId,1]);
+        $openSt = DB::connection('mysql_config')->select("SELECT * from t_app_open_conf where app_id=? limit 1", [$appId]);
+        if (!$openSt) {
+            self::createOpenSetting(); // 新增开放平台配置
+            $openSt = DB::connection('mysql_config')->select("SELECT * from t_app_open_conf where app_id=? limit 1", [$appId]);
+        }
+        $openSt = $openSt[0];
+        $openSt->app_secret = $app_secret[0]->app_secret;
+        return view("admin.accountSetting.openApiSetting", [
+            "data" => $openSt
+        ]);
+    }
+
+    // 修改平台配置
+    public function modifySetting(Request $request)
+    {
+        $appId = AppUtils::getAppID();
+        $wxAppId = AppUtils::getWxAppId();
+        $input = $request->all();
+        // 查询是否配置开放平台
+        $openSt = DB::connection('mysql_config')->select("SELECT * from t_app_open_conf where app_id=? limit 1", [$appId]);
+        if (!$openSt) { // 未配置开放平台
+            $create = self::createOpenSetting(); // 新增开放平台配置
+        }
+        $updated_at = date('Y-m-d H:i:s');
+        // 修改开放平台配置
+        $update = DB::connection('mysql_config')->table('t_app_open_conf')
+                  ->where('app_id', $appId)->limit(1)
+                  ->update(['need_jump'=>$input['need_jump'],'web_jump_url'=>$input['web_jump_url'],'need_push'=>$input['need_push'],'msg_push_url'=>$input['msg_push_url'],
+                  'updated_at'=>$updated_at]);
+        // 修改app_secret
+        $update_secret = DB::connection('mysql_config')->table('t_app_conf')
+                  ->where('app_id', $appId)->where('wx_app_type', '1')->where('wx_app_id', $wxAppId)->limit(1)
+                  ->update(['secrete_key'=>$input['app_secret']]);
+        return json_encode(['code' => 0, 'msg' => '', 'data' => []]);
+    }
+
+    // 新增开放平台配置
+    public function createOpenSetting()
+    {
+        $appId = AppUtils::getAppID();
+        $wxAppId = AppUtils::getWxAppId();
+        // 查询是否配置开放平台
+        $openSt = DB::connection('mysql_config')->select("SELECT * from t_app_open_conf where app_id=? limit 1", [$appId]);
+        if (!$openSt) { // 未配置开放平台
+            $created_at = date('Y-m-d H:i:s');
+            $insertData = DB::connection('mysql_config')->insert("INSERT INTO t_app_open_conf (
+                app_id,
+                wx_app_id,
+                created_at
+            ) VALUES (?, ?, ?)", [$appId, $wxAppId, $created_at]);
+            if ($insertData) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+}

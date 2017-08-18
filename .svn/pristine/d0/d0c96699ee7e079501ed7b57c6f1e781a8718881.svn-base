@@ -1,0 +1,59 @@
+/**
+ * Created by Administrator on 2017/8/2.
+ */
+
+
+$(document).ready(function () {
+    $currentObj.init();
+});
+
+$currentObj = (function () {
+    var $currentObj = {
+
+    };
+    var $private = {
+
+    };
+    $currentObj.init = function () {
+
+        //作业的操作
+        $(".operateList > li.operate").click(function () {
+            var $self = $(this),
+                $parent = $self.parents(".exerciseOperateArea"),
+                type = $self.data("type"),
+                resId = $parent.data("resource_id"),
+                resType = $parent.data("resource_type"),
+                exerciseId = $parent.data("exercise_id");
+
+            switch (type) {
+                case "look_exercise_content":
+
+                    break;
+                case "delete_exercise":
+
+                    break;
+                default:
+                    console.log("参数错误");
+                    break;
+            }
+            baseUtils.show.redTip(type);
+
+        });
+
+
+    };
+
+    return $currentObj;
+})();
+
+
+
+
+
+
+
+
+
+
+
+

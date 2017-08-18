@@ -1,0 +1,135 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'communityOperate';
+$pageData['barTitle'] = '作业本';
+
+//dump($exercise_list);
+//dump($user_wx_nickname);
+
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--弹窗--}}
+    <link type=text/css rel="stylesheet" href="../css/external/jquery-alert.css" />
+    <link type=text/css rel="stylesheet" href="../css/admin/exercise/exerciseList.css?{{env('timestamp')}}"/>
+@stop
+
+@section('page_js')
+    {{--弹窗--}}
+    <script type="text/javascript" src="../js/external/jquery-alert.js?"></script>
+    <script type="text/javascript" src="../js/admin/exercise/exerciseList.js?{{env('timestamp')}}"></script>
+@stop
+
+@section('base_mainContent')
+
+    <header class="mainHeader">
+        <div class="pageTopTitle">
+            <a href="/exercise/exercise_book_list">作业本</a>
+            &gt;
+            作业列表
+        </div>
+        <div class="headerContent">
+            <span class="exerciseBookName">{{$exercise_book_title}}</span>
+            <span class="exerciseBookTeacherName">老师：{{$user_wx_nickname}}</span>
+            <form class="submitSearchPart" action="/exercise/exercise_list" method="GET">
+                <input type="hidden" name="exercise_book_id" value="{{$exercise_book_id}}">
+                <input class="inputDefault searchContentInput" name="search_content" type="search"
+                       placeholder="请输入作业内容" value="{{trim($search_content)}}">
+                <button class="btnMid xeBtnDefault submitSearchBtn" type="submit">搜索</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="mainContent">
+        <div class="tableHeader">
+            <div>作业内容</div>
+            <div>布置时间</div>
+            <div>关联课程</div>
+            <div>回答数</div>
+            <div>当前状态</div>
+            <div>操作</div>
+        </div>
+        <div class="tableContent">
+            @foreach($exercise_list as $key => $value)
+                <?php
+                /*********** 作业内容 ***********/
+                $exerciseContent = $value->content;
+                $imgUrls = ($value->img_compressed_urls?$value->img_compressed_urls:$value->img_urls);
+                $imgUrlsArr = json_decode($imgUrls);
+                if (count($imgUrlsArr) > 0) {
+                    $exerciseContent .= "(图片)";
+                }
+                $audioUrlsArr = json_decode($value->audio_urls);
+                if (count($audioUrlsArr) > 0) {
+                    $exerciseContent .= "(语音)";
+                }
+                if (empty($exerciseContent)) {
+                    $exerciseContent = "--";
+                }
+
+                /*********** 关联课程 ***********/
+                $relevantRes = "";
+                switch ($value->resource_type) {
+                    case 1:
+                        $relevantRes= "图文：".$value->resource_name;
+                        break;
+                    case 2:
+                        $relevantRes= "音频：".$value->resource_name;
+                        break;
+                    case 3:
+                        $relevantRes= "视频：".$value->resource_name;
+                        break;
+                    case 4:
+                        $relevantRes= "直播：".$value->resource_name;
+                        break;
+                    case 5:
+                        $relevantRes= "专栏：".$value->resource_name;
+                        break;
+                    default:
+                        $relevantRes= "--";
+                        break;
+                }
+                /*********** 作业状态 ***********/
+                $exerciseState = ($value->state?"隐藏":"显示");
+                ?>
+                <div class="singleExerciseItem">
+                    <div title="{{$exerciseContent}}">{{$exerciseContent}}</div>
+                    <div title="{{$value->created_at}}">{{$value->created_at}}</div>
+                    <div title="{{$relevantRes}}">{{$relevantRes}}</div>
+                    <div>{{$value->submit_exercise_num}}</div>
+                    <div>{{$exerciseState}}</div>
+                    <div class="exerciseOperateArea"
+                         data-resource_id="{{$value->resource_id}}"
+                         data-resource_type="{{$value->resource_type}}"
+                         data-exercise_id="{{$value->exercise_id}}"
+                    >
+                         <ul class="operateList">
+                             <li class="operate" data-type="look_exercise_content">查看作业内容</li>
+                             <li class="verticalGapLine">&nbsp;|&nbsp;</li>
+                             <li class="operate" data-type="delete_exercise">删除</li>
+                         </ul>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </main>
+
+@stop
+
+
+@section("base_modal")
+
+
+@stop
+
+
+
+
+
+
+
+
+
+
+

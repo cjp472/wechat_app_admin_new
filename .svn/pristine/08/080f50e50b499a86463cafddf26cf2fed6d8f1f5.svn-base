@@ -1,0 +1,79 @@
+<?php
+$pageData = [];
+$pageData['barTitle'] = '商品管理';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section("page_css")
+    {{--<link type=text/css rel="stylesheet" href="../css/admin/resManage/memberList.css?{{env('timestamp')}}" />--}}
+    <link type=text/css rel="stylesheet" href="../css/admin/resManage/userDefined.css?{{env('timestamp')}}" />
+@stop
+
+@section("page_js")
+    <script type="text/javascript" src="../js/admin/resManage/userDefined.js?{{env('timestamp')}}"></script>
+@stop
+
+@section("base_mainContent")
+    <div class="pageTopTitle">
+        <a>商品管理</a> &gt; 自定义内容列表
+    </div>
+
+    <div class="content">
+        <div id="addContent" class="btnMid btnBlue">添加内容</div>
+        <div class="hasAddItem">
+            <input type="hidden" id="product_id" data-pid="{{$product_id}}">
+          @foreach($memberContentList as $key => $value)
+            <div data-pro-id="{{$value -> id}}" class="list_item">
+                <img class="type_icon"
+                     @if($value->resource_type == 1)
+                     src="/images/admin/resManage/res_type_article.png" title="图文"
+                     @elseif($value->resource_type == 2)
+                     src="/images/admin/resManage/res_type_audio.png" title="音频"
+                     @elseif($value->resource_type == 3)
+                     src="/images/admin/resManage/res_type_video.png" title="视频"
+                     @elseif($value->resource_type == 4)
+                     src="/images/admin/resManage/res_type_live.png" title="直播"
+                     @endif
+                >
+                <img class="cover_img" src="{{$value -> img_url_compressed}}">
+                <div class="item_desc">
+                    <div class="titleMsg">{{$value -> title}}</div>
+                </div>
+                <button class="close closeItem">×</button>
+            </div>
+          @endforeach
+        </div>
+
+        <div class="list-page">
+                {!! $memberContentList->appends(['id'=>$product_id])->render() !!}
+        </div>
+    </div>
+
+
+@stop
+
+@section("base_modal")
+    {{--编辑后离开页面的提示--}}
+    @include('admin.actionTips.leaveTips')
+    <div class="modal downloadPop" id="addModal" style="display:none">
+        <div class="darkScreen"></div>
+        <div class="addBox">
+            <div class="pageTopTitle">
+                <span class="outPutTime">选择已有单品</span>
+                <button type="button" class="close closePop" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body" style="height:436px">
+                <div class="searchHeader">
+                    <input class="" id="kwContent" type="text" placeholder="输入名称"/>
+                    <button class="btnMid" id="forTab" value="">搜索</button>
+                </div>
+                <div class="initList">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="xeBtnDefault btnMid closePop">关闭</div>
+                <div class="btnBlue btnMid" id="add">添加</div>
+            </div>
+        </div>
+    </div>
+@stop

@@ -1,0 +1,82 @@
+
+table.list {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 13px;
+}
+
+table.list th {
+    height: 18px;
+    line-height: 18px;
+    padding: 10px 10px;
+    text-align: center;
+    color: #888;
+    white-space: nowrap;
+    font-weight: normal;
+    border-bottom: 0 solid #ddd !important;
+    border-top: 0 solid #ddd !important;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+table.list tr td.normal {
+    width: 85px;
+}
+
+table.list tr td {
+    border-bottom: 1px #e5e5e5 solid;
+    padding: 10px 10px;
+    height: 18px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+table.list tr.last td {
+    border-bottom: 0 #e5e5e5 solid;
+}
+
+table.list tr.title {
+    background-color: #F9F9F9;
+    /*border-bottom: 1px;*/
+}
+
+table.list tr.highlight td.normal {
+    font-size: 13px;
+    font-weight: normal;
+}
+
+table.list tr.highlight td {
+    color: #323332;
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+.echats_class {
+    width: 102%;
+    height: 500px;
+    margin-left: -25px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.todayIncome {
+    color: red;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.otherIncome {
+    color: #323332;
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+.data_tip {
+    margin: 10px 0 10px 20px;
+    color: #999;
+}

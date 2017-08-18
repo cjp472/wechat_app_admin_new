@@ -1,0 +1,36 @@
+/**
+ * Created by jserk on 2017/3/30.
+ */
+$(function () {
+    marketingSelect.init();
+})
+
+var marketingSelect=function () {
+    var marketingSelect={};
+
+    marketingSelect.init=function () {
+        $(".channel").click(function(){
+            window.location='/channel_admin';
+        });
+
+        $(".saler").click(function(){
+             window.location='/distribute/index';
+        });
+
+        $(".invitationCode").click(function(){
+            window.location='/invitecode';
+        });
+
+        $(".invitation").click(function(){
+            window.location='/invite/index';
+        });
+        $(".discount").click(function(){
+            window.location='coupon/index';
+        });
+        $(".shortLink").click(function(){
+            window.location='/assist/short';
+        });
+    };
+    
+    return marketingSelect;
+}();

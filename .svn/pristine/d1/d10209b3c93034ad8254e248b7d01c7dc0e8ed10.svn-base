@@ -1,0 +1,207 @@
+<template>
+    <div class="index-part-drag">
+        <div class="navigation-bar">
+            <img src="/images/admin/shopDiy/navigation-bar@2x.png"/>
+        </div>
+        <draggable class="drag-group" v-model="list" :options="dragOptions" :move="onMove"
+                   @start="isDragging=true" @end="isDragging=false">
+            <transition-group type="transition" :name="'flip-list'">
+                <div class="drag-group-item" v-for="(element,index) in list" :key="element.order"
+                     @mouseover="mouseOverShow(index)" @click.stop="onEditClick(element,$event)">
+                    <banner v-if="element.index_sort == 1"></banner>
+                    <category v-else-if="element.index_sort == 2" :category_part="index_local_data.category_part"></category>
+                    <community v-else-if="element.index_sort == 3" :community_part="index_local_data.community_part"></community>
+                    <member v-else-if="element.index_sort == 4" :member_part="index_local_data.member_part"></member>
+                    <question v-else-if="element.index_sort == 5" :question_part="index_local_data.question_part"></question>
+                    <alive v-else-if="element.index_sort == 6" :alive_part="index_local_data.alive_part"></alive>
+                    <recommend v-else-if="element.index_sort == 7" :recommend_part="index_local_data.recommend_part"></recommend>
+                    <activity v-else-if="element.index_sort == 8" :activity_part="index_local_data.activity_part"></activity>
+                    <div class="actions" v-show="isActive==index">
+                        <div class="actions-wrap">
+                            <span class="action edit" @click.stop="onEditButton(element,$event)">编辑</span>
+                            <span class="action delete" @click="onDelete(index)">删除</span>
+                        </div>
+                        <div class="action-tip">
+                            <img src="/images/admin/shopDiy/icon-drag@2x.png"/>
+                        </div>
+                    </div>
+                </div>
+            </transition-group>
+        </draggable>
+        <index_part_add :index_sort="index_sort"></index_part_add>
+    </div>
+</template>
+
+<script>
+    import draggable from 'vuedraggable';
+    import EventBus from '../../libs/eventbus.js';
+
+    import banner from './banner_part/banner.vue';
+    import category from './category_part/category.vue';
+    import community from './community_part/community.vue';
+    import member from './member_part/member.vue';
+    import alive from './alive_part/alive.vue';
+    import question from './question_part/question.vue';
+    import recommend from './recommend_part/recommend.vue';
+    import activity from './activity_part/activity.vue';
+    import index_part_add from './index_part_add.vue';
+
+    export default {
+        props: ['index_sort', 'index_data', 'index_local_data'],
+        data () {
+            return {
+                list: this.index_sort.map((item, index) => {
+                    return {index_sort: item, order: index + 1, index_data: this.index_data[index]};
+                }),
+                isDragging: false,
+                delayedDragging: false,
+                isActive: 0
+            }
+        },
+        created: function () {
+            EventBus.$on('add_part',this.addIndexSort);
+        },
+        methods: {
+            onMove: function () {
+            },
+            mouseOverShow: function (index) {
+                this.isActive = index;
+            },
+            onEditButton: function (item,event) {
+//                console.log(item);
+//                console.log(event.path[3].offsetTop);
+                let obj = {
+                    num: event.path[3].offsetTop,
+                    index_sort: item.index_sort,
+                    index_data: item.index_data
+                };
+                EventBus.$emit('sidebar_part_position',obj);
+            },
+            onEditClick: function (item,event) {
+//                console.log(item);
+//                console.log(event.path[1].offsetTop);
+                let obj = {
+                    num: event.path[1].offsetTop,
+                    index_sort: item.index_sort,
+                    index_data: item.index_data
+                };
+                EventBus.$emit('sidebar_part_position',obj);
+            },
+            onDelete: function (index) {
+                this.list.splice(index,1);
+                let arr = [];
+                for (let i=0;i<this.list.length;i++){
+                    arr.push(this.list[i].index_sort);
+                }
+                EventBus.$emit('delete_part',arr);//与添加模块交互
+            },
+            addIndexSort: function (index_sort) {
+                let item = {
+                    index_sort: index_sort,
+                    order: this.list.length+1,
+                    index_data: {}
+                };
+                this.list.push(item);
+            }
+        },
+        computed: {
+            dragOptions () {
+                return {
+                    animation: 150,
+                    group: 'description',
+                    ghostClass: 'ghost'
+                };
+            }
+        },
+        watch: {
+            isDragging (newValue) {
+                if (newValue) {
+                    this.delayedDragging = true;
+                    return
+                }
+                this.$nextTick(() => {
+                    this.delayedDragging = false;
+                    console.log(this.list);
+                })
+            }
+        },
+        components: {
+            draggable,
+            banner,
+            category,
+            community,
+            member,
+            alive,
+            question,
+            recommend,
+            activity,
+            index_part_add
+        }
+    }
+</script>
+
+<style>
+    .index-part-drag {
+        width: 100%;
+        background-color: #efeff4;
+    }
+
+    .navigation-bar img {
+        width: 100%;
+        height: 65px;
+    }
+
+    .flip-list-move {
+        transition: transform 0.5s;
+    }
+
+    .ghost {
+        opacity: .5;
+        background: #C8EBFB;
+    }
+
+    .drag-group-item {
+        position: relative;
+        cursor: move;
+    }
+    .drag-group-item .actions {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 100%;
+        width: 375px;
+        border: 2px dashed rgba(42,117,237,0.7);
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 2;
+    }
+    .drag-group-item .actions .actions-wrap {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 0;
+    }
+    .drag-group-item .actions .action-tip {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        width: 18px;
+        height: 14px;
+        margin-top: -7px;
+    }
+    .drag-group-item .actions .action-tip img {
+        width: 100%;
+        height: 100%;
+    }
+    .drag-group-item .actions .actions-wrap .action {
+        display: inline-block;
+        background-color: rgba(0,0,0,0.4);
+        color: #fff;
+        padding: 0 5px;
+        margin-left: 1px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+</style>

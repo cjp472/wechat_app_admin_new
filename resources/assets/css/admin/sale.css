@@ -1,0 +1,136 @@
+.base_mainContent
+{
+    padding: 0;
+}
+/*****************************标题部分**************************/
+.header
+{
+    width: 100%;
+    height: 62px;
+    margin-bottom: 20px;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #ECECEC;
+}
+.header_ul
+{
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    padding-left: 0;
+}
+.header_li
+{
+    float: left;
+    width: 110px;
+    height: 62px;
+    text-align: center;
+    line-height: 62px;
+}
+.header_a
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    color:#333;
+}
+.header_a:hover
+{
+    color:#333;
+}
+
+/***********************************内容列表*************************************/
+.content
+{
+    width: 100%;
+    min-height: 550px;
+}
+
+/***********************************搜索区域*************************************/
+.searchArea
+{
+    width: 100%;
+    height: 34px;
+    padding: 0 20px;
+}
+/*搜素按钮*/
+#searchButton
+{
+    float: right;
+}
+/*搜索输入*/
+.searchInputArea
+{
+    float: right;
+    margin-right: 5px;
+}
+/*多选框*/
+.selectArea
+{
+    float: right;
+    margin-right: 10px;
+}
+
+/*已拒绝*/
+.hasRefused
+{
+    color: #b8b8b8;
+}
+
+/***************************************同意分销Modal框***********************************/
+.chooseChannelArea
+{
+    margin: 0;
+    padding-left: 20px;
+}
+/*已有渠道的展示*/
+.tableArea
+{
+    height: 300px;
+    overflow-y:scroll ;
+    margin-left: 20px;
+}
+/*底部的button*/
+.buttonArea
+{
+    text-align: center;
+    margin-top: 20px;
+}
+/*确认申请和拒绝申请*/
+td{
+    text-overflow: ellipsis;
+}
+.blueButton
+{
+    width: 120px;
+    height: 42px;
+    text-align: center;
+    line-height: 36px;
+    background-color: #2A75ED;
+    border-radius: 4px;
+    color: #fff;
+    border: none;
+}
+td:nth-child(6) {
+    max-width: 187px !important;
+    word-break: break-all !important;
+    word-wrap: break-word !important;
+    line-height: 30px!important;
+}
+
+td:nth-child(8) {
+    max-width: 487px !important;
+    word-break: break-all !important;
+    word-wrap: break-word !important;
+    /*line-height: 30px!important;*/
+}
+
+
+
+
+
+
+
+
+
+

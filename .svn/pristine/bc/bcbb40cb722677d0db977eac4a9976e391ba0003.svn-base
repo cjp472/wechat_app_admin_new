@@ -1,0 +1,491 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\StringConstants;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Tools\Utils;
+
+class InterfaceSettingController extends Controller
+{
+    private $app_id;
+
+    public function __construct()
+    {
+        $this->app_id = AppUtils::getAppID();
+    }
+
+    //界面设置首页
+    public function interfaceSetting()
+    {
+        $info = DB::connection('mysql_config')->table('t_app_module')->select('if_caption_define','caption_define')
+            ->where('app_id',$this->app_id)->first();
+
+        //首页名称   默认显示为"首页"
+        $home_title = '首页';
+        if ($info){
+            if ($info->if_caption_define) {
+                $result_json = json_decode($info->caption_define, true);
+                if ($result_json && key_exists('home_title', $result_json)) {
+                    $home_title = $result_json['home_title'];
+                }
+            }
+        }
+
+        // 业务信息
+        $app_info = DB::connection('mysql_config')->table('t_app_conf')->select('use_collection','merchant_id','wx_app_id')
+            ->where('app_id',$this->app_id)->where('wx_app_type',1)->first();
+        // 商户名称
+        $wx_app_name = DB::connection('mysql_config')->table('t_merchant_conf')
+            ->where('merchant_id',$app_info->merchant_id)->value('wx_app_name');
+
+        $info->home_title = $home_title;
+        $info->use_collection = $app_info->use_collection;
+        $info->wx_app_id = $app_info->wx_app_id;
+        $info->wx_app_name = $wx_app_name;
+
+        return View('admin.interfaceSetting', [
+            'info' => $info,
+        ]);
+    }
+
+    //首页标题设置
+    public function setHomeTitle()
+    {
+        $home_title = Input::get("home_title");
+        $users = DB::connection("mysql_config")->table("t_app_module")->where("app_id",$this->app_id)->first();
+
+        if($users){
+            if($users->caption_define){
+                $caption_define = '{"home_title":"'.$home_title.'"}';
+            }else {
+                $temp = json_decode($users->caption_define);
+                $temp->home_title = $home_title;
+                $caption_define = json_encode($temp, JSON_UNESCAPED_UNICODE);
+            }
+//              $update = DB::connection("mysql_config")->update("update t_app_module set caption_define=?
+//                where app_id=? limit 1", [$caption_define, $this->app_id]);
+            $update = DB::connection("mysql_config")->table("t_app_module")->where("app_id",$this->app_id)
+                ->update(["caption_define"=>$caption_define,"updated_at"=>date("Y-m-d H:i:s")]);
+
+            if ($update === 1) {
+                return response()->json(['code' => 0,"msg" => "更新成功"]); //更新成功
+            } else {
+                return response()->json(['code' => 1,"msg" => "更新失败"]); //更新失败
+            }
+        }else{
+            return response()->json(['code' => -1,"msg" => "数据库查询失败"]);
+        }
+    }
+
+    //分享设置页面
+    public function shareSetting()
+    {
+        $share = DB::connection("mysql_config")->table("t_app_conf")
+            ->select("wx_share_title", "wx_share_content", "wx_share_image", "wx_share_image_compressed")
+            ->where("app_id", "=", $this->app_id)->where("wx_app_type", "=", "1")->first();
+        return View("admin.shareSetting", compact("share"));
+    }
+
+    //更新分享设置
+    public function updateShareInfo()
+    {
+        $params = Input::get("params");
+        $params['updated_at'] = date('Y-m-d H:i:s');//压缩图片 1 微信
+        if (array_key_exists('wx_share_image', $params)) {
+            $params['wx_share_image_compressed'] = $params['wx_share_image'];
+            $this->imageDeal($params['wx_share_image'], 't_app_conf', 1, 200, 200, 60, 'wx_share_image_compressed');
+        }
+        $update = DB::connection("mysql_config")->table("t_app_conf")
+            ->where("app_id", "=", $this->app_id)->where("wx_app_type", "=", "1")->update($params);
+
+        if ($update > 0) {
+            return response()->json(['code' => 0, 'msg' => '保存成功']);
+        } else {
+            return response()->json(['code' => 1, 'msg' => '保存失败']);
+        }
+    }
+
+    //公众号设置页面
+    public function wxAccountSetting() {
+        $wxAccount = DB::connection("mysql_config")->table("t_app_conf")
+            ->select('wx_app_name',"wx_app_name_define", "wx_qr_url", "wx_qr_url_compressed")
+            ->where("app_id", "=", $this->app_id)->where("wx_app_type", "=", "1")->first();
+        if ($wxAccount->wx_app_name_define){
+            $name = $wxAccount->wx_app_name_define;
+        }else {
+            $name = $wxAccount->wx_app_name;
+        }
+        return View("admin.knowledgeShop.wxAccountSetting", compact("wxAccount","name"));
+    }
+    public function uploadWXAccountInfo() {
+        $params = Input::get("params");
+        $params['updated_at'] = date('Y-m-d H:i:s');
+
+        //压缩图片
+        if (array_key_exists('wx_qr_url', $params)) {
+            $params['wx_qr_url_compressed'] = $params['wx_qr_url'];
+            $this->imageDeal($params['wx_qr_url'], 't_app_conf', 1, 100, 100, 80, 'wx_qr_url_compressed');
+        }
+        $update = DB::connection("mysql_config")->table("t_app_conf")
+            ->where("app_id", "=", $this->app_id)->where("wx_app_type", "=", "1")->update($params);
+        if ($update > 0) {
+            return response()->json(['code' => 0, 'msg' => '保存成功']);
+        } else {
+            return response()->json(['code' => 1, 'msg' => '保存失败']);
+        }
+    }
+
+    //压缩图片
+    public function imageDeal($image_url, $table_name, $image_id, $image_width, $image_height, $image_quality, $compressed)
+    {
+        $host_url = env('HOST_URL');
+        $app_id = AppUtils::getAppID();
+
+        //压缩尺寸设定
+        $image_width = $image_width ? $image_width : 100;
+        $image_height = $image_height ? $image_height : 100;
+        $image_quality = $image_quality ? $image_quality : 60;
+        Utils::asyncThread($host_url . '/downloadImaged?image_field=wx_app_type&image_id=' . $image_id . '&app_id='
+            . $app_id . '&table_name=' . $table_name . '&file_url=' . $image_url
+            . '&image_width=' . $image_width . '&image_height=' . $image_height . '&image_quality=' . $image_quality
+            . '&compressed=' . $compressed . '&db=mysql_config');;
+
+        Utils::log("async of out");
+    }
+
+    //订阅数隐藏开关
+    public function setHidSubCount(Request $request)
+    {
+
+        $set_info=DB::connection('mysql_config')->table('t_app_module')
+            ->where('app_id',$this->app_id)
+            ->value('hide_sub_count');
+
+        $hide_sub_count=$request->input('status');
+        if($set_info==1) {
+            $hide_sub_count = 0;
+        }
+        else
+        {
+            $hide_sub_count=1;
+        }
+
+        $update=DB::connection('mysql_config')->table('t_app_module')
+            ->where('app_id',$this->app_id)
+            ->update(['hide_sub_count'=>$hide_sub_count]);
+        $data = new \stdClass();
+        $data->status = $set_info;
+        if($update)
+        {
+            return response()->json(['code'  => 0, 'msg'   => '修改成功', 'data'  => $data]);
+        }
+        else
+        {
+            return response()->json(['code'  => -1, 'msg'   => '修改失败', 'data'  => $data]);
+        }
+
+    }
+
+    //消息弹窗开关
+    public function setAlertMessage() {
+
+        $set_info=DB::connection('mysql_config')->table('t_app_module')
+            ->where('app_id',$this->app_id)
+            ->value('is_alert_message');
+
+        if($set_info==1) {
+            $is_alert_message = 0;
+        } else {
+            $is_alert_message = 1;
+        }
+
+        $update=DB::connection('mysql_config')->table('t_app_module')
+            ->where('app_id',$this->app_id)
+            ->update(['is_alert_message'=>$is_alert_message]);
+        $data = new \stdClass();
+        $data->status = $is_alert_message;
+        if($update) {
+            return ['code'  => 0, 'msg'   => 'ok', 'data'  => $data];
+        } else {
+            return ['code'  => 1024, 'msg'   => 'db error', 'data'  => $data];
+        }
+
+    }
+
+    public function setResourceCount(Request $request){
+        $status = $request->input('status',0);
+        $old_status = DB::connection('mysql_config')->table('t_app_module')
+            ->where('app_id',$this->app_id)
+            ->value('is_show_resourcecount');
+        if ($status == $old_status){
+            return ['code'  => -1, 'msg'   => 'db error', 'data'  => []];
+        }
+
+        $update = DB::connection('mysql_config')->table('t_app_module')
+            ->where('app_id',$this->app_id)
+            ->update(['is_show_resourcecount' => $status]);
+
+        if($update) {
+            return ['code'  => 0, 'msg'   => 'ok', 'data'  => []];
+        } else {
+            return ['code'  => 1024, 'msg'   => 'fail', 'data'  => []];
+        }
+
+
+    }
+
+    // 分类导航开关
+    public function categorySwitch(Request $request)
+    {
+        $type = $request->input('type');
+
+        // 如果用户开启分类模块
+        if ($type == 1) {
+            // 判断用户是否有编辑完整的分类信息
+            $num = DB::connection('mysql')->table('t_category')
+                ->where('app_id', '=', $this->app_id)
+                ->where('id', '!=', '0')
+                ->count('id');
+
+            if ($num == 4) {
+                // 获取用户分类模块配置记录
+                $exist = DB::connection('mysql_config')->table('t_app_module')
+                    ->select('resource_category')
+                    ->where('app_id', '=', $this->app_id)
+                    ->value('resource_category');
+                // 判断用户是否有配置记录
+                if ($exist == $type) {
+                    return response()->json(['ret' => StringConstants::Code_Failed, 'msg' => '请求数据有误']);
+                } else {
+                    //更新分类资源模块 开关
+                    $update = DB::connection('mysql_config')->table('t_app_module')->where('app_id', '=', $this->app_id)->update(['resource_category'=>1]);
+                    // 更新分类资源关系表中专栏数据
+                    if ($update) return $this->updateCategoryResource();
+                }
+            } else {
+                return response()->json(['ret' => StringConstants::Code_Failed, 'msg' => '完成分类导航的编辑后，才可开启首页分类导航']);
+            }
+        } else {
+            // 如果用户关闭分类模块
+            $update = DB::connection('mysql_config')->table('t_app_module')->where('app_id','=',$this->app_id)->update(['resource_category'=>0]);
+            if ($update) {
+                return response()->json(['ret' => StringConstants::Code_Succeed,'msg' => '关闭分类导航成功']);
+            } else {
+                return response()->json(['ret' => StringConstants::Code_Failed,'msg' => '关闭分类导航失败']);
+            }
+        }
+    }
+
+
+    // 功能管理页面
+    public function manageFunction(){
+        // 获取用户分类模块配置记录
+        $data = DB::connection('mysql_config')->table('t_app_module')
+            ->select('resource_category','hide_sub_count','is_alert_message','is_show_resourcecount')
+            ->where('app_id', '=', $this->app_id)
+            ->first();
+
+        return View("admin.functionManage.manageFunction",['data'=>$data]);
+    }
+
+    // 分类导航页面
+    public function categorySetting()
+    {
+        // 获取分类导航数据
+        $categoryInfo = DB::connection("mysql")
+            ->table("t_category")
+            ->select("category_name", "icon_url", "weight")
+            ->where("app_id", "=", $this->app_id)
+            ->where("id", "!=", "0")
+            ->orderBy("weight","desc")
+            ->get();
+
+        //  腾讯云中的图标 - 用于分类导航栏
+        $urlArr = [
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_Exclusive.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_Featured.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_Finance.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_Planet.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_Speech.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_all.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_book.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_free.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_life.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_member.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_soul.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_time.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_video.png",
+            "http://wechatappdev-10011692.file.myqcloud.com/image/column_kind/icon_home_voice.png",
+
+        ];
+
+        return View("admin.categorySetting",compact("categoryInfo","urlArr"));
+    }
+
+    // 更新分类导航设置
+    public function updateCategoryInfo(Request $request)
+    {
+        $params = $request->input('params');
+        $exist = DB::connection('mysql')->table('t_category')
+            ->select('id')
+            ->where('app_id', '=', $this->app_id)
+            ->where('id', '!=', "0")
+            ->orderBy('weight','desc')
+            ->pluck('id');
+
+        // 如果数据库中无分类数据 则全部插入数据
+        if (empty ($exist)) {
+            //app_id,id ,category_name,icom_url,weight,created_at
+            // 判断是否有首页分类数据
+            $home_page = DB::connection('mysql')->table('t_category')
+                ->where('app_id','=',$this->app_id)
+                ->where('id','=',"0")
+                ->first();
+            if ($home_page){
+                $result_insert = true;
+            }else {
+                // 如果不存在 插入一条 首页分类的数据
+                $result_insert = DB::connection('mysql')->insert("insert into t_category values ('$this->app_id','0','首页','',0,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())");
+            }
+
+            if ($result_insert == false) return response()->json(['ret' => StringConstants::Code_Failed]);
+
+            // 插入其他的四条分类数据
+            $data['app_id'] = $this->app_id;
+            $data['created_at'] = date('Y-m-d H:i:s', time());
+
+            $i = 4;
+            $result_insert = true;
+            foreach ($params as $k => $v) {
+                $data['id'] = Utils::getUniId('c_');
+                $data['category_name'] = $v['name'];
+                $data['icon_url'] = $v['url'];
+                $data['weight'] = $i--;
+
+                $insert = DB::connection('mysql')->table('t_category')->insert($data);
+                if ($insert == false) {
+                    $result_insert = false;
+                }
+            }
+            // 返回插入成功或失败信息
+            if ($result_insert == false) {
+                return response()->json(['ret' => StringConstants::Code_Failed]);
+            } else {
+                return response()->json(['ret' => StringConstants::Code_Succeed]);
+            }
+        } else {
+//            dump($params);
+            foreach($exist as &$v){
+                $v = "'".$v."'";
+            }
+            $ids = implode(',',$exist);
+            // 如果已存在分类数据，则更新所有分类数据
+            // 拼装 update  sql 语句
+            $sql = "UPDATE t_category SET category_name = CASE id ";
+            $i = 0;
+            while (isset($exist[$i]) && isset($params[$i])) {
+                $sql .= sprintf(" WHEN  %s THEN '%s' ", $exist[$i], $params[$i]['name']);
+                $i++;
+            }
+            $sql .= " END, icon_url = CASE id ";
+            $i = 0;
+            while (isset($exist[$i]) && isset($params[$i])) {
+                $sql .= sprintf("WHEN %s THEN '%s' ", $exist[$i], $params[$i]['url']);
+                $i++;
+            }
+            $sql .= " END WHERE id IN ($ids) and app_id = ('$this->app_id')";
+            $update = DB::connection('mysql')->update($sql);
+
+            return response()->json(['ret' => StringConstants::Code_Succeed]);
+        }
+    }
+
+    // 更新分类资源关系表中专栏数据
+    protected function updateCategoryResource()
+    {
+        $result_insert = true;
+        // 获取所有的专栏信息，插入至分类表
+        $product_ids = DB::connection('mysql')->table('t_pay_products')
+            ->select('id')
+            ->where('app_id','=', $this->app_id)
+            ->pluck('id');
+        // 获得所有分类资源关系表中首页分类下所有的专栏信息
+        $has_product = DB::connection('mysql')->table('t_category_resource')
+            ->select('resource_id')
+            ->where('app_id','=',$this->app_id)
+            ->where('resource_type','=',0)
+            ->where('category_id', '=', '0')
+            ->pluck('resource_id');
+
+        if ($product_ids) {
+            $data['app_id'] = $this->app_id;
+            $data['category_id'] = 0;
+            $data['resource_type'] = 0;
+            $data['state'] = 1;
+            $data['created_at'] = date('Y-m-d H:i:s', time());
+
+            foreach ($product_ids as $id) {
+                // 如果分类资源关系表中无记录就插入
+                if (!in_array($id, $has_product)) {
+                    $data['resource_id'] = $id;
+                    $insert = DB::connection('mysql')->table('t_category_resource')
+                        ->insert($data);
+
+                    if ($insert == false) $result_insert = false;
+                }
+            }
+        }
+        // 获取所有的直播信息，插入至分类表
+        $alive_ids = DB::connection('mysql')->table('t_alive')
+            ->select('id')
+            ->where('app_id','=', $this->app_id)
+            ->pluck('id');
+        // 获得所有分类资源关系表中首页分类下所有的专栏信息
+        $has_alives = DB::connection('mysql')->table('t_category_resource')
+            ->select('resource_id')
+            ->where('app_id','=',$this->app_id)
+            ->where('resource_type','=',4)
+            ->where('category_id', '=', '0')
+            ->pluck('resource_id');
+
+        if ($alive_ids) {
+            $data['app_id'] = $this->app_id;
+            $data['category_id'] = 0;
+            $data['resource_type'] = 4;
+            $data['state'] = 1;
+            $data['created_at'] = date('Y-m-d H:i:s', time());
+
+            foreach ($alive_ids as $id) {
+                // 如果分类资源关系表中无记录就插入
+                if (!in_array($id, $has_alives)) {
+                    $data['resource_id'] = $id;
+                    $insert = DB::connection('mysql')->table('t_category_resource')
+                        ->insert($data);
+
+                    if ($insert == false) $result_insert = false;
+                }
+            }
+        }
+        if ($result_insert == false) {
+            return response()->json(['ret' => StringConstants::Code_Failed]);
+        } else {
+            return response()->json(['ret' => StringConstants::Code_Succeed]);
+        }
+
+    }
+
+
+}
+
+
+
+
+
+
+
+

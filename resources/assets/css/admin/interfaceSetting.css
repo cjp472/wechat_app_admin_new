@@ -1,0 +1,306 @@
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+    background-color: #efeff4;
+}
+/********************************************共用标题区************************************/
+.header
+{
+    width: 100%;
+    height: 62px;
+    background-color: #fafbfc;
+}
+.header ul
+{
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    padding-left: 0;
+}
+.header li
+{
+    float: left;
+    width: 110px;
+    height: 100%;
+    text-align: center;
+}
+.header a
+{
+    display: block;
+    color: #243042;
+    font:normal normal normal 16px/62px 'Microsoft YaHei';
+}
+/*****************************************内容****************************************/
+.red_prompt {
+    background-color: #629eff;
+}
+
+.red_prompt_word a{
+    color: #629eff;
+    background: #fff;
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 2px;
+    padding: 0 5px;
+    margin: 0 10px;
+    font-size: 12px;
+}
+
+.close_img_wrapper {
+    background-color: #629eff;
+}
+.content
+{
+    width: 100%;
+    height: 650px;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+/*手机端预览页面*/
+.phonePreview
+{
+    position: absolute;
+    width: 250px;
+    height: 514px;
+    left:76px;
+    top:48px;
+}
+/*绑定的标题*/
+.bindH4
+{
+    position: absolute;
+    font:normal bold normal 16px/1.5em 'Microsoft YaHei';
+    left:400px;
+    top:67px;
+}
+/*************************************首页标题设置相关***********************************/
+.homeInfoArea
+{
+    height: 34px;
+    position: absolute;
+    left:380px;
+    top:120px;
+}
+/*标题*/
+.infoLabel
+{
+    margin-right: 15px;
+    text-align: left;
+    width: 145px;
+    line-height: 34px;
+    float: left;
+}
+/*值*/
+.infoValue
+{
+    float: left;
+}
+/*商户名*/
+.wxName{
+    height: 34px;
+    position: absolute;
+    left:380px;
+    top:175px;
+}
+#editWxName{
+    float: left;
+    line-height: 34px;
+    color: #2a75ed;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.wxTitleShow
+{
+    float: left;
+    line-height: 34px;
+}
+/*标题*/
+.titleShow
+{
+    float: left;
+    line-height: 34px;
+}
+/*点击编辑*/
+#edit
+{
+    float: left;
+    line-height: 34px;
+    color: #2a75ed;
+    margin-left: 20px;
+    cursor: pointer;
+}
+/*保存*/
+#save,#saveWx
+{
+    float: left;
+    line-height: 34px;
+    color: #2a75ed;
+    margin-left: 20px;
+    cursor: pointer;
+}
+/*绑定的信息展示区*/
+.bindInfoArea
+{
+    height: 34px;
+    position: absolute;
+    left:380px;
+    top:230px;
+}
+/*二维码展示区*/
+.qrcodeArea
+{
+    height: 34px;
+    position: absolute;
+    left:380px;
+    top:285px;
+}
+/*复制按钮*/
+.copyButton
+{
+    width: 42px;
+    height: 24px;
+    float: left;
+    border-radius: 2px;
+    border: solid 1px #2a75ed;
+    color: #2a75ed;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #fff;
+    margin:6px 0 0 20px;
+}
+/*每个复制按钮自带插件的位置调整*/
+#ZeroClipboardMovie_1
+{
+    margin-top: -16px;
+}
+
+
+.no_wx_temp1
+{
+    position: absolute;
+    font:normal bold normal 16px/1.5em 'Microsoft YaHei';
+    left:400px;
+    top:70px;
+}
+.no_wx_temp2
+{
+    position: absolute;
+    font-size: 14px;
+    left: 400px;
+    top: 120px;
+    color: #b8b8b8;
+}
+.no_wx_temp3
+{
+    width: 180px;
+    height: 42px;
+    position: absolute;
+    left:400px;
+    top:170px;
+    font-size: 16px;
+    line-height: 42px;
+    border-radius: 4px;
+    color:#fff;
+    text-align: center;
+    background-color: #2A75ED;
+}
+.no_wx_temp3:hover
+{
+    color:#fff;
+}
+
+
+.appendText{
+    display: none;
+    z-index: 10001;
+    position: absolute;
+    left: 320px;
+    top: 10px;
+    width: 260px;
+    color: #fff;
+}
+.appendText .textBtn{
+    cursor: pointer;
+    width: 100px;
+    line-height: 34px;
+    margin-top: 20px;
+    text-align: center;
+    border: 1px solid #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#mask{
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border: solid rgba(0,0,0,.5);
+}
+
+
+
+/* #myModal{
+    overflow: hidden;
+}
+.firstAlert{
+    -moz-animation: focusIn .5s ease both;
+    -webkit-animation: focusIn .5s ease both;
+    animation: focusIn .5s ease both;
+}
+
+
+@-moz-keyframes focusIn {
+  from {
+    opacity: .3;
+    -moz-transform: scale(20);
+    -webkit-transform: scale(20);
+    transform: scale(20);
+  }
+
+  to {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@-webkit-keyframes focusIn {
+  from {
+    opacity: .3;
+    -moz-transform: scale(20);
+    -webkit-transform: scale(20);
+    transform: scale(20);
+  }
+
+  to {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes focusIn {
+  from {
+    opacity: .3;
+    -moz-transform: scale(20);
+    -webkit-transform: scale(20);
+    transform: scale(20);
+  }
+
+  to {
+    opacity: 1;
+    -moz-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+} */

@@ -1,0 +1,343 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\Utils;
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
+
+class BannerAdminController extends Controller
+{
+    //
+    private $app_id;
+
+    public function __construct(Request $request)
+    {
+        $this->app_id = AppUtils::getAppID();
+    }
+
+    /**
+     * 获取轮播栏列表
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getBannerList(Request $request) {
+        $search_status = $request->input('search_status', "-1");
+        $resource_attr = $request->input('resource_attr', "title");
+        $search_content = $request->input('search_content', "");
+
+        $thistime = Utils::getTime();
+        if ($search_status == -1) {
+            if (empty($search_content)) {
+                $bannerList = DB::connection('mysql')->table('t_banner')
+                    ->where('app_id', $this->app_id)
+                    ->orderBy('start_at', 'desc')->paginate(10);
+            } else {
+                $bannerList = DB::connection('mysql')->table('t_banner')
+                    ->where('app_id', $this->app_id)
+                    ->where($resource_attr, 'like', '%' . $search_content . '%')
+                    ->orderBy('start_at', 'desc')->paginate(10);
+            }
+        } else {
+            if (empty($search_content)) {
+                $bannerList = DB::connection('mysql')->table('t_banner')
+                    ->where('app_id', $this->app_id)->where('state_offline', $search_status)
+                    ->orderBy('start_at', 'desc')->paginate(10);
+            } else {
+                $bannerList = DB::connection('mysql')->table('t_banner')
+                    ->where('app_id', $this->app_id)->where('state_offline', $search_status)
+                    ->where($resource_attr, 'like', '%' . $search_content . '%')
+                    ->orderBy('start_at', 'desc')->paginate(10);
+            }
+        }
+
+        foreach ($bannerList as $key => $value) {//
+            //检测banner图是否压缩处理
+            /*if($value->img_url_compressed == NULL || $value->img_url_compressed == $value->image_url){
+                $this->imageDeal($value->image_url,'t_banner',$value->id, 750, 280, 60);
+            }*/
+            //获取链接资源状态
+            if($value->skip_type == 2){
+                $stateInfo = DB::connection('mysql')->table('t_audio')->select('audio_state as state')->where('id', $value->skip_target)
+                    ->where('app_id', $this->app_id)->first();
+                if($stateInfo) $bannerList[$key]->resource_state = $stateInfo->state===0? '' : '(失效)';
+                else $bannerList[$key]->resource_state = '';
+            }
+            elseif($value->skip_type == 3){
+                $stateInfo = DB::connection('mysql')->table('t_video')->select('video_state as state')->where('id', $value->skip_target)
+                    ->where('app_id', $this->app_id)->first();
+                if($stateInfo) $bannerList[$key]->resource_state = $stateInfo->state===0? '' : '(失效)';
+                else $bannerList[$key]->resource_state = '';
+            }
+            elseif($value->skip_type == 1){
+                $stateInfo = DB::connection('mysql')->table('t_image_text')->select('display_state as state')->where('id', $value->skip_target)
+                    ->where('app_id', $this->app_id)->first();
+                if($stateInfo) $bannerList[$key]->resource_state = $stateInfo->state===0? '' : '(失效)';
+                else $bannerList[$key]->resource_state = '';
+            }elseif($value->skip_type == 4){
+                $stateInfo = DB::connection('mysql')->table('t_alive')->select('state')->where('id', $value->skip_target)
+                    ->where('app_id', $this->app_id)->first();
+                if($stateInfo) $bannerList[$key]->resource_state = $stateInfo->state===0? '' : '(失效)';
+                else $bannerList[$key]->resource_state = '';
+            }//print_r($bannerList[$key]);
+            elseif($value->skip_type == 6){
+                $stateInfo = DB::connection('mysql')->table('t_pay_products')->select('state')->where('id', $value->skip_target)
+                    ->where('app_id', $this->app_id)->first();
+                if($stateInfo) $bannerList[$key]->resource_state = $stateInfo->state===0? '' : '(失效)';
+                else $bannerList[$key]->resource_state = '';
+            }
+            else{
+                $bannerList[$key]->resource_state = '';
+            }
+
+
+        }
+
+        return view("admin.bannerAdmin", compact('bannerList', 'resource_attr', 'thistime', 'search_content', 'search_status'));
+    }
+
+    /**
+     * 创建banner图
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function bannerCreate(Request $request) {
+
+        $audioList = DB::connection('mysql')->table('t_audio')->where('app_id', $this->app_id)->get();
+//        $videoList = DB::connection('mysql')->select("select * from t_video");
+//        $imageTextList = DB::connection('mysql')->select("select * from t_image_text");
+
+        return view("admin.uploadBanner", compact('audioList'));
+    }
+
+    /**
+     * 获取关联的资源列表
+     * @param Request $request
+     * @return string
+     */
+    public function getResourceList(Request $request) {
+        $type = $request->input('type');
+
+        $resultList = "";
+
+        if ($type == "audio") {
+            $resultList = DB::connection('mysql')->table('t_audio')->select('id', 'title')->where('app_id', $this->app_id)->where('audio_state', 0)->get();
+        } else if ($type == "video") {
+            $resultList = DB::connection('mysql')->table('t_video')->select('id', 'title')->where('app_id', $this->app_id)->where('video_state', 0)->get();
+        } else if ($type == "image_text") {
+            $resultList = DB::connection('mysql')->table('t_image_text')->select('id', 'title')->where('app_id', $this->app_id)->where('display_state', 0)->get();
+        } else if ($type == "alive") {
+            $resultList = DB::connection('mysql')->table('t_alive')->select('id', 'title')->where('app_id', $this->app_id)->where('state', 0)->get();
+        } else if ($type == "package") {
+            $resultList = DB::connection('mysql')->table('t_pay_products')->select('id', 'name as title')->where('app_id', $this->app_id)->where('state', 0)->get();
+        }
+
+        return json_encode($resultList);
+    }
+
+    /**
+     * 确认创建上传
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function upload_banner(Request $request) {
+        $params = $request->input('params');
+
+        $current_time = Utils::getTime();
+        $params['created_at'] = $current_time;
+        $params['updated_at'] = $current_time;
+        $params['app_id'] = $this->app_id;
+
+        $params['id'] = Utils::getUniId("b_");
+
+        $result =  DB::connection('mysql')->table('t_banner')->insert($params);
+
+        if ($result > 0 || $result == true) {
+            $this->imageDeal($params['image_url'], 't_banner', $params['id'], 750,280, 60, 'img_url_compressed'); //图片压缩
+            return response()->json(['code' => 0, 'msg' => '新增成功']);
+        } else {
+            return response()->json(['code' => -1, 'msg' => '新增失败']);
+        }
+    }
+
+    /**
+     * 编辑banner图
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit_banner(Request $request) {
+        $banner_id = $request->input('id');
+
+        $banner_detail = DB::table('t_banner')->where('app_id', $this->app_id)->where('id', $banner_id)->first();
+
+        $resource_list = "";
+
+        if ($banner_detail->skip_type == 1) {
+            $resource_list = DB::connection('mysql')->table('t_image_text')->select('id', 'title')->where('app_id', $this->app_id)->where('display_state', 0)->get();
+        }
+        else if ($banner_detail->skip_type == 2) {
+            $resource_list = DB::connection('mysql')->table('t_audio')->select('id', 'title')->where('app_id', $this->app_id)->where('audio_state', 0)->get();
+        }
+        else if ($banner_detail->skip_type == 3) {
+            $resource_list = DB::connection('mysql')->table('t_video')->select('id', 'title')->where('app_id', $this->app_id)->where('video_state', 0)->get();
+        }
+        else if ($banner_detail->skip_type == 4) {
+            $resource_list = DB::connection('mysql')->table('t_alive')->select('id', 'title')->where('app_id', $this->app_id)->where('state', 0)->get();
+        }
+        else if ($banner_detail->skip_type == 6) {
+            $resource_list = DB::connection('mysql')->table('t_pay_products')->select('id', 'name as title')->where('app_id', $this->app_id)->where('state', 0)->get();
+        }
+
+        return view('admin.editBanner', compact('banner_detail', 'resource_list'));
+    }
+
+    /**
+     * 保存编辑banner图  上架、下架
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function save_edit_banner(Request $request) {
+        $params = $request->input('params');
+        $banner_id = $request->input('id');
+
+//        $state_change = $request->input('state_change', 0);
+        //如果是上架操作,更新上架时间
+        if (array_key_exists('state_offline', $params))
+         {
+             //下架
+             if($params['state_offline'] == 1) {
+                 $params['stop_at'] = Utils::getTime();
+                 $result = DB::table('t_banner')->where('app_id', $this->app_id)->where('id', $banner_id)->update(
+                     $params
+                 );
+                 if ($result >= 0) {
+                     return response()->json(['code' => 0, 'msg' => '修改成功']);
+                 } else {
+                     return response()->json(['code' => -1, 'msg' => '修改失败']);
+                 }
+             }
+             //上架
+            else //if ($params['state_offline'] === 0)
+            {
+                $params['start_at'] = Utils::getTime();
+
+                $banner_detail = DB::table('t_banner')->where('app_id', $this->app_id)->where('id', $banner_id)->first();
+                $banner_detail_skip_type = $banner_detail->skip_type;
+                if ($banner_detail_skip_type == 1) {
+                    $resource_detail = DB::connection('mysql')->table('t_image_text')->select('display_state as state')->where('app_id', $this->app_id)
+                        ->where('id', $banner_detail->skip_target)->first();
+                }
+                else if ($banner_detail_skip_type == 2) {
+                    $resource_detail = DB::connection('mysql')->table('t_audio')->select('audio_state as state')->where('app_id', $this->app_id)
+                        ->where('id', $banner_detail->skip_target)->first();
+                }
+                else if ($banner_detail_skip_type == 3) {
+                    $resource_detail = DB::connection('mysql')->table('t_video')->select('video_state as state')->where('app_id', $this->app_id)
+                        ->where('id', $banner_detail->skip_target)->first();
+                }
+                else if ($banner_detail_skip_type == 4) {
+                    $resource_detail = DB::connection('mysql')->table('t_alive')->select('state')->where('app_id', $this->app_id)
+                        ->where('id', $banner_detail->skip_target)->first();
+                }
+                else if ($banner_detail_skip_type == 6) {
+                    $resource_detail = DB::connection('mysql')->table('t_pay_products')->select('state')->where('app_id', $this->app_id)
+                        ->where('id', $banner_detail->skip_target)->first();
+                }
+                //符合更新条件
+                if($banner_detail_skip_type == 0 || $banner_detail_skip_type == 5 ||  $resource_detail->state == 0 )
+                {
+                    $result = DB::table('t_banner')->where('app_id', $this->app_id)->where('id', $banner_id)->update(
+                        $params
+                    );
+
+                    if ($result >= 0) {
+                        return response()->json(['code' => 0, 'msg' => '修改成功']);
+                    } else {
+                        return response()->json(['code' => -1, 'msg' => '修改失败']);
+                    }
+                }
+                else{
+                    return response()->json(['code' => 1, 'msg' => '跳转链接已失效']);
+                }
+            }
+
+       }
+        //编辑
+       else if(array_key_exists('skip_type', $params))
+        {
+            if ($params['skip_type'] == 1) {
+                $resource_detail = DB::connection('mysql')->table('t_image_text')->select('display_state as state')->where('id', $params['skip_target'])
+                    ->where('app_id', $this->app_id)->first();
+            }
+            else if ($params['skip_type'] == 2) {
+                $resource_detail = DB::connection('mysql')->table('t_audio')->select('audio_state as state')->where('id', $params['skip_target'])
+                    ->where('app_id', $this->app_id)->first();
+            }
+            else if ($params['skip_type'] == 3) {
+                $resource_detail = DB::connection('mysql')->table('t_video')->select('video_state as state')->where('id', $params['skip_target'])
+                    ->where('app_id', $this->app_id)->first();
+            }
+            else if ($params['skip_type'] == 4) {
+                $resource_detail = DB::connection('mysql')->table('t_alive')->select('state')->where('id', $params['skip_target'])
+                    ->where('app_id', $this->app_id)->first();
+            }
+            else if ($params['skip_type'] == 6) {
+                $resource_detail = DB::connection('mysql')->table('t_pay_products')->select('state')->where('id', $params['skip_target'])
+                    ->where('app_id', $this->app_id)->first();
+            }
+            $banner_detail_skip_type = $params['skip_type'];
+
+            //过期时间重置为空
+            if(!array_key_exists('stop_at', $params)){
+                $params['stop_at'] = null;
+            }
+
+            //符合更新条件
+            if($banner_detail_skip_type == 0 || $banner_detail_skip_type == 5 ||  $resource_detail->state === 0 )
+            {
+                $result = DB::table('t_banner')->where('app_id', $this->app_id)->where('id', $banner_id)->update(
+                    $params
+                );
+
+                if ($result >= 0) {
+                    if(array_key_exists('image_url', $params))
+                        $this->imageDeal($params['image_url'], 't_banner', $banner_id, 750,280, 60, 'img_url_compressed'); //图片压缩750,280 80%
+                    return response()->json(['code' => 0, 'msg' => '修改成功']);
+                } else {
+                    return response()->json(['code' => -1, 'msg' => '修改失败']);
+                }
+            }
+            else{
+                return response()->json(['code' => 1, 'msg' => '跳转链接已失效']);
+            }
+        }
+
+
+    }
+
+    //压缩
+    /**
+     *图片处理
+     * @param $image_url
+     * @param $table_name
+     * @param $image_id
+     * @param $image_width //压缩尺寸 宽度 (默认 160)
+     * @param $image_height //压缩尺寸 高度 (默认 120)
+     * @param $image_quality //压缩参数 质量值 (默认 60)
+     * @param $compressed //缩略图存储字段
+     */
+    public function imageDeal($image_url, $table_name, $image_id, $image_width, $image_height, $image_quality, $compressed)
+    {
+        $host_url = env('HOST_URL');
+        $app_id = AppUtils::getAppID();
+
+        Utils::asyncThread($host_url . '/downloadImaged?image_id=' . $image_id . '&app_id='
+            . $app_id . '&table_name=' . $table_name . '&file_url=' . $image_url
+            . '&image_width=' . $image_width . '&image_height=' . $image_height . '&image_quality=' . $image_quality
+        . '&compressed=' . $compressed);
+
+    }
+}

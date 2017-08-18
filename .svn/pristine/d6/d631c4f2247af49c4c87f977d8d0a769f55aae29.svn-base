@@ -1,0 +1,76 @@
+/**
+ * Created by Stuphin on 2016/9/30.
+ */
+$(document).ready(function()
+{
+    $.cookie('content_create','');
+    setTopUrlCookie('message_listop', '消息列表');
+    //填入搜索值
+    $("input[name='search']").val(getUrlParam("search"));
+    $("select[name='ruler']").val((getUrlParam("ruler")==null  || getUrlParam("ruler")=='') ? 0 :getUrlParam("ruler"));
+    $("select[name='typer']").val((getUrlParam("typer")==null || getUrlParam("typer")=='') ? 0 :getUrlParam("typer"));
+
+    //table hover样式
+    $("tbody tr").mouseover(function()
+    {
+        $(this).css({'background-color':'#f5f5f5'});
+    }).mouseout(function()
+    {
+        $(this).css({'background-color':'#fff'});
+    });
+
+    //搜索
+    $("#searchButton").click(function()
+    {
+        var ruler=$("select[name='ruler']").val();
+        var typer=$("select[name='typer']").val();
+        var search=$("input[name='search']").val();
+        window.location.href="/message?search="+search+"&ruler="+ruler+"&typer="+typer;
+    });
+
+    //回车搜索
+    $(document).keypress(function(e)
+    {
+        if(e.which == 13)
+        {
+            $('#searchButton').trigger("click");//模拟点击
+        }
+    });
+
+    //推送消息
+    $(".createButton").click(function()
+    {
+        window.location.href='/messageadd';
+    });
+});
+
+//编辑功能
+function messageEdit(id)
+{
+    var id =id;
+    window.location.href="/messageedit?id="+id;
+}
+
+//撤回功能
+function messageDelete(id)
+{
+    var id=id;
+    window.wxc.xcConfirm("您确定要撤回这条消息吗?","confirm",{onOk:function()
+    {
+        $.get('/messagedelete',{"id":id},function(data)
+        {
+            if(data.ret==0)
+            {
+                window.wxc.xcConfirm("消息撤回成功","success",{onOk:function()
+                {
+                    setTimeout(window.location.href='/message',2000);
+                }});
+            }
+            else
+            {
+                window.wxc.xcConfirm("消息撤回失败","error");
+            }
+        });
+    }});
+
+}

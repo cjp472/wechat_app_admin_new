@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\Utils;
+use EasyWeChat\Core\Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\View;
+
+
+class noticeController extends Controller {
+
+
+    public function topBarNotice() {
+        $show_all = Input::get('show_all', '');
+        $app_id = AppUtils::getAppID();
+        $now_time=Utils::getTime();
+        // $app_created_at='1=1';
+        $app_created_at=\DB::connection('mysql_config')->table('t_app_conf')
+            ->where('app_id', $app_id)
+            ->where('wx_app_type', 1)
+            ->select('created_at')
+            ->first();
+            // dd($app_created_at);
+//        $startChargeTime = explode(' ',microtime());
+        $notice_app_id_list = \DB::connection('mysql_notice')->table('t_app_notice')
+                ->where('app_id', $app_id)
+                ->select('notice_id')
+                ->get();
+
+        foreach ($notice_app_id_list as $key => $value) {
+            $notice_app_id_list[$key] = $value->notice_id;
+        }
+//     通知基础表
+        $notice_basic_id_list = \DB::connection('mysql_notice')->table('t_notice')
+                ->where('state', '=', '0')
+                ->where('notice_time', '<=', Utils::getTime())
+                ->where('notice_time','>',$app_created_at->created_at)
+                ->orwhere('id','n_590fd187cfc5a_vcwATIuX')
+                ->select('id')
+                ->get();
+
+        foreach ($notice_basic_id_list as $key => $value) {
+            $notice_basic_id_list[$key] = $value->id;
+        }
+
+        for ($i = 0; $i < sizeof($notice_basic_id_list); $i++) {
+//            如果通知基础表中的通知不在通知关系表中
+            if (!in_array($notice_basic_id_list[$i], $notice_app_id_list)) {
+                $notice_id_list[0]['notice_id'] = $notice_basic_id_list[$i];
+                $notice_id_list[0]['app_id'] = $app_id;
+                $notice_id_list[0]['created_at'] = Utils::getTime();
+                //             向关系表中插入通知
+                $ret = \DB::connection('mysql_notice')->table('t_app_notice')
+                        ->insert($notice_id_list);
+            }
+        }
+//        若是列表获取，则加上分页
+        if ($show_all == 1) {
+            $notice_list = \DB::connection('mysql_notice')->table('t_app_notice')
+                    ->where('app_id', $app_id)
+                    ->leftJoin('t_notice', 'notice_id', '=', 't_notice.id')
+                    ->where('state', '=', '0')
+                    ->whereRaw("(t_notice.notice_time > '$app_created_at->created_at' and t_notice.notice_time < '$now_time' or t_notice.id = 'n_590fd187cfc5a_vcwATIuX')")
+                    ->orderBy('t_notice.notice_time', 'desc')
+                    ->orderBy('t_app_notice.created_at', 'desc')
+                    ->paginate(10);
+            return view('admin.notice_list', compact('notice_list'));
+        }
+//        若是顶部通知ajax,则正常取
+        else{
+          $notice_list = \DB::connection('mysql_notice')->table('t_app_notice')
+                  ->where('app_id', $app_id)
+                  ->leftJoin('t_notice', 'notice_id', '=', 't_notice.id')
+                  ->where('state', '=', '0')
+                  ->whereRaw("(t_notice.notice_time > '$app_created_at->created_at' and t_notice.notice_time < '$now_time' or t_notice.id = 'n_590fd187cfc5a_vcwATIuX')")
+                  ->orderBy('t_notice.notice_time', 'desc')
+                  ->orderBy('t_app_notice.created_at', 'desc')
+                  ->get();
+            $notice_unread_num = 0;
+            $notice_arr = [];
+            foreach ($notice_list as $key => $value) {
+                $notice_arr[] = $value;
+                if ($notice_list[$key]->view_state == 0) {
+                    $notice_unread_num++;
+                }
+            }
+           // dump($notice_list);
+//            dump($notice_unread_num);
+            return json_encode(['notice_list' => $notice_list, 'notice_unread_num' => $notice_unread_num]);
+        }
+//        $endChargeTime = explode(' ',microtime());
+//        $expenseTime = $endChargeTime[0]+$endChargeTime[1]-($startChargeTime[0]+$startChargeTime[1]);
+//        dump($expenseTime);
+
+    }
+
+    public function changeNoticeState() {
+        $notice_id = Input::get('notice_id');
+        $app_id = AppUtils::getAppID();
+        $ret = \DB::connection('mysql_notice')->table('t_app_notice')
+                ->where('app_id',$app_id)
+                ->where('notice_id', $notice_id)
+                ->update(array('view_state' => 1));
+        if ($ret) {
+            return response()->json(['code' => '0', 'msg' => '更新成功！']);
+        } else {
+            return response()->json(['code' => '-1', 'msg' => '更新失败！']);
+        }
+    }
+}

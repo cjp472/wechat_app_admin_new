@@ -1,0 +1,38 @@
+.btn-danger{
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    width: 28px;
+    height: 20px;
+    font-size: 6px;
+}
+.btn-primary{
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    width: 28px;
+    height: 20px;
+    font-size: 6px;
+}
+
+.tool_bar{
+    height: 34px;line-height: 34px;
+    margin:10px 0 20px 0;
+}
+.tool_bar_item{
+    float: right;
+}
+.tool_bar_item_left{
+    float: left;
+}
+
+.tool_bar_item_margin{
+    float: right;
+    margin-right: 10px;
+}
+
+table{
+    font-size: 14px;
+}

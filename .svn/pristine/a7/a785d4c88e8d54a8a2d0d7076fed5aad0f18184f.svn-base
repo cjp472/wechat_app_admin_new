@@ -1,0 +1,1307 @@
+
+.pageTopTitle .helpDocumentLink {
+    float: right;
+    margin-right: 52px;
+    color: #2a75ed;
+    font-size: 14px;
+}
+
+[type="radio"]+label:before, [type="radio"]+label:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -1px;
+    margin: 4px;
+    width: 14px;
+    height: 14px;
+    z-index: 0;
+    -webkit-transition: .28s ease;
+    transition: .28s ease;
+}
+[type="radio"]:not(:checked)+label, [type="radio"]:checked+label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    -webkit-transition: .28s ease;
+    transition: .28s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/*********************** 问答详情部分 - start *************************/
+
+.QA_DetailArea {
+    height: 160px;
+    margin: 20px 20px 10px;
+    background-color: #f6f8fa;
+    border: solid 1px #efefef;
+    position: relative;
+}
+.QACoverImg {
+    width: 160px;
+    height: 120px;
+    margin: 20px;
+    float: left;
+}
+.QACoverImg img {
+    width: 100%;
+    height: 100%;
+}
+
+.QADescWrapper {
+    max-width: 600px;
+    margin: 20px 0 0 0;
+    float: left;
+}
+.QATitle {
+    height: 22px;
+    line-height: 22px;
+    font-size: 16px;
+    color: #353535;
+    margin-bottom: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.QASummary {
+    height: 40px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #888888;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+.QAEavesdropPrice {
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #f67849;
+    margin-bottom: 8px;
+}
+.QAShareRatio {
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #353535;
+}
+
+.detailOperateArea {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.topDetailOperate {
+    height: 20px;
+}
+.responderDetailOperate {
+    height: 20px;
+    width: 80px;
+}
+.questionDetailOperate {
+    height: 20px;
+    width: 90px;
+    margin-left: 36px;
+    position: relative;
+}
+.questionDetailOperate .answerQuestionOpera {
+    position: absolute;
+    top: 0;
+    width: 62px;
+    right: 88px;
+    text-align: right;
+}
+
+.responderDetailOperate li.operate, .topDetailOperate li.operate, .questionDetailOperate li.operate {
+    height: 20px;
+    font-size: 14px;
+    color: #2a75ed;
+    float: left;
+    list-style: none;
+    cursor: pointer;
+}
+.responderDetailOperate li.verticalDivideLine, .topDetailOperate li.verticalDivideLine, .questionDetailOperate li.verticalDivideLine {
+    height: 20px;
+    color: #eeeeee;
+    float: left;
+    list-style: none;
+}
+.questionDetailOperate li.greyText {
+    height: 20px;
+    font-size: 14px;
+    color: grey;
+    float: left;
+    list-style: none;
+    margin-left: -15px;
+}
+
+/*********************** 问答详情部分 - end *************************/
+
+.QA_TabSelectArea {
+    padding-left: 20px;
+}
+ul.contentTabWrapper {
+    width: 100%;
+    height: 50px;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.contentTabWrapper li {
+    float: left;
+    width: 80px;
+    margin: 0 10px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+li.activeContentTab {
+    border-bottom: 2px solid #2a75ed;
+    color: #2a75ed;
+}
+.listOperateArea {
+    width: 100%;
+    height: 76px;
+}
+
+/*********** 问题列表 操作 ***********/
+.questionListOperate {
+    height: 36px;
+    margin: 20px 20px 0 0;
+}
+
+.questionListOperateLeft {
+    float: left;
+    position: absolute;
+    z-index: 0;
+}
+.handleRefundBtn {
+    margin: 0 0 0 20px;
+    float: left;
+}
+.refundTip {
+    height: 36px;
+    line-height: 18px;
+    width: 365px;
+    color: #888;
+    font-size: 14px;
+    float: left;
+    margin-left: 20px;
+}
+.refundTip span {
+    color: orange;
+}
+
+.questionListOperateRight {
+    height: 36px;
+    float: right;
+    position: relative;
+}
+.operate_askTime {
+    position: absolute;
+    top: 0;
+    left: -70px;
+    height: 36px;
+    line-height: 36px;
+    margin-right: 10px;
+    font-size: 12px;
+    color: #243042;
+    float: left;
+}
+.operate_timeSelector {
+    height: 36px;
+    margin: 0px 10px 0 0;
+    line-height: 36px;
+    float: left;
+    width: 230px;
+}
+.selectTimeText {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    margin-right: 10px;
+}
+.selectTimeIcon {
+    float: left;
+    margin-top: 15px;
+    display: block;
+}
+.operate_lastSevenDays {
+    height: 36px;
+    line-height: 36px;
+    margin-right: 20px;
+    font-size: 12px;
+    color: #2a75ed;
+    float: left;
+}
+.operate_lastMonth {
+    height: 36px;
+    line-height: 36px;
+    margin-right: 30px;
+    font-size: 12px;
+    color: #2a75ed;
+    float: left;
+}
+/*.operate_selectorQuestionList {*/
+/*float: left;*/
+/*margin-right: 10px;*/
+/*padding-left: 5px;*/
+/*width: 80px;*/
+/*}*/
+.operate_searchQuestion {
+    float: left;
+    width: 180px;
+    margin-right: 20px;
+    padding-left: 31px;
+}
+.searchIcon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 275px;
+    top: 11px;
+}
+.operate_searchBtn {
+    float: left;
+}
+
+/*********** 答主列表 操作 ***********/
+.responderListOperate {
+    height: 36px;
+    margin: 20px 20px 0 20px;
+}
+.inviteResponderBtn {
+    float: left;
+}
+.responderListRightOperate {
+    float: right;
+    position: relative;
+}
+.operate_selectorIsShow {
+    float: left;
+    margin-right: 10px;
+    padding-left: 5px;
+    width: 80px;
+}
+.operate_searchResponder {
+    float: left;
+    width: 180px;
+    margin-right: 20px;
+    padding-left: 31px;
+}
+
+
+
+.QA_ContentArea {
+    position: relative;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+.mainListContent {
+    width: 100%;
+    margin-bottom: 100px;
+    float: left;
+}
+
+.contentNoneTip {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    margin-top: 20px;
+    color: #888888;
+    font-size: 14px;
+}
+
+/*********** 加载动画 - start ***********/
+.loadingS {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 1000;
+    background: hsla(0, 0%, 100%, .9);
+}
+.loadingSContent {
+    position: absolute;
+    width: 100px;
+    height: 90px;
+    top: 200px;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    background: hsla(0,0%,100%,.9);
+}
+.loadingS .loadingText {
+    text-align: center;
+    color: #20a0ff;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.loadingS .circular {
+    width: 42px;
+    height: 42px;
+    -webkit-animation: loading-rotate 2s linear infinite;
+    -moz-animation: loading-rotate 2s linear infinite;
+    animation: loading-rotate 2s linear infinite;
+}
+
+.loadingS .path {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #20a0ff;
+    stroke-linecap: round;
+    -webkit-animation: loading-dash 1.5s ease-in-out infinite;
+    -moz-animation: loading-dash 1.5s ease-in-out infinite;
+    animation: loading-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@-moz-keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@-webkit-keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@-webkit-keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@-moz-keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+/*********** 加载动画 - end ***********/
+
+/*********************** 问题列表 - start *************************/
+.questionListTable tr.tr_body {
+    height: 100px;
+}
+.questionListTable tr th.thQuestionDetail {
+    text-align: left;
+    padding-left: 20px;
+}
+.questionContent {
+    min-width: 221px;
+    max-width: 243px;
+    line-height: 20px;
+    height: 60px;
+    font-size: 14px;
+    color: #243042;
+    overflow: hidden;
+    text-align: left;
+    padding-left: 12px;
+}
+.questionerInfo {
+    float: left;
+    min-width: 150px;
+}
+.questionerInfo img, .answerQuestionInfo img {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+.answererInfo img {
+    width: 40px;
+    height: 40px;
+}
+.answererInfo span {
+    height: 40px;
+    line-height: 40px;
+    margin-left: 6px;
+    float: left;
+}
+.questionerInfo span {
+    height: 40px;
+    line-height: 40px;
+    margin-left: 6px;
+    float: left;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.answerQuestionInfo {
+    float: left;
+    min-width: 150px;
+}
+.answerQuestionInfo span {
+    height: 40px;
+    line-height: 40px;
+    margin-left: 6px;
+    float: left;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.questionListTable tbody tr td.lastTd {
+    width: 80px;
+}
+
+/*********************** 问题列表 - end *************************/
+
+/*********************** 答主列表 - start *************************/
+
+.responderListTable tr.tr_body {
+    height: 80px;
+}
+.responderListTable tr th {
+
+}
+.responderListTable tr th.thInviteLink {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.responderListTable tr td.tdInviteLink {
+    width: 400px;
+}
+.responderListTable tr td.tdInviteLink div {
+    min-width: 221px;
+    max-width: 350px;
+    line-height: 20px;
+    height: 40px;
+    font-size: 14px;
+    color: #243042;
+    overflow: hidden;
+    text-align: left;
+    padding-left: 12px;
+    float: left;
+}
+.responderListTable tbody tr td.lastTd {
+    width: 80px;
+}
+.responderListName {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 300px;
+    margin: auto;
+}
+
+
+/*********************** 答主列表 - end *************************/
+
+/*********************** 邀请答主窗口， 改用二维码 - start *************************/
+
+.scanQrCodeWindowBg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+.scanQrCodeWindow {
+    width: 320px;
+    height: 300px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -160px;
+    margin-top: -150px;
+    background-color: white;
+}
+.closeScanQrCodeWindow {
+    width: 100%;
+    height: 22px;
+    padding: 10px 10px 0 0;
+}
+.closeScanQrCodeWindow img {
+    width: 12px;
+    height: 12px;
+    float: right;
+    cursor: pointer;
+}
+.closeScanQrCodeWindowContentArea {
+    width: 100%;
+    height: auto;
+    margin-top: 28px;
+}
+.closeScanQrCodeContent1 {
+    width: 168px;
+    height: 34px;
+    margin: 0 auto;
+    line-height: 17px;
+    font-size: 12px;
+    text-align: center;
+    color: #243042;
+}
+.closeScanQrCodeContent2 {
+    width: 120px;
+    height: 120px;
+    margin: 19px auto 0;
+}
+.closeScanQrCodeContent2 img {
+    width: 100%;
+    height: 100%;
+}
+.closeScanQrCodeContent3 {
+    width: 75px;
+    height: 17px;
+    line-height: 17px;
+    text-align: center;
+    font-size: 12px;
+    color: #2a75ed;
+    border-bottom: 1px solid;
+    margin: 10px 122.5px 0;
+    cursor: pointer;
+}
+
+/*********************** 邀请答主窗口， 改用二维码 - end *************************/
+
+/*********************** 查看问题窗口 - start *************************/
+.scanQuestionWindowBg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+.scanQuestionWindow {
+    width: 640px;
+    height: 262px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -320px;
+    margin-top: -131px;
+    background-color: white;
+}
+.windowTopArea {
+    width: 100%;
+    height: 52px;
+    background-color: #fafbfc;
+    border-bottom: solid 1px #f2f2f2;
+    border-radius: 10px 10px 0 0;
+}
+.scanQuestionWindowTitle {
+    height: 52px;
+    line-height: 52px;
+    margin-left: 30px;
+    font-size: 16px;
+    color: #353535;
+    float: left;
+}
+.closeQuestionDetailWindow {
+    width: 12px;
+    height: 12px;
+    margin: 20px;
+    float: right;
+    cursor: pointer;
+}
+.closeQuestionDetailWindow img {
+    width: 12px;
+    height: 12px;
+    float: left;
+}
+.scanQuestionWindowContentArea {
+    padding-top: 20px;
+}
+.questionWindowContent {
+    height: 40px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #243042;
+    margin: 0 34px;
+    overflow: hidden;
+}
+.questionWindowImageWrapper {
+    width: 100%;
+    height: 100px;
+    padding: 20px 0 0 34px;
+}
+.questionWindowImageWrapper img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    float: left;
+}
+/*********************** 查看问题窗口 - end *************************/
+
+.ta_calendar table td {
+    padding: 5px 0;
+}
+
+/*********************** 上传文件 - start *************************/
+.uploadFileWindowBg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+.uploadFileWindow {
+    width: 640px;
+    height: 262px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -320px;
+    margin-top: -131px;
+    background-color: white;
+}
+.uploadFileWindowTitle {
+    height: 52px;
+    line-height: 52px;
+    margin-left: 30px;
+    font-size: 16px;
+    color: #353535;
+    float: left;
+}
+.closeUploadFileWindow {
+    width: 12px;
+    height: 12px;
+    margin: 20px;
+    float: right;
+    cursor: pointer;
+}
+.closeUploadFileWindow img {
+    width: 12px;
+    height: 12px;
+    float: left;
+}
+.uploadFileWindowContentArea {
+
+
+}
+.uploadFileBtn {
+    height: 36px;
+    margin: 45px 0 0 65px;
+    position: relative;
+}
+.uploadFileBtn div {
+    float: left;
+}
+.uploadFileBtn span {
+    height: 36px;
+    line-height: 36px;
+    margin-left: 10px;
+    color: #b2b2b2;
+    float: left;
+}
+.uploadAudioFileInput {
+    height: 36px;
+    width: 100px;
+    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    opacity: 0;
+}
+
+/*********** 进度条***********/
+
+.uploadBox {
+    float: left;
+    width: 100%;
+    padding: 15px 0 0 65px;
+}
+
+.uploadProgress {
+    float: left;
+    height: 36px;
+    border-radius: 2px;
+    background-color: #fafbfc;
+    border: solid 1px #e5e7eb;
+    padding: 8px;
+}
+
+.uploadPTitle {
+    float: left;
+    height: 20px;
+    color: #353535;
+    line-height: 20px;
+    text-align: center;
+    overflow: hidden;
+    word-wrap: break-word;
+    max-width: 235px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.uploadPSize {
+    float: left;
+    height: 20px;
+    margin-left: 10px;
+    line-height: 20px;
+    color: #b2b2b2;
+}
+
+.uploadPLine {
+    float: left;
+    width: 160px;
+    height: 4px;
+    background: #d8d8d8;
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.uploadPLineActive {
+    float: left;
+    width: 0;
+    height: 100%;
+    background: #2a75ed;
+}
+
+.uploadPersent {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 20px;
+    color: #b2b2b2;
+}
+
+.uploadCancel {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-left: 10px;
+    color: #2a75ed;
+    cursor: pointer;
+}
+
+.uploadAudioBtnArea {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+}
+.cancelUploadAudioBtn {
+    float: left;
+    margin-right: 20px;
+}
+.confirmUploadAudioBtn {
+
+}
+
+/*********************** 上传文件 - end*************************/
+
+
+/*********************** 退款列表 弹窗 - start *************************/
+
+.refundListWindowBg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+
+.refundListWindow {
+    width: 720px;
+    height: 465px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -360px;
+    margin-top: -233px;
+    background-color: white;
+}
+.windowTopArea {
+    width: 100%;
+    height: 52px;
+    background-color: #fafbfc;
+    border-bottom: solid 1px #f2f2f2;
+    border-radius: 10px 10px 0 0;
+}
+.refundListWindowTitle {
+    height: 52px;
+    line-height: 52px;
+    margin-left: 30px;
+    font-size: 16px;
+    color: #353535;
+    float: left;
+}
+.closeIconWrapper {
+    width: 12px;
+    height: 12px;
+    margin: 20px;
+    float: right;
+    cursor: pointer;
+}
+
+.closeIconWrapper img {
+    width: 12px;
+    height: 12px;
+    float: left;
+}
+.windowSearchArea {
+    width: 100%;
+    height: 76px;
+    position: relative;
+}
+.windowSearchInput {
+    width: 240px;
+    margin: 20px 10px 0 30px;
+    padding-left: 30px;
+    float: left;
+}
+.searchRefundIcon {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 38px;
+    top: 30px;
+}
+.searchUserBtn {
+    float: left;
+    margin: 20px 0 0 0;
+}
+
+table.tableHeader {
+    margin-bottom: 0;
+}
+.table thead th:nth-child(2) {
+    width: 180px;
+}
+.table thead th:nth-child(3) {
+    width: 200px;
+}
+.table thead th:nth-child(4) {
+    width: 260px;
+}
+th.thCheckBox {
+    width: 65px;
+    padding: 8px 0;
+}
+th.thAvatarNickname {
+    text-align: left;
+}
+.windowContentWrapper {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+.windowContentArea {
+    width: 100%;
+}
+.refundListItem {
+    width: 100%;
+    height: 60px;
+}
+.refundListItem:hover {
+    background-color: #f6faff;
+}
+input.isSelectCheckBox {
+    float: left;
+    height: 60px;
+    margin: 0 25px;
+}
+
+td.tdCheckBox {
+
+}
+
+.refundUserInfo {
+    width: 200px;
+    height: 60px;
+    float: left;
+    padding: 10px 0 0 0;
+}
+.refundUserInfo img {
+    width: 40px;
+    height: 40px;
+    float: left;
+    border-radius: 20px;
+}
+.refundUserInfo span {
+    width: 142px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 6px;
+    text-align: left;
+    float: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.refundType {
+    float: left;
+    height: 60px;
+    width: 65px;
+    line-height: 60px;
+    text-align: center;
+}
+.refundGoodName {
+    width: 290px;
+    float: left;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+}
+.refundPrice {
+    color: #fe605d;
+    width: 80px;
+    height: 60px;
+    line-height: 60px;
+    float: left;
+    text-align: center;
+}
+
+.windowBottomArea {
+    width: 100%;
+    height: 68px;
+}
+
+.horizontalDivideLine {
+    height: 1px;
+    margin: 0 30px 0;
+    background-color: #f2f2f2;
+}
+.windowDescInfo {
+    width: 400px;
+    height: 45px;
+    margin: 35px 0 0 30px;
+    float: left;
+}
+.windowDescInfo div:first-child {
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #353535;
+}
+/*.windowDescInfo div:last-child  {*/
+/*height: 17px;*/
+/*line-height: 17px;*/
+/*margin-top: 8px;*/
+/*font-size: 12px;*/
+/*color: #b2b2b2;*/
+/*}*/
+.btnRight {
+    height: 36px;
+    float: right;
+    margin: 30px 30px 0 0;
+
+}
+.windowCancelBtn {
+    float: left;
+    margin-right: 20px;
+}
+.windowConfirmBtn {
+    float: left;
+    color: #fff;
+    background: #2a75ed;
+    border: none;
+    cursor: default;
+}
+input[type=checkbox] {
+    width: 16px;
+}
+input#selectAllRefundList {
+    height: 16px;
+}
+
+/*********************** 退款列表 弹窗 - end *************************/
+
+.confirmRefundWindowBg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+.confirmRefundWindow {
+    width: 540px;
+    height: 280px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -270px;
+    margin-top: -140px;
+    background-color: white;
+}
+.closeConfirmRefundWindow {
+    width: 100%;
+    height: 38px;
+    padding: 20px 20px 0 0;
+}
+.closeConfirmRefundWindow img {
+    width: 18px;
+    height: 18px;
+    float: right;
+    cursor: pointer;
+}
+.confirmRefundWindowIcon {
+    width: 50px;
+    height: 50px;
+    margin: 12px auto 0;
+}
+.confirmRefundWindowIcon img {
+    width: 50px;
+    height: 50px;
+    float: left;
+}
+.confirmRefundWindowText {
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
+    margin: 20px 0 10px;
+    font-size: 16px;
+    text-align: center;
+    color: #353535;
+}
+.confirmRefundWindowTip {
+    width: 100%;
+    line-height: 20px;
+    height: 20px;
+    font-size: 14px;
+    text-align: center;
+    color: #fe605d;
+}
+.confirmRefundWindowBtnArea {
+    margin-top: 42px;
+    padding-left: 153px;
+}
+.confirmRefundWindowBtn_1 {
+    float: left;
+    margin-right: 34px;
+}
+
+/*********** 加载动画 - end ***********/
+.isDown{
+    line-height: 50px;
+    text-align: center;
+    color: #888888;
+}
+.isDownAnimation {
+    color: #666;
+    -webkit-animation: shake 1s linear infinite alternate;
+    -moz-animation: shake 1s linear infinite alternate;
+    animation: shake 1s linear infinite alternate;
+}
+@-webkit-keyframes shake{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@-moz-keyframes shake{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+@keyframes shake{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+/*********************** 设置页面 - start *************************/
+.QA_settingSection {
+    width: 100%;
+    margin-top: 35px;
+    float: left;
+    padding-left: 40px;
+}
+
+.settingSectionT1 {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    color: #243042;
+}
+.starIcon {
+    color: #e64340;
+    margin-left: 3px;
+}
+.settingSectionT2 {
+    float: left;
+    width: 128px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #243042;
+}
+
+.settingSectionC {
+    float: left;
+    width: 730px;
+}
+.radioGroup {
+    margin-left: -5px;
+}
+.radioBtn1 {
+    float: left;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+}
+
+.radioBtn2 {
+    float: left;
+    width: 100%;
+    margin-top: 17px;
+    height: 20px;
+    line-height: 20px;
+}
+label>span {
+    font-size: 14px;
+    text-align: left;
+    color: #666666;
+    padding-left: 10px;
+}
+
+.settingBtnWrapper {
+    float: left;
+    width: 100%;
+    margin: 30px 0 50px 0;
+}
+.confirmSettingBtn {
+    margin-left: 30px;
+    float: left;
+}
+.contentTemplateDesc1 {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 35px;
+    padding: 0 0 0 40px;
+    float: left;
+    font-size: 14px;
+    text-align: left;
+    color: #353535;
+}
+.contentTemplateDesc2 {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 30px;
+    padding: 0 0 0 40px;
+    float: left;
+    font-size: 14px;
+    text-align: left;
+    color: #353535;
+}
+.contentTemplateWrapper {
+    width: 100%;
+    height: 60px;
+    float: left;
+    padding-left: 40px;
+    margin-top: 20px;
+}
+.contentTemplate {
+    width: 464px;
+    height: 60px;
+    border-radius: 2px;
+    background-color: #f9f9f9;
+    border: solid 1px #eeeeee;
+    padding: 10px;
+    line-height:20px;
+    font-size: 14px;
+    text-align: left;
+    color: #353535;
+}
+
+
+/*********************** 设置页面 - end *************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

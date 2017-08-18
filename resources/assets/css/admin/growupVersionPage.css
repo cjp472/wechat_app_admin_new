@@ -1,0 +1,356 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    width: 100%;
+    height: 100%;
+    background: #f9f9f9;
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+
+.button_click {
+    cursor: pointer;
+}
+
+.header {
+    width: 100%;
+    height: 64px;
+    background: #ffffff;
+    border-bottom: 1px solid #dcdcdc;
+    box-sizing: border-box;
+    padding-top: 16px;
+}
+
+.content {
+    width: 900px;
+    height: 400px;
+    background: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 72px;
+    border: 1px solid #dcdcdc;
+}
+
+.content_part1 {
+    float: left;
+    width: 480px;
+    height: 400px;
+    box-sizing: border-box;
+    border-right: 1px solid #dcdcdc;
+}
+
+.content_part2 {
+    float: left;
+    width: 420px;
+    height: 400px
+}
+
+.header-pic {
+    float: left;
+    width: 110px;
+    height: 32px;
+    margin-left: 25px;
+}
+
+.return_btn {
+    float: right;
+    width: 92px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    background: #2a75ed;
+    border-radius: 3px;
+    color: #ffffff;
+}
+
+.user {
+    float: right;
+    height: 30px;
+    margin-left: 20px;
+    margin-right: 30px;
+}
+
+.user_logo {
+    float: left;
+    width: 30px;
+    height: 30px;
+}
+
+.user_name {
+    float: left;
+    margin-left: 6px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #353535;
+}
+
+.content_pic {
+    width: 420px;
+    height: 236px;
+    margin-top: 61px;
+    margin-left: 30px;
+}
+
+.content_intro {
+    width: 314px;
+    height: 40px;
+    margin-left: 92px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #243042;
+}
+
+.content_charge_num {
+    width: 360px;
+    height: 80px;
+    position: relative;
+    margin-top: 29px;
+    margin-left: 30px;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 2px;
+    font-size: 32px;
+    color: #353535;
+}
+
+.content_charge_num_t {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    right: 20px;
+    top: 26px;
+}
+
+.charge_intro {
+    width: 360px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-left: 30px;
+    margin-top: 10px;
+    color: #243042;
+}
+
+#checkFlag {
+    float: left;
+    margin: 16px 0 0 32px;
+}
+
+.agree {
+    display: block;
+    float: left;
+    font: normal normal normal 12px/1em 'Microsoft YaHei';
+    margin: 16px 0 0 30px;
+}
+
+.seperate {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    background-color: #abacac;
+    opacity: 0.6;
+}
+
+.agreeModal {
+    display: none;
+    width: 700px;
+    height: 450px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    z-index: 4;
+}
+
+.agreeModal h3 {
+    width: 100%;
+    text-align: center;
+    margin: 15px 0 5px 0;
+}
+
+.agreeModalContent {
+    width: 80%;
+    height: 350px;
+    margin: 0 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: left;
+    font: normal normal normal 12px/1.5em 'Microsoft YaHei';
+}
+
+.layerButton {
+    float: left;
+    width: 120px;
+    height: 36px;
+    background-color: #289ef1;
+    border-radius: 2px;
+    border: none;
+    color: white;
+    text-align: center;
+    font: normal normal normal 14px/36px 'Microsoft YaHei';
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.charge_btn {
+    width: 160px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: 30px;
+    margin-top: 40px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    background: #1aae18;
+    text-align: center;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.pay_by_wechat_icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    left: 10px;
+    top: 8px;
+}
+
+.scan_screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.scan_screen_content,
+.scan_status {
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: -200px;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.scan_status {
+    position: absolute;
+    width: 460px;
+    height: 280px;
+    top: 50%;
+    left: 50%;
+    margin-left: -230px;
+    margin-top: -140px;
+    border-radius: 10px;
+    background: #ffffff;
+}
+.pop-up_close{
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+/*微信支付按钮hover*/
+#pay_by_wechat:hover{
+    background: #179c15;
+}
+.scan_screen_words {
+    width: 312px;
+    height: 33px;
+    line-height: 33px;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 24px;
+    color: #353535;
+}
+
+.scan_screen_pic {
+    width: 172px;
+    height: 172px;
+    margin-top: 34px;
+    background: white;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.scan_screen_notice{
+    width: 229px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    color: #888888
+}
+
+.scan_status_icon {
+    width: 80px;
+    height: 80px;
+    margin-top: 60px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.scan_status_word {
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 20px;
+    color: #353535;
+}
+
+.scan_status_countdown {
+    width: 100%;
+    height: auto;
+    font-size: 12px;
+    margin-top: 41px;
+    text-align: center;
+    color: #243042;
+}
+
+.scan_status_countdown a {
+    text-decoration: none;
+    color: #2a75ed;
+}
+
+.scan_status_return {
+    width: 90px;
+    height: 36px;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 36px;
+    border: 1px solid #e5e7eb;
+    background: #fafbfc;
+    font-size: 14px;
+    color: #243042;
+    text-align: center;
+    cursor: pointer;
+}

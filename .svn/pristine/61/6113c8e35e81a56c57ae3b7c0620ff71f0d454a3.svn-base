@@ -1,0 +1,153 @@
+/**
+ * Created by Stuphin on 2016/9/25.
+ */
+
+var type = GetQueryString("type");
+
+$(function() {
+
+
+    init();
+    //页面加载时间统计
+    var performanceTime = parseInt(window.performance.now());//页面加载时间
+    window.e_report(
+        '',
+        "登录页",
+        '',
+        $('#xet_machineip').val(),
+        '',
+        navigator.userAgent,
+        $('#xet_userip').val(),
+        410,
+        1,
+        performanceTime + "," + window.location.pathname
+    );
+    console.log(performanceTime);
+    console.log('加载时间上报');
+
+
+    //表单提交
+    $("#submit").click(function() {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if (username.length == 0) {
+            window.wxc.xcConfirm("请输入账号", "error");
+            return false;
+        }
+        if (password.length == 0) {
+            window.wxc.xcConfirm("请输入密码", "error");
+            return false;
+        }
+        //记住登录
+        rememberMe();
+
+        $.post("/dologin", { "username": username, "password": password }, function(data) {
+            if (data.ret == 0) {
+                var versionType = parseInt(GetQueryString("version_type"));
+                var currentType = parseInt(data.current_version_type);
+                console.log("versionType=" + versionType)
+                console.log(data);
+                if (versionType <= currentType) {
+                    window.location.href = "/index";
+                } else {
+                    if (versionType == 2) {
+                        window.location.href = "/open_growUp_version_page";
+                    } else if (versionType == 3) {
+                        window.location.href = "/open_vip_version_page";
+                    }else{
+                        window.location.href = "/index";
+                    }
+                }
+                // window.location.href="/dashboard";
+            } else if (data.ret == 2) //数值空
+            {
+                window.wxc.xcConfirm("请勿输入非法字符", "error");
+            } else {
+                window.wxc.xcConfirm("账号/密码错误", "error");
+            }
+        });
+    });
+
+    //回车事件
+    $(document).keypress(function(e) {
+        if (e.which == 13) {
+            $('#submit').trigger("click"); //模拟点击
+        }
+    });
+    if (type == 1) {
+        dealTest();
+    }
+});
+
+//初始化函数
+function init() {
+    var versionType = GetQueryString("version_type");
+    //生成二维码
+    try {
+        var obj = new WxLogin({
+            id: "login_container",
+            appid: qrcode_app_id,
+            scope: "snsapi_login",
+            redirect_uri: encodeURI(qrcode_redirect_url + "?version_type=" + versionType),
+            state: "",
+            style: "black",
+            href: qrcode_href
+        });
+        console.log(qrcode_redirect_url + "?version_type=" + versionType);
+    } catch (ex) {
+        console.error(ex);
+    }
+    //点击账号登录
+    $("#wechatLogin").find("li").eq(1).click(function() {
+        $("#wechatLogin").css({ 'display': 'none' });
+        $("#normalLogin").css({ 'display': 'block' });
+    });
+
+    //点击微信登录
+    $("#normalLogin").find("li").eq(0).click(function() {
+        $("#normalLogin").css({ 'display': 'none' });
+        $("#wechatLogin").css({ 'display': 'block' });
+    });
+
+    //填入账号密码
+    if ($.cookie("isRemember") == "true") {
+        $("#username").val($.cookie("username"));
+        $("#password").val($.cookie("password"));
+    }
+}
+
+function dealTest() {
+    $("#wechatLogin").css({ 'display': 'none' });
+    $("#normalLogin").css({ 'display': 'block' });
+
+    $("#username").val("test");
+    $("#password").val("123456");
+}
+
+//记住我
+function rememberMe() {
+    if ($(".loginCheckbox").is(':checked')) {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        $.cookie("isRemember", "true", { expires: 7 }); // 存储一个带7天期限的 cookie
+        $.cookie("username", username, { expires: 7 }); // 存储一个带7天期限的 cookie
+        $.cookie("password", password, { expires: 7 }); // 存储一个带7天期限的 cookie
+    } else {
+        $.cookie("isRemember", "false", { expires: -1 });
+        $.cookie("username", '', { expires: -1 });
+        $.cookie("password", '', { expires: -1 });
+    }
+}
+
+//返回官网
+function backHomePage() {
+    window.location.href = homepage;
+}
+//获取地址栏参数
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) return unescape(r[2]);
+    return null;
+}

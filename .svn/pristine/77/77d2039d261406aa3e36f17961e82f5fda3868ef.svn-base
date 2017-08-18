@@ -1,0 +1,467 @@
+$baseColor: #f9f9f9;
+$basePadding: 20px;
+
+.base_mainContent{
+	padding: $basePadding $basePadding 50px;
+	&>div{
+		margin-top: $basePadding;
+	}
+	.myShop {
+		margin-top: 0;
+	}
+}
+
+.titleText {
+	margin: 0 0 $basePadding;
+	line-height: 20px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #353535;
+	a{
+		font-weight: 100;
+		margin-left: 10px;
+		line-height: 20px;
+	}
+}
+
+.goodCase{
+	padding-bottom: 120px;
+}
+.caseContent{
+	width: 100%;
+	height: 130px;
+	// background-color: $baseColor;
+	padding: $basePadding;
+	& > div{
+		position: relative;
+		cursor: default;
+		float: left;
+		width: 80px;
+		height: 90px;
+		margin-right: 40px;
+		text-align: center;
+		&>img{
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+		}
+		p{
+			margin-top: 10px;
+			font-size: 14px;
+			text-align: center;
+			color: #243042;
+		}
+		.codeContent{
+			display: none;
+			position: absolute;
+			top: 90px;
+			left: -35px;
+			width: 150px;
+			height: 180px;
+			padding: 15px;
+			border-radius: 2px;
+			background-color: #ffffff;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+			border: solid 1px #dbdbdb;
+			img{
+				display: block;
+				width: 120px;
+				height: 120px;
+			}
+			p{
+				font-size: 12px;
+			}
+		}
+		&:hover .codeContent {
+			display: block;
+		}
+	}
+}
+
+.myShop{
+	height: 60px;
+	width: 100%;
+	padding: 12px 0;
+	margin-top: $basePadding;
+	.content{
+		float: left;
+		/* img{
+			vertical-align: top;
+			width: 36px;
+			height: 36px;
+		} */
+		p{
+			line-height: 20px;
+			display: inline-block;
+			margin: 8px 8px 0 0;
+			font-size: 18px;
+			font-weight: 500;
+			color: #353535;
+		}
+		.version{
+			vertical-align: text-bottom;
+			cursor: default;
+			display: inline-block;
+			border-radius: 1px;
+			background-color: #5e99f7;
+			color: #fff;
+			font-size: 12px;
+			padding: 0 5px;
+			line-height: 20px;
+			margin-right: $basePadding;
+		}
+		a{
+			line-height: 20px;
+		}
+	}
+	.btnContent{
+		float: right;
+		position: relative;
+		.qrcodeArea{
+			display: none;
+			position: absolute;
+			top: 50px;
+			right: 0;
+			overflow: hidden;
+			width: 180px;
+			height: 220px;
+			padding: $basePadding 30px;
+			border-radius: 2px;
+			background-color: #ffffff;
+			box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+			border: solid 1px #dbdbdb;
+			text-align: center;
+			.text{
+				line-height: 20px;
+				font-size: 12px;
+				color: #243042;
+			}
+			.codeContent{
+				text-align: center;
+				margin: 10px 0;
+			}
+			.href{
+				a{text-decoration: underline !important; color: #2a75ed; font-size: 12px;}
+			}
+		}
+	}
+	
+}
+
+.shopData{
+	margin-top: $basePadding;
+
+	.content{
+		background: $baseColor;
+		height: 120px;
+		width: 100%;
+	}
+	.shopInfo{
+		float: left;
+		width: 60%;
+		.content{
+			padding: 15px 0;
+			.item{
+				float: left;
+				height: 100%;
+				width: 25%;
+				text-align: center;
+				border-left: 1px solid #eeeeee;
+				.dataNum{
+					margin-top: 13px;
+					font-size: 24px;
+					color: #3e3e3e;
+				}
+				.dataText{
+					font-size: 12px;
+				}
+			}
+			.item:first-child{
+				width: 20%;
+				border-left: none;
+			}
+			.item:last-child{
+				width: 30%;
+			}
+		}
+	}
+	.shopAccount{
+		float: right;
+		width: 38%;
+		.content{
+			.item{
+				float: left;
+				width: 50%;
+				height: 120px;
+				.data{
+					height:88px;
+					padding-top: 15px;
+					text-align: center;
+					.dataNum{
+						font-size: 24px;
+						color: #3e3e3e;
+					}
+					.dataText{
+						margin: 0 0 7px;
+						font-size: 12px;
+					}
+				}
+				.bottomBtn{
+					display:block;
+					width: 100%;
+					line-height: 32px;
+					text-align: center;
+				}
+				.recharge{
+					background: #5f99f6;
+					color: #fff;
+				}
+				.record{
+					background: #eeeeee;
+					color: #243042;
+				}
+			}
+		}
+	}
+}
+
+.commonFun, .topicalApp{
+	.newHref{
+		display: block;
+		float: left;
+		height: 60px;
+		width: 200px;
+		margin: 0 6px 10px 0;
+		padding: 18px 20px;
+		background: $baseColor;
+		img{
+			vertical-align: top;
+			width: 24px;
+			height: 24px;
+			margin-right: 5px;
+		}
+		span{
+			display: inline-block;
+			line-height: 24px;
+			color: #353535;
+			font-size: 14px;
+		}
+	}
+}
+
+.tutorial {
+	.content {
+		width: 100%;
+		height: 140px;
+		// background: $baseColor;
+		padding: $basePadding;
+		.item {
+			float: left;
+			margin-right: 50px;
+			width: 110px;
+			height: 100px;
+			overflow: hidden;
+			text-align: center;
+			p{
+				font-size: 13px;
+				text-align: center;
+				color: #525252;
+				margin:0;
+				padding: 0;
+				line-height: 20px;
+			}
+		}
+	}
+}
+
+a.newHref, a.bottomBtn {
+	&:hover{
+		box-shadow: inset 0 0 1000px rgba(0, 0, 0, .05);
+	}
+	&:active{
+		box-shadow: inset 0 0 1000px rgba(0, 0, 0, .1);
+	}
+}
+
+a.item {
+	position: relative;
+	&:before{
+		content: '';
+		position: absolute;
+		left: 25px;
+		top: 10px;
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		background: rgba(0,0,0,.05);
+		display: none;
+	}
+	&:hover:before{
+		display: block;
+	}
+	&:active:before{
+		background: rgba(0,0,0,.1);
+	}
+
+}
+/*优惠券介绍，概况页弹窗*/
+.welcomeBoxClose{
+    position: fixed;
+    top:50px;
+    right:50px;
+    cursor: pointer;
+}
+
+.welcomeBoxClose img{
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+
+.salerWelcomeBox{
+    position: absolute;
+    width: 600px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: -200px;
+    border-radius: 8px;
+    background: white;
+    overflow: hidden;
+}
+
+.welcomeBoxBanner{
+    width: 100%;
+    height: 200px;
+    background: #fffcf7;
+    overflow: hidden;
+}
+
+.welcomeBoxBanner img{
+    display: block;
+    width: 318px;
+    height: 160px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+}
+
+.welcomeBoxTitle{
+    width: 100%;
+    line-height: 22px;
+    text-align: center;
+    font-size: 16px;
+    color: #353535;
+    font-weight: 500;
+    margin-top: 40px;
+}
+
+.welcomeBoxIntro{
+    width: 100%;
+    line-height: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #666666;
+    margin-top: 10px;
+}
+
+.enterIntroBtn{
+    width: 160px;
+    position: absolute;
+    left:50%;
+    bottom: 30px;
+    margin-left: -80px;
+}
+
+.baseIcon{
+	position:relative;
+
+
+}
+.baseIcon:after{
+	transform: scale(0.5);
+	position: absolute;
+	right:10px;
+	width:64px;
+	text-align:center;
+	line-height:32px;
+	height:32px;
+	top:50%;
+	margin-top:-8px;
+	border-radius: 16px;
+	font-size: 20px;
+	font-weight: 500;
+	display: block;
+	color:#fff;
+	transform-origin: right top;
+}
+.baseIcon.newIcon:after{
+	content:"New";
+	background-color: #fb6161;
+}
+.baseIcon.hotIcon:after{
+	content:"Hot";
+	background-color: #ffb85e;
+}
+
+.darkScreen2.indWel{
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top:0;
+	opacity:0;
+	visibility:hidden;
+}
+.indexWelcomeCloseBtn{
+	position: absolute;
+	right:60px;
+	top:60px;
+	cursor: pointer;
+}
+
+.darkScreen2.indWel.active{
+	opacity:1;
+	visibility:visible;
+}
+
+.darkScreen2.indWel.ready{
+	transition-property: opacity,visibility;
+	transition-duration:0.5s;
+}
+
+.indexWelcomeBox{
+	width:600px;
+	height:400px;
+	background:#fff;
+	position: relative;
+	border-radius:8px;
+	overflow: hidden;
+}
+
+.indexWelcomeBox>.indConBan{
+	background:#fffcf7;
+	text-align: center;
+}
+
+.indexWelcomeCont{
+	text-align: center;
+
+}
+
+.indexWelcomeCont>span{
+	font-size: 16px;
+	color: #353535;
+	font-weight: 500;
+	margin-top: 40px;
+	display: block;
+}
+
+.indexWelcomeCont>p{
+	font-size: 14px;
+	color: #666;
+	margin-top: 10px;
+	line-height:20px;
+	position: relative;
+}

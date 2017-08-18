@@ -1,0 +1,124 @@
+
+li {
+    list-style: none;
+}
+
+
+.mainHeader {
+    width: 100%;
+    height: 76px;
+    padding: 20px;
+    margin-top: 50px;
+}
+.createExerciseBookBtn {
+    float: left;
+    margin-right: 20px;
+}
+.exerciseHelpDoc {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    color: blue;
+}
+.submitSearchPart {
+    height: 36px;
+    float: right;
+}
+.searchContentInput {
+    width: 200px;
+    float: left;
+    margin-right: 20px;
+}
+.submitSearchBtn {
+    float: left;
+}
+
+
+.mainContent {
+    width: 100%;
+    padding: 0 20px;
+    height: auto;
+}
+.tableHeader {
+    width: 100%;
+    height: 50px;
+    background: #cccccc;
+}
+.tableHeader > div {
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    float: left;
+}
+.tableHeader > div:nth-child(1) {
+    text-align: center;
+    width: 5%;
+}
+.tableHeader > div:nth-child(5) {
+    width: 10%;
+}
+.tableHeader > div:nth-child(6) {
+    width: 5%;
+}
+.tableHeader > div:nth-child(7) {
+    text-align: center;
+}
+
+.tableContent {
+    width: 100%;
+    padding: 0 20px;
+}
+.exerciseBookItem {
+    width: 100%;
+    height: 70px;
+    padding: 20px;
+    line-height: 30px;
+}
+.exerciseBookItem > div {
+    width: 20%;
+    height: 70px;
+    line-height: 50px;
+    float: left;
+    text-align: left;
+}
+.exerciseBookItem > div:nth-child(1) {
+    text-align: center;
+    width: 5%;
+}
+.exerciseBookItem > div:nth-child(5) {
+    width: 10%;
+}
+.exerciseBookItem > div:nth-child(6) {
+    width: 5%;
+}
+
+/*********************** 操作部分 -start *************************/
+.exerciseBookOperateArea {
+    text-align: center;
+
+}
+.operateList {
+    width: 100%;
+}
+.operateList > li {
+    float: left;
+}
+.operateList > li.operate {
+    color: blue;
+    cursor: pointer;
+}
+.operateList > li.verticalGapLine {
+    color: #cccccc;
+}
+
+/*********************** 操作部分 -end*************************/
+
+
+
+
+
+
+
+
+
+

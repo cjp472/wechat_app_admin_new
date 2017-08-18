@@ -1,0 +1,31 @@
+{{--编辑后离开页面的提示--}}
+<div class="modal fade" id="upload_Modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="padding-left: 10px">
+            <div class="modal-body">
+                <div style="text-align: center;font-size: 1.4em">
+                    <p>此时离开将丢失已编辑的内容，是否离开？</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btnMid xeBtnDefault"
+                        data-dismiss="modal">
+                    取消
+                </button>
+                <button id="leavePage" type="button" class="btnMid btnBlue" style="margin-left: 10px">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="preview_con">
+    <div class="preview_box">
+        <div id="preview_content">
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,306 @@
+
+
+li {
+    list-style: none;
+}
+
+.mainHeader {
+    height: auto;
+    width: 100%;
+}
+.headerContent {
+    height: 76px;
+    padding: 20px 20px;
+    line-height: 36px;
+}
+.exerciseBookName {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    color: #353535;
+}
+.exerciseBookTeacherName {
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    color: #353535;
+    padding-left: 20px;
+}
+.submitSearchPart {
+    height: 36px;
+    float: right;
+}
+.searchContentInput {
+    width: 200px;
+    float: left;
+    margin-right: 20px;
+}
+.submitSearchBtn {
+    float: left;
+}
+
+.mainContent {
+    width: 100%;
+    padding: 0 20px 50px;
+    height: auto;
+}
+.tableHeader {
+    width: 100%;
+    height: 40px;
+    background: #f6f8fa;
+}
+.tableHeader > div {
+    width: 20%;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    font-weight: bold;
+    color: #353535;
+}
+.tableHeader > div:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+.tableHeader > div:nth-child(3) {
+    width: 27%;
+}
+.tableHeader > div:nth-child(4) {
+    width: 5%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(5) {
+    width: 8%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(6) {
+    text-align: center;
+}
+
+.tableContent {
+    width: 100%;
+    padding: 0;
+    color: #666666;
+}
+.singleExerciseItem {
+    width: 100%;
+    height: 75px;
+    padding: 15px 0;
+    line-height: 45px;
+    border-bottom: 1px solid #eeeeee;
+}
+.singleExerciseItem:hover {
+    background-color: #f6faff;
+}
+.singleExerciseItem > div {
+    width: 20%;
+    height: 45px;
+    float: left;
+    text-align: left;
+}
+.singleExerciseItem > div:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.resInfoWrapper {
+    width: 100%;
+    height: 45px;
+}
+.resInfoWrapper > img {
+    width: 60px;
+    height: 45px;
+    float: left;
+}
+.resDescWrapper {
+    width: 74%;
+    height: 45px;
+    margin-left: 10px;
+    float: left;
+}
+.resDescWrapper>div:nth-child(1) {
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.resDescWrapper>div:nth-child(2) {
+    height: 17px;
+    line-height: 17px;
+}
+.singleExerciseItem > div:nth-child(3) {
+    width: 27%;
+}
+.singleExerciseItem > div:nth-child(4) {
+    width: 5%;
+    text-align: center;
+}
+.singleExerciseItem > div:nth-child(5) {
+    width: 8%;
+    text-align: center;
+}
+
+/*********************** 操作部分 -start *************************/
+.singleExerciseItem .exerciseOperateArea {
+    text-align: center;
+}
+.operateList {
+    height: 45px;
+    width: 130px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+.operateList > li {
+    float: left;
+}
+.operateList > li.operate {
+    color: #2a75ed;
+    cursor: pointer;
+}
+.operateList > li.verticalGapLine {
+    color: #cccccc;
+}
+
+/*********************** 操作部分 -end*************************/
+
+/*********************** 详情窗口 - start *************************/
+.lookExerciseDetailWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 640px;
+    height: 520px;
+    margin-top: -260px;
+    margin-left: -320px;
+    z-index: 10000;
+    background-color: #fff;
+    display: none;
+}
+.windowHeader {
+    height: 22px;
+    line-height: 22px;
+    margin: 50px 0 0 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #353535;
+}
+.windowContentRegion {
+    height: 362px;
+    padding: 30px 0 50px;
+    margin: 0 30px;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    overflow-y: scroll;
+}
+.textContentArea {
+    width: 100%;
+    line-height: 22px;
+    height: auto;
+    font-size: 16px;
+    color: #353535;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.imgContentArea {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+.singleExeImg {
+    width: 155px;
+    height: 155px;
+    margin: 0 10px 10px 0;
+    float: left;
+}
+.singleExeImg > img {
+    width: 100%;
+    height: 100%;
+}
+.singleExeAudio {
+    width: 320px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    border: solid 1px #efefef;
+    margin: 20px 0 10px;
+    float: left;
+}
+.audioController {
+    width: 100%;
+    height: 100%;
+    padding: 13px 0 0 10px;
+}
+.audioPlayStateIcon {
+    width: 24px;
+    height: 24px;
+    float: left;
+    cursor: pointer;
+    background-size: cover;
+}
+.playing {
+    background-image: url("/images/admin/exercise/audio_play.png");
+}
+.paused {
+    background-image: url("/images/admin/exercise/audio_pause.png");
+}
+.progressBar {
+    width: 230px;
+    height: 4px;
+    margin: 10px 0 0 10px;
+    border-radius: 2px;
+    background-color: #eeeeee;
+    float: left;
+    position: relative;
+}
+.finishedProgress {
+    width: 0%;
+    height: 4px;
+    background-color: #1bc570;
+    display: inline-block;
+    float: left;
+}
+.progressBarDot {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: -5px;
+    left: 0%;
+    margin-left: -7px;
+    border-radius: 7px;
+    display: inline-block;
+    background: #1bc570;
+    cursor: pointer;
+}
+.audioLengthSecond {
+    width: auto;
+    height: 24px;
+    line-height: 24px;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #888888;
+    float: left;
+}
+
+.windowFooter {
+    width: 100%;
+    height: auto;
+}
+.closeExeDetailWindow {
+    margin: 20px 0 0 270px;
+}
+/*********************** 详情窗口 - end *************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+

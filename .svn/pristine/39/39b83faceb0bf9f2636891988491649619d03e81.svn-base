@@ -1,0 +1,268 @@
+
+
+
+<div class="_chosenShopHeader">
+    <div class="_chosenShopTitleWrapper">
+        <div class="_chosenShopTitle">小鹅通内容分销</div>
+        <a class="_chosenShopUrl" target="_blank" href="https://h5b.xiaoe-tech.com/?channel_info=guanwang_pc">点击前往小鹅通内容分销</a>
+    </div>
+    <div class="_chosenShopHeaderDesc">
+        小鹅通精选介绍：小鹅通内容分销汇聚了众多优质知识商品，您开启了参与上架小鹅通内容分销之后，您参与推⼴分销的知识商品将有机会入选商城。
+        在商城内您的商品将会展示给众多渠道商，渠道商可以在内容分销内选择推广您的商品。
+        如您的商品成功入选了内容分销，小鹅通将帮您把商品推荐给优质的渠道商，借助更广泛的渠道，您将收获更多付费用户与收益。
+        <br>
+        渠道商在商城内将获得推广链接和二维码，通过推广链接或二维码成交的订单渠道商将获得对应比例的奖励分成，所有订单分成将自动结算。
+    </div>
+</div>
+
+<div class="salerSection">
+    <div class="salerSectionT " style="margin-top: 19px">上架设置：</div>
+    <div class="salerSectionC">
+        <div class="radioGroup">
+            <div class="radioBtn1">
+                <input class="with-gap _enableChosenShop" id="cBtn1" name="group4" type="radio" data-is_checked="{{$is_enable_chosen==1?"yes":"no"}}"
+                       @if($is_enable_chosen == 1) checked @endif/>
+                <label for="cBtn1" style="margin-top: 19px">
+                    参与上架<span>（开启后参与推广的商品将有机会上架小鹅通内容分销，您的商品将获得更多的推广机会）</span>
+                </label>
+            </div>
+            @if($is_enable_chosen == 0)
+                <div class="radioBtn2">
+                    <input class="with-gap _forbidChosenShop" id="cBtn2" name="group4" type="radio" checked/>
+            @else
+                <div class="radioBtn2 disabledInput">
+                    <input class="with-gap _forbidChosenShop" id="cBtn2" name="group4" type="radio" disabled/>
+            @endif
+                    <label for="cBtn2">暂不参与</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="_selectGoodsSection @if($is_enable_chosen == 0) hide @endif " id="_selectGoodsSection">
+        <div class="salerSectionT">选择商品：</div>
+        <div class="salerSectionC">
+            <div class="_selectGoodsDesc">
+                *您最多可以添加20个商品，且商品添加后暂时不支持删除（<span>{{count($resource_chosen)}}</span>/20）
+            </div>
+            <div class="_selectGoodsContent" @if(count($resource_chosen) > 0) style="display: block;" @endif id="_selectGoodsContent">
+                <?php
+                    foreach ($resource_chosen as $key => $value) {
+                        $type = "";
+                        switch ($value->type) {
+                            case 1:
+                                $type = "图文";
+                                break;
+                            case 2:
+                                $type = "音频";
+                                break;
+                            case 3:
+                                $type = "视频";
+                                break;
+                            case 4:
+                                $type = "直播";
+                                break;
+                            case 5:
+                                $type = "专栏";
+                                break;
+                            case 6:
+                                $type = "会员";
+                                break;
+                        }
+                        echo '<div class="_goodsItem" title="'.$value->name.'" data-res_id="'.$value->id.'">'.$type."：".$value->name.'</div>';
+                    }
+                ?>
+            </div>
+            <div class="_addGoodsOperate" id="_addGoodsOperate">
+                <span>+</span>添加
+            </div>
+            <div class="_selectGoodsSelector" id="_selectGoodsSelector">
+                <select id="resTypeSel" name="resType" class="resTypeSelector">
+                    <option value="package" id="package">专栏</option>
+                    <option value="member" id="member">会员</option>
+                    <option value="alive" id="alive">直播</option>
+                    <option value="course" id="course">课程</option>
+                </select>
+                <select id="packageSel" name="package" class="resourceSelector">
+                    <option value="none">请选择具体专栏</option>
+                    @foreach($column as $k => $v)
+                        <option data-res_id="{{$v->id}}" data-res_type="{{$v->type}}">{{$v->name}}</option>
+                    @endforeach
+                </select>
+                <select id="memberSel" name="member" class="resourceSelector hide">
+                    <option value="none">请选择具体会员</option>
+                    @foreach($member as $k => $v)
+                        <option data-res_id="{{$v->id}}" data-res_type="{{$v->type}}">{{$v->name}}</option>
+                    @endforeach
+                </select>
+                <select id="aliveSel" name="alive" class="resourceSelector hide">
+                    <option value="none">请选择具体直播</option>
+                    @foreach($alive as $k => $v)
+                        <option data-res_id="{{$v->id}}" data-res_type="{{$v->type}}">{{$v->title}}</option>
+                    @endforeach
+                </select>
+                <select id="courseSel" name="course" class="resourceSelector hide">
+                    <option value="none">请选择具体课程</option>
+                    @foreach($course as $k => $v)
+                        <option data-res_id="{{$v->id}}" data-res_type="{{$v->type}}">{{$v->title}}</option>
+                    @endforeach
+                </select>
+                <button id="addSelectGoods" class="btnMid btnBlue _addSelectGoodsBtn">添加</button>
+                <button id="cancelSelectGoods" class="btnMid xeBtnDefault _cancelSelectGoodsBtn">取消</button>
+            </div>
+        </div>
+</div>
+
+<div class="_ratioSetSection clearfix @if(count($resource_chosen) == 0) hide @endif " id="_ratioSetSection">
+        <div class="salerSectionT">梯度分成设置：</div>
+        <div class="salerSectionC">
+            <div class="_ratioSetDesc">
+                <div class="_ratioSetDescIcon">
+                    <img src="/images/admin/marketing/rate_tip.png">
+                    <div class="_chosenShopHoverBox">
+                        <span style="line-height: 12px">*小鹅通内容分销的渠道商在推广您的商品时，推⼴数量在您设置的区间内，将会获得对应的分成比例的金额。</span>
+                        <ul>
+                            <li style="line-height: 20px">例如：商品定价为100元，设置为：</li>
+                            <li style="line-height: 20px">1 - 100 &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 30%</li>
+                            <li style="line-height: 20px">101 - 500 &nbsp; &nbsp;&nbsp;&nbsp; 35%</li>
+                            <li style="line-height: 20px">501 - 以上 &nbsp;&nbsp;&nbsp;&nbsp; 50%</li>
+                        </ul>
+                        <br>
+                        <span>
+                            当渠道商分成数量量为1000笔，则第1-100笔的分成奖励为30元/笔，第101-500笔的分成奖励为35元/笔， 第501⾄至1000笔的分成奖励为50元/笔
+                        </span>
+                    </div>
+                </div>
+                <div class="_ratioSetDescText">
+                    *所有商品的梯度分成均一致，且3个月内仅能修改1次，请谨慎设置。
+                    @if(!empty($last_update_time)) 上一次的修改时间为 {{$last_update_time}} @endif
+                </div>
+            </div>
+            <div class="_ratioSetInputPart">
+                <div style="margin-top: 20px">
+                    <p class="chosenCenter">区间</p>
+                    <p style="width: 80px;text-align:center;float:left;margin-left: 135px">分成比例/笔</p>
+                </div>
+                <div class="clearFloat"></div>
+
+                @if($is_have_distribute_data == 1)
+
+                    <div class="" id="showRatioSet">    {{--显示部分--}}
+                        <div style="margin-top: 20px">
+                            <p class="chosenCenter">1</p>
+                            <p class="chosenCenter">-</p>
+                            <p class="chosenInputP">{{$distribute_data[0]->end_order_num}}</p>
+                            <p class="chosenInputPPercent">{{$distribute_data[0]->distribute_percent}} %</p>
+                        </div>
+                        <div class="clearFloat"></div>
+
+                        <div style="margin-top: 20px">
+                            <p class="chosenInputP"
+                               style="margin-right: 0">{{$distribute_data[1]->start_order_num}}</p>
+                            <p class="chosenCenter">-</p>
+                            <p class="chosenInputP">{{$distribute_data[1]->end_order_num}}</p>
+                            <p class="chosenInputPPercent">{{$distribute_data[1]->distribute_percent}} %</p>
+                        </div>
+                        <div class="clearFloat"></div>
+
+                        <div style="margin-top: 20px">
+                            <p class="chosenInputP"
+                               style="margin-right: 0">{{$distribute_data[2]->start_order_num}}</p>
+                            <p class="chosenCenter">-</p>
+                            <p class="chosenCenter" style="margin-right: 50px">以上</p>
+                            <p class="chosenInputPPercent">{{$distribute_data[2]->distribute_percent}} %</p>
+                        </div>
+                        <div class="clearFloat"></div>
+
+                        @if($is_enable_edit == 0){{--可编辑--}}
+                            <div class="btnMid btnBlue editGradientBtn" id="editGradientValue" data-is_enable_edit="yes">编辑</div>
+                        @else
+                            <div class="forbidEditGradientBtn" id="editGradientValue" data-is_enable_edit="no">编辑</div>
+                        @endif
+                    </div>
+
+
+                @endif
+
+
+                <div class="_savePer" id="editRatioSet" @if($is_have_distribute_data == 1) style="display: none;" @endif>    {{--编辑部分--}}
+
+                    @if($is_have_distribute_data == 1)
+                        <input type="hidden" id="distributeData"
+                               value="edit"
+                               data-id1="{{$distribute_data[0]->distribute_id}}"
+                               data-id2="{{$distribute_data[1]->distribute_id}}"
+                               data-id3="{{$distribute_data[2]->distribute_id}}"
+                        >
+                    @endif
+
+                    <div style="margin-top: 20px">
+                        <p class="chosenCenter">1</p>
+                        <p class="chosenCenter">-</p>
+                        <p class="chosenInputP">
+                            <input id="in1" onkeyup="onlyNum(this.value, this)" class="chosenInput inputDefault" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[0]->end_order_num}}" @endif>
+                        </p>
+                        <p class="chosenInputPPercent">
+                            <input id='per1' onkeyup="onlyNum(this.value, this)" class="chosenInput inputDefault" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[0]->distribute_percent}}" @endif>
+                            %
+                        </p>
+                    </div>
+                    <div class="clearFloat"></div>
+
+                    <div style="margin-top: 20px">
+                        <p class="chosenInputP" style="margin-right: 0;  ">
+                            <input id='in2' disabled="disabled" onkeyup="onlyNum(this.value, this)"
+                                   class="chosenInput inputDefault" style="background-color:gainsboro" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[1]->start_order_num}}"@endif>
+                        </p>
+                        <p class="chosenCenter">-</p>
+                        <p class="chosenInputP">
+                            <input id='in3' onkeyup="onlyNum(this.value, this)" class="chosenInput inputDefault" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[1]->end_order_num}}" @endif>
+                        </p>
+                        <p class="chosenInputPPercent">
+                            <input id="per2" onkeyup="onlyNum(this.value, this)" class="chosenInput inputDefault" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[1]->distribute_percent}}" @endif>
+                            %
+                        </p>
+                    </div>
+                    <div class="clearFloat"></div>
+
+                    <div style="margin-top: 20px">
+                        <p class="chosenInputP" style="margin-right: 0">
+                            <input id='in4' disabled="disabled" onkeyup="onlyNum(this.value, this)"
+                                   class="chosenInput inputDefault" style="background-color:gainsboro" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[2]->start_order_num}}" @endif>
+                        </p>
+                        <p class="chosenCenter">-</p>
+                        <p class="chosenCenter" style="margin-right: 50px">以上</p>
+                        <p class="chosenInputPPercent">
+                            <input id="per3" onkeyup="onlyNum(this.value, this)" class="chosenInput inputDefault" type="text"
+                                   @if($is_have_distribute_data == 1) value="{{$distribute_data[2]->distribute_percent}}" @endif>
+                            %
+                        </p>
+                    </div>
+                    <div class="clearFloat"></div>
+                    @if($is_have_distribute_data == 1)
+                        <div class="btnMid xeBtnDefault salerChosen" id="cancelEditGradientValue">取消</div>
+                    @endif
+                    <div class="btnBlue btnMid _saveGradientValue" id="_saveGradientValue">保存</div>
+                </div>
+
+
+            </div>
+        </div>
+</div>
+
+@if($is_have_distribute_data == 1)
+    <div class="_finishAllSetTip">您已完成所有配置且所有配置已保存</div>
+@endif
+
+
+
+
+

@@ -1,0 +1,87 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2016/9/26 0026
+ * Time: 下午 2:47
+ */
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use Illuminate\Http\Request;
+use App\Http\Controllers\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
+
+class HomeChannelAdminController extends Controller
+{
+    private $request;
+    private $app_id;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+        $this->app_id = AppUtils::getAppID();
+    }
+    public function homeChannel(){
+        $id = $_GET['id'];
+        $title = $_GET['title'];
+
+        $page = Input::get('page',0);
+            //需要付费的音频资源
+            $results_audio = \DB::table('t_audio')->select(\DB::raw('app_id,id,title,payment_type,1 as type'))
+                ->where('payment_type','=',2)
+                ->where('app_id','=',$this->app_id);
+            //需要付费的视频资源
+            $results_video = \DB::table('t_video')->select(\DB::raw('app_id,id,title,payment_type,2 as type'))
+                ->where('payment_type','=',2)
+                ->where('app_id','=',$this->app_id);
+            //需要付费的图文资源
+            $results_image_text = \DB::table('t_image_text')->select(\DB::raw('app_id,id,title,payment_type,3 as type'))
+                ->where('payment_type','=',2)
+                ->where('app_id','=',$this->app_id);
+            //需要付费的所有资源
+            $results = \DB::table('t_pay_products')->select(\DB::raw('app_id,id,name as title,3 as payment_type,4 as type'))
+                ->where('app_id','=',$this->app_id)
+                ->union($results_audio)->union($results_video)->union($results_image_text)->get();
+            $idArray = array();
+            foreach ($results as $value){
+                if($value->payment_type==2){//单笔付费的
+                    $countResults = \DB::table('t_purchase')->select(\DB::raw('count(*) as count'))
+                        ->where('app_id','=',$this->app_id)
+                        ->where('channel_id','=',$id)
+                        ->where('resource_id','=',$value->id)
+                        ->get();
+                }else{ //专栏付费的
+                    $countResults = \DB::table('t_purchase')->select(\DB::raw('count(*) as count'))
+                        ->where('app_id','=',$this->app_id)
+                        ->where('channel_id','=',$id)
+                        ->where('product_id','=',$value->id)
+                        ->get();
+                }
+                $idArray[] = $countResults[0]->count;
+            }
+
+        if(!empty($results)){
+            return view('admin.HomeOpenDetail',compact('results','title','idArray'));
+        }else{
+            return view('admin.HomeOpenDetail');
+        }
+
+//        if(!empty($results)){
+//            if($id){
+//                return view('admin.openDetail',compact('results','user_info','search_content','order_attr','id_title','id_name'));
+//            }else{
+//                return view('admin.payAdmin',compact('results','user_info','search_content','order_attr','id_title','id_name'));
+//            }
+//        }else{
+//            if($id){
+//                return view('admin.openDetail');
+//            }else{
+//                return view('admin.payAdmin');
+//            }
+//        }
+    }
+}

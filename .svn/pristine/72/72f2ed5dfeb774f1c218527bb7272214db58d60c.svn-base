@@ -1,0 +1,151 @@
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+}
+
+/*每个块*/
+.content {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    min-height: 650px;
+    padding-left: 20px;
+    padding-bottom: 30px;
+}
+/*每行输入*/
+.inputArea {
+    width: 100%;
+    margin-top: 40px;
+    font:normal normal normal 14px/34px 'Microsoft YaHei';
+}
+.inputLabel {
+    position: relative;
+    width: 130px;
+    float: left;
+    margin-left: 20px;
+}
+.inputValue {
+    float: left;
+}
+.necess{
+    position: absolute;
+    top: -4px;
+    margin-left: 3px;
+    vertical-align: top;
+    font-size: 14px;
+    color: red;
+}
+
+/*图片上传相关*/
+#wx_share_image,#wx_qr_url
+{
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    opacity: 0;
+    z-index: 2;
+}
+.picClose
+{
+    width:16px;
+    height: 16px;
+    position: absolute;
+    left: 112px;
+    top: -8px;
+    z-index: 2;
+}
+.picAdd
+{
+    width: 120px;
+    height: 120px;
+    position: absolute;
+}
+.picShow
+{
+    width: 120px;
+    height: 120px;
+    position: absolute;
+}
+.bottomLine{
+    height: 0;
+    width: 570px;
+    border-bottom: 1px solid #f2f2f2;
+    margin: 30px 20px 0;
+}
+/*保存按钮*/
+#save
+{
+    margin: 30px 0 30px 150px;
+}
+
+/*****************************************预览图片*******************************************/
+.previewArea {
+    width: 260px;
+    height: 600px;
+    position: absolute;
+    left: 670px;
+    top:15px;
+}
+.previewH4 {
+    margin: 20px 0 10px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #888;
+}
+.previewImg {
+    width: 240px;
+    height: 226px;
+    margin:10px 0;
+}
+
+
+/*图片预览与上传*/
+.previewPic {
+    float: left;
+    width: 120px;
+    height: 120px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f7f8f9;
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.previewPic img {
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+.previewInfo{
+    float: left;
+}
+.coverUpbtn {
+    cursor: pointer;
+    position: relative;
+    margin-left: 20px;
+    margin-right: 80px;
+    overflow: hidden;
+}
+.coverUpbtn span {
+    cursor: pointer;
+}
+.coverUpbtn input {
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.coverUpTip {
+    width: 300px;
+    line-height: 20px;
+    margin-left: 20px;
+    margin-top: 10px;
+    color: #b2b2b2;
+}

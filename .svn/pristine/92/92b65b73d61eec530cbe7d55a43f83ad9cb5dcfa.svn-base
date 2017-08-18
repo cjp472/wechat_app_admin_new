@@ -1,0 +1,702 @@
+$(document).ready(function () {
+    initEvent();
+
+});
+
+
+function initEvent() {
+    var NoticeBoxShow = 0;
+    var noticeFirstClick = 1;
+    $(".functionManage").click(function () {
+        if($("#versionType").val()==1){
+            baseUtils.show.redTip('当前版本不支持功能管理，如需开启请升级至成长版或专业版');
+        }else{
+            location.href='/manage_function';
+        }
+    });
+
+    //没有权限的提示
+
+    if($('#forbidAccess').val()){
+        if(!window.history.forward()) {
+            baseUtils.show.redTip($('#forbidAccess').val());
+            $('#forbidAccess').val('');
+        }
+
+    }
+
+    //通知中心
+    //通知中心数据ajax获取
+    $.ajax({
+        type: 'GET',
+        url: '/notice_list',
+        success: function (data) {
+            // if($.type(data).indexOf('object')<0) {
+            data = JSON.parse(data);
+            //}
+            if (data.notice_list[0]) {
+                if (data.notice_unread_num > 0) {
+                    $('.noticeUnreadNum').text(data.notice_unread_num);
+                    $('.noticeUnreadNum').show();
+                }
+                $('.noticeUnreadNum').css('transform', 'scale(1)');
+                $('.noticeTime').text(data.notice_list[0].notice_time);
+                $('.noticeTitle').text(data.notice_list[0].title);
+                $('.noticeContent').html(data.notice_list[0].notice_detail);
+                $('#viewState').val(data.notice_list[0].view_state);
+                $('#noticeId').val(data.notice_list[0].id);
+                $('.noticeLink').text(data.notice_list[0].link_name);
+                $('.noticeLink').attr('href', data.notice_list[0].notice_link)
+            }
+        },
+        error: function (xhr, status, err) {
+            $(".loadingS").fadeOut(100);
+            console.log(err);
+            baseUtils.show.redTip("网络错误，请稍后再试！");
+        }
+
+    });
+    $('.base_topBar').on('mouseenter', '.clientNotice', function () {
+        $('.noticeIcon').addClass('noticeIconActive');
+    });
+
+    $('.base_topBar').on('mouseleave', '.clientNotice', function () {
+        $('.noticeIcon').removeClass('noticeIconActive');
+    });
+
+    $('.base_topBar').on('click', '.clientNotice', function () {
+
+        var viewState = $('#viewState').val();
+        var noticeId = $('#noticeId').val();
+        console.log(noticeId);
+        if (noticeId) {
+            if (NoticeBoxShow == 1) {
+                $('.NoticeBox').fadeOut(200);
+                $('.noticeIcon').removeClass('noticeIconActiveC');
+                NoticeBoxShow = 0;
+            } else {
+                $('.NoticeBox').fadeIn(200);
+                $('.noticeIcon').addClass('noticeIconActiveC');
+                NoticeBoxShow = 1;
+                //判定是否为第一次点击
+                if (noticeFirstClick) {
+                    //判定当前最新消息是否已读
+                    console.log('当前是第一次点击');
+                    if (viewState == 0) {
+                        console.log('当前是未读');
+                        var unreadNum = $('.noticeUnreadNum').text();
+                        //改变对应通知的阅读状态
+                        changeViewState(noticeId);
+                        console.log(unreadNum);
+                        unreadNum--;
+                        //    判定是否等于0
+                        if (unreadNum == 0) {
+                            $('.noticeUnreadNum').hide();
+                        } else {
+                            $('.noticeUnreadNum').text(unreadNum);
+                        }
+                    }
+                }
+                noticeFirstClick = 0;
+            }
+        }
+
+
+    });
+
+
+    $('body').on('click', '.NoticeBoxClose', function () {
+        $('.NoticeBox').fadeOut(300);
+        $('.noticeIcon').removeClass('noticeIconActiveC');
+        NoticeBoxShow = 0;
+    });
+
+    $('.NoticeBox,.clientNotice').hover(function () {
+        $('body').unbind('mousedown');
+    }, function () {
+        $('body').bind('mousedown', function () {
+            $('.NoticeBox').fadeOut(300);
+            $('.noticeIcon').removeClass('noticeIconActiveC');
+            NoticeBoxShow = 0;
+        });
+    });
+
+
+    $('body').on('click', '.noticeMore', function () {
+        window.location = '/notice_list?show_all=1';
+    });
+    //通知中心结束
+
+    // 侧边栏菜单二級索引初始化
+    $(".secondIndexWrapper").each(function () {
+        var secondIndexHeight = $(this).find(".base_menu_sub").length * 42;
+        $(this).css({"height": secondIndexHeight + "px"});
+    });
+    // 侧边栏菜单跳转
+    $(".base_slide").on("click", ".sideMenu", function (e) {
+
+        var $target = $(this).children("._spreadIcon"),
+            $secondIndex = $(this).next(".secondIndexWrapper"),
+            secondIndexHeight = $secondIndex.find(".base_menu_sub").length * 42,
+            isContainSecondIndex = $(this).data("is_contain_second_index");    //是否有二级菜单
+
+        if (isContainSecondIndex) {
+            if ($target.hasClass("_spreadIconDown")) {  //关闭一级索引
+                $target.removeClass("_spreadIconDown").addClass("_spreadIconUp");
+                $secondIndex.css({"height": "0px"});
+            } else {
+                //展开当前一级索引
+                $target.removeClass("_spreadIconUp").addClass("_spreadIconDown");
+                $secondIndex.css({"height": secondIndexHeight + "px"});
+                //关闭其他一级索引
+                $("._spreadIcon").not($target).removeClass("_spreadIconDown").addClass("_spreadIconUp");
+                $(".secondIndexWrapper").not($secondIndex).css({"height": "0px"});
+            }
+            return false;
+        }
+
+        var href = $(this).data("href"),
+            sideMenuId = $(this).attr("id");
+
+        if (href) {
+            if (getSaveFlag()) {    // 编辑离开时浮层提醒
+                $("#upload_Modal").modal('show');
+                $("#leavePage").off("click").on("click", function () {
+                    setTimeout(showLoading, 1200);
+                    window.location.href = href;
+                })
+            }
+            else {
+                switch (sideMenuId) {
+                    case "activityManage":       //活动管理
+                        authorityUtils.handleActivityManage();
+                        break;
+                    case "questionAndAnswer":    //付费问答
+                        authorityUtils.handleQueAndAns();
+                        break;
+                    default:
+                        setTimeout(showLoading, 1200);
+                        window.location.href = href;
+                        break;
+                }
+            }
+        }
+    });
+
+    // 退出账户
+    $("#account_exit").click(function () {
+        $.get('/loginout', function (result) {
+            var code = result.ret;
+            if (code == "0") {
+                window.location = "/login";
+            }
+            else {
+                baseUtils.show.redTip("错误")
+                return;
+            }
+        });
+    });
+
+
+    /*鼠标悬浮于头像，弹出框*/
+    $(".base_avatar").hover(function () {
+        $(".hide_drop_down").show();
+    }, function () {
+        $(".hide_drop_down").hide();
+    });
+
+
+    /*隐藏提醒框 -*/
+    $(".pop_up_close").click(function () {
+        $(".window_prompt").hide();
+    });
+
+    /*隐藏 红色提醒栏*/
+    $(".red_prompt_close_img").click(function () {
+        $(".red_prompt").hide();
+    });
+
+    /*使红色提醒栏 悬浮于顶部*/
+    (function () {
+        var red_prompt_top = $(".red_prompt").css("top");
+        red_prompt_top = Number(red_prompt_top.substring(0, red_prompt_top.indexOf("p")));  //首先在监听器外部记录某class=red_prompt的标签的初始位置
+        window.onscroll = function () {
+            var top = document.documentElement.scrollTop || document.body.scrollTop;
+            top = red_prompt_top - top;
+            if (top < 0) {
+                top = 0;
+            }
+            $(".red_prompt").css("top", top + "px");
+        };
+    })();
+    // 按钮组按下状态
+    (function () {
+        //普通按钮
+        $(".xeBtnDefault").mousedown(function () {
+            $(this).addClass("xeBtnDefaultDown")
+        });
+        $(".xeBtnDefault").mouseup(function () {
+            $(this).removeClass("xeBtnDefaultDown")
+        });
+        //蓝色按钮
+        $(".btnBlue").mousedown(function () {
+            $(this).addClass("btnBlueDown")
+        });
+        $(".btnBlue").mouseup(function () {
+            $(this).removeClass("btnBlueDown")
+        })
+        //红色按钮
+        $(".btnRed").mousedown(function () {
+            $(this).addClass("btnRedDown")
+        });
+        $(".btnRed").mouseup(function () {
+            $(this).removeClass("btnRedDown")
+        })
+    })();
+
+
+    /**
+     * 扫码补填UnionId提醒
+     */
+    $("#closeScanningWindow, .windowScanningBtn").click(function () {
+        $(".scanning_window_prompt").addClass("hide");
+    });
+
+
+}
+
+//改变阅读状态
+function changeViewState(noticeId) {
+    $.ajax({
+        type: 'POST',
+        url: '/change_view_state',
+        data: {
+            notice_id: noticeId
+        },
+        dataType: 'json',
+        success: function (data) {
+            console.log(noticeId);
+            console.log(data);
+        }
+    });
+}
+// 显示loading
+function showLoading() {
+    $("#base_loading").show();
+    $(".base_content").addClass("contentFilter");
+    //$('#login_progressImage').show();
+    $('.progress-bar-striped').addClass('active');
+}
+// 隐藏loading
+function hideLoading() {
+    $("#base_loading").hide();
+    //$('#login_progressImage').hide();
+    $(".base_content").removeClass("contentFilter");
+    $('.progress-bar-striped').attr('aria-valuenow', '100');
+    $('.progress-bar-striped').html('100%');
+    $('.progress-bar-striped').css('width', '100%')
+    $('.progress-bar-striped').removeClass('active');
+}
+
+function reloadPage() {
+    if (window.location.reload) {
+        window.location.reload();
+    } else {
+        window.location.href = window.location.href;
+    }
+}
+
+function keyEnter(target) {
+    $("input").keypress(function (e) {//当按下按键时
+        if (e.which == 13) {//回车键的键位序号为13
+            target.trigger("click");//触发登录按钮的点击事件
+        }
+    });
+}
+
+//获取url参数
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return decodeURI(r[2]);
+    return null; //返回参数值
+}
+
+/**
+ * 输入框限制输入金额
+ * @param id
+ */
+function inputLimitPrice(id) {
+    $(id).keyup(function () {
+        var reg = $(this).val().match(/\d+\.?\d{0,2}/);
+        var txt = '';
+        if (reg != null) {
+            txt = reg[0];
+        }
+        $(this).val(txt);
+    }).change(function () {
+        $(this).keypress();
+        var v = $(this).val();
+        if (/\.$/.test(v)) {
+            $(this).val(v.substr(0, v.length - 1));
+        }
+    });
+}
+
+/**
+ * 日期选择控件配置
+ * @param id
+ */
+function datetimepickerconfig(id) {
+    $(id).datetimepicker({
+        /*startDate:new Date(),*/
+        weekStart: 1,
+        minView: "day",
+        format: 'yyyy-mm-dd hh:00:00',
+        autoclose: true//选择日期后自动关闭
+    });
+}
+function exportTimepickerconfig(id) {
+    $(id).datetimepicker({
+        /*startDate:new Date(),*/
+        // weekStart: 1,
+        minView: "month",
+        format: 'yyyy-mm-dd',
+        autoclose: true//选择日期后自动关闭
+    });
+}
+/*直播日期配置*/
+function aliveTimeConfig(id) {
+    $(id).datetimepicker({
+        /*startDate:new Date(),*/
+        weekStart: 1,
+        minView: "hour",
+        format: 'yyyy-mm-dd hh:ii:00',
+        autoclose: true//选择日期后自动关闭
+    });
+}
+
+//获取时间的函数
+//获取当天时间
+function getNowDay() {
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (day >= 1 && day <= 9) {
+        day = "0" + day;
+    }
+    return date.getFullYear() + '-' + month + '-' + day;
+}
+//获取到N天前日期
+function getOneDay(N) {
+    var date = new Date;
+    date.setDate(date.getDate() - N);
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (day >= 1 && day <= 9) {
+        day = "0" + day;
+    }
+    return date.getFullYear() + '-' + month + '-' + day;
+}
+//获取当月的第一天
+function getNowMonth() {
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    return date.getFullYear() + '-' + month + '-' + '01';
+}
+
+
+//采用正则表达式获取地址栏参数（name）
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)return decodeURIComponent(r[2]);
+    return null;
+}
+//获取当前页的pathname，拼接参数然后跳转
+function spliceSearchParams(obj) {
+    var url, searchKey, pathName = window.location.pathname;
+    url = pathName + '?';
+    for (searchKey in obj) {
+        url += searchKey + '=' + obj[searchKey] + '&';
+    }
+    window.location.href = url;
+}
+//获取当前页完整url用于回跳
+function resetUrl(objUrl) {
+    //获取当前页url
+    var reurl = encodeURIComponent(window.location.href); //alert(reurl);
+    //转向目标地址
+    window.location.href = objUrl + '&reurl=' + reurl;
+}
+//onclick等响应跳转
+function contentDetail(url) {
+    window.location.href = url;
+}
+//设置层级页面数据缓存
+function setTopUrlCookie(topcookie, resourceInfo) {
+    var urlInfo = window.location.href;
+    $.cookie(topcookie, resourceInfo + '|' + urlInfo, {path: '/'});
+}
+//显示上下路径
+function setTopUrlInfo(cookie_name, innerTo) {
+    var topUrlInfos = $.cookie(cookie_name);
+    innerTo = innerTo ? innerTo : 0;
+    if (topUrlInfos) {
+        var topcookie = topUrlInfos.split('|');
+        if (innerTo == 0) {
+            var addHtml = "<span><a href='" + topcookie[1] + "'>" + topcookie[0] + "</a></span>&nbsp;>&nbsp;";//alert(appendHtml);
+            $('.base_explain').prepend(addHtml);//alert('appok');
+        }
+        else {
+            var addHtml = "<span>&nbsp;>&nbsp;<a href='" + topcookie[1] + "'>" + topcookie[0] + "</a></span>";//alert(appendHtml);
+            $('.base_explain').append(addHtml);//alert('appok');
+        }
+    }
+}
+//回跳至编辑内容来路路径
+// cookieName,来路cookie,listUrl,原始列表url
+function reListUrl(cookieName, listUrl) {
+    var cookieInfo = $.cookie(cookieName);
+    if (cookieInfo) {
+        var reListInfo = cookieInfo.split('|')[1];
+        if (reListInfo) {
+            window.location.href = reListInfo;
+        } else {
+            window.location.href = listUrl;
+        }
+    }
+    else {
+        window.location.href = listUrl;
+    }
+}
+
+//上传错误反馈
+function uploadErrorShow(resultResponseText) {
+    var errorInfo = $.parseJSON(resultResponseText);
+    if (errorInfo.code == -96) {
+        var howhref = 'https://www.baidu.com/s?wd=%E5%90%8C%E6%AD%A5%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4';
+        window.wxc.xcConfirm("<span>本地时间不同步&nbsp;&nbsp;<a href='" + howhref + "' target='_blank' style='font-size: 20px;'>立即设置</a></span>", "error", {
+            title: '上传失败',
+            btn: parseInt("0000", 2),
+            onOk: function (e) {
+            }
+        });
+        $("#base_loading").hide();
+    }
+}
+//打印对象
+function writeObj(obj) {
+    var description = "";
+    for (var i in obj) {
+        var property = obj[i];
+        description += i + " = " + property + "\n";
+    }
+    alert(description);
+}
+//JS检查浏览器中的flashplayer版本
+function flashChecker() {
+    var hasFlash = 0;　　　　//是否安装了flash
+    var flashVersion = 0;　　//flash版本
+    var browserKernel = 0   //浏览器内核
+
+    if (document.all) {
+        var swf = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+        if (swf) {
+            hasFlash = 1;
+            VSwf = swf.GetVariable("$version");
+            flashVersion = parseInt(VSwf.split(" ")[1].split(",")[0]);
+        }
+    } else {
+        if (navigator.plugins && navigator.plugins.length > 0) {
+            var swf = navigator.plugins["Shockwave Flash"]; //writeObj(navigator.plugins["Shockwave Flash"]);
+            if (swf) {
+                //MacOS
+                if (navigator.userAgent.indexOf('Mac OS X') > 0) {
+                    hasFlash = 1;
+                }
+                else if (navigator.userAgent.indexOf("Chrome") >= 0) {//chrome
+                    browserKernel = 'chrome';
+                    if (swf.filename.indexOf("pepflashplayer") >= 0) {
+                        hasFlash = 1;
+                        var words = swf.description.split(" ");
+                        for (var i = 0; i < words.length; ++i) {
+                            if (isNaN(parseInt(words[i]))) continue;
+                            flashVersion = parseInt(words[i]);
+                        }
+                    }
+                } else {//firefox
+                    hasFlash = 1;
+                    var words = swf.description.split(" ");
+                    for (var i = 0; i < words.length; ++i) {
+                        if (isNaN(parseInt(words[i]))) continue;
+                        flashVersion = parseInt(words[i]);
+                    }
+                }
+
+            }
+        }
+    }
+    return {f: hasFlash, v: flashVersion, b: browserKernel};
+}
+
+
+/*判断IE浏览器版本*/
+function getInternetExplorerVersion() {
+    var ua = navigator.userAgent;
+    //是IE浏览器
+    if (ua.indexOf("MSIE") != -1) {
+        //判断浏览器版本 低于IE10 做出提示
+        if (ua.indexOf("MSIE 9.0") != -1 || ua.indexOf("MSIE 8.0") != -1 || ua.indexOf("MSIE 7.0") != -1) {
+            baseUtils.show.redTip('发现您的IE浏览器版本较低，为了不影响您的使用体验，建议您使用Chrome浏览器或将IE浏览器升级为IE 10及以上版本', function () {
+            }, 3600, 'top-center');
+        }
+    }
+}
+
+
+/*
+ * 高亮未编辑字段提示
+ * */
+function setHighLightMsg(input_id) {
+    if (input_id) {
+        $(input_id).parents('.upload_input_div').find('.upload_input_msg').css('color', 'red');
+    }
+}
+/*
+ * 反高亮提示
+ * */
+function setMsgDim(input_id, input, msg_id) {
+    var msg_id = msg_id ? msg_id : '.upload_input_msg';
+    var input = input ? input : 'text';
+    var input_val;
+    if (input == 'text') input_val = $(input_id).val().trim();
+    if (input == 'select') input_val = $(input_id).find('option:selected').val().trim();
+
+    if (input_val.length > 0) {
+        $(input_id).parents('.upload_input_div').find(msg_id).css('color', '');
+    } else {
+        $(input_id).parents('.upload_input_div').find(msg_id).css('color', 'red');
+    }
+}
+
+/*
+ * 打开公共header模板
+ * */
+function showContentTitle() {
+    $(".content_header").show();
+}
+
+/*
+ * 设置content区域标题
+ *  headerTitle : 标题名
+ *  titleUrl : 标题点击的链接地址
+ *  isCurrent : true -> 表示为当前页面标题,在title底下加上蓝色的border_bottom
+ *    <li><a href="/titleUrl">headerTitle</a></li>
+ * */
+function appendContentHeader(headerTitle, titleUrl, isCurrent) {
+    var li_string;
+    if (isCurrent) {
+        li_string = "<li style='border-bottom:2px solid #2a75ed;'><a href='" + titleUrl + "'>" + headerTitle + "</a></li>";
+        $(".content_header_ul").append(li_string);
+    } else {
+        li_string = "<li><a href='" + titleUrl + "'>" + headerTitle + "</a></li>";
+        $(".content_header_ul").append(li_string);
+    }
+}
+
+//链接跳转权限控制
+var authorityUtils = {
+
+    userVersionNum: $(".user_version_num").data("version_type"),
+
+    handleActivityManage: function () {
+        if (this.userVersionNum == 1) {
+            baseUtils.show.redTip("当前版本不支持活动管理，如需开启请升级至成长版或专业版");
+            return false;
+        } else {
+            window.location.href = "/activityManage";
+        }
+    },
+    handleQueAndAns: function () {
+        if (this.userVersionNum == 1) {
+            baseUtils.show.redTip("当前版本不支持付费问答，如需开启请升级至成长版或专业版");
+            return false;
+        }
+        $.ajax("/QA/isHaveQA", {
+            type: "GET",
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                if (data.code == 0) { // 已经有问答 则跳往详情
+                    window.location.href = "/QA/questionAndAnswerDetail";
+                } else if(data.code == 1){ // 还没有问答 则跳往创建
+                    window.location.href = "/QA/createQuestionAndAnswer";
+                }
+            },
+            error: function (xhr, status, err) {
+                console.log(err);
+                baseUtils.show.redTip("网络错误，请稍后再试！");
+            }
+        });
+
+    },
+
+}
+
+
+/**
+ * 新建公共方法入口
+ */
+var baseUtils = {
+
+    /**
+     * 显示模块
+     */
+    show: {
+        colors: {
+            red: '#f06d6b',
+            blue: '#2a75ed'
+        },
+
+        defaultTip: function (content, callback, time, color) {
+            var $Tip = $('#TopPrompt'),
+                $TipText = $Tip.find('.topPromptContent');
+            time = time || 2000;
+            $TipText.text(content);
+            $Tip.css('backgroundColor', this.colors[color]).fadeIn(300);
+
+            setTimeout(function () {
+                $Tip.fadeOut(300);
+                if (callback) callback.call();
+            }, time);
+        },
+        //  蓝色顶部提示条
+        blueTip: function (content, callback, time) {
+            this.defaultTip(content, callback, time, 'blue');
+        },
+        //  红色顶部提示条
+        redTip: function (content, callback, time) {
+            this.defaultTip(content, callback, time, 'red');
+        }
+
+    },
+
+    /**
+     * 输入的最大价格 100万， 单位：元
+     */
+    maxInputPrice: 1000000,
+
+
+}
+
+

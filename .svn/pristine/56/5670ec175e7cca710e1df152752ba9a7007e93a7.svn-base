@@ -1,0 +1,301 @@
+@extends('help.baseLayout')
+@section('base_title')
+    系统升级说明
+@stop
+
+@section('base_resource')
+    <link type=text/css rel="stylesheet" href="../css/help/help.css?{{env('timestamp')}}">
+
+@stop
+
+@section('base_explain')
+    <span style="font-size: 18px">系统升级说明</span>
+@stop
+
+@section('system_update')
+    <div class="base_menu">
+        <div class="base_menu_sub">
+            <p class="hp " onclick="window.location.href ='/help/system_update#hp1'">· 单品使用教程</p>
+        </div>
+        <div class="base_menu_sub">
+            <p class="hp " onclick="window.location.href ='/help/system_update#hp2'">· 专栏使用教程</p>
+        </div>
+        <div class="base_menu_sub">
+            <p class="hp " onclick="window.location.href ='/help/system_update#hp3'">· 会员使用教程</p>
+        </div>
+    </div>
+@stop
+
+
+@section('base_mainContent')
+    <div class="hearder_title">
+        <h1>小鹅通商品管理使用指引</h1>
+        <hr />
+    </div>
+
+    <div>
+        <img src="../images/help/index_logo1.png" style="width: 120px;margin: -30px 2px 26px;" alt=""/>
+        <h4 class="b"> 小鹅通管理台全新改版啦！新朋友/老朋友们，请让这份指引带您一起踏上新的知识服务之旅。</h4>
+
+        <div>
+            <h4 class="b"> 一、发布内容：</h4>
+            <p>请点击管理台左侧商品管理选项。您可以选择添加单品、专栏或设置会员。</p>
+            <p>1）添加单品：您可选择新建音频、视频、图文、直播类型的单品，可为单品设置价格或设置免费观看。</p>
+            <p><a href="/help/system_update#hp1">点此查看单品教程</a></p>
+        </div>
+
+        <div>
+            <p>2）设置专栏：您可将单品添加在专栏内，将不同类型的单品打包进行售卖。</p>
+            <p><a href="/help/system_update#hp2">点此查看专栏教程</a></p>
+        </div>
+
+        <div>
+            <p>3）设置会员：您可通过会员模式将您的用户精细化运营，也可按会员模式将付费内容按时长售卖。</p>
+            <p><a href="/help/system_update#hp3">点此查看会员教程</a></p>
+        </div>
+
+
+        <div>
+            <h4 class="b"> 二、管理用户评论</h4>
+            <p>请点击管理台左侧内容评论选项。您可以通过管理用户评论进行筛选精选评论或隐藏等功能。</p>
+            <p><a href="http://mp.weixin.qq.com/s?__biz=MzI0MTYzMDU3NQ==&mid=100000426&idx=1&sn=4835ef4246fdc6ad1d1c0e05a4935845&chksm=6909eeaa5e7e67bc8ab8ca1d8568592c2770c81be8ea4559e418d2b0bb4336842afddbf776ac#rd">点此查看内容评论相关教程</a></p>
+        </div>
+
+        <div>
+            <h4 class="b"> 三、设置首页轮播图</h4>
+            <p>您可以通过设置首页轮播图来装饰您的首页。</p>
+            <p><a href="http://mp.weixin.qq.com/s?__biz=MzI0MTYzMDU3NQ==&mid=100000424&idx=1&sn=91897cd5d8b0948441266f3971bc6ffe&chksm=6909eea85e7e67bed1e8b21561c72be20b7797a0e815b2fe024c3d836e7f45059506d31cedd8#rd">点此查看轮播图相关教程</a></p>
+        </div>
+
+        <div>
+            <h4 class="b"> 四、查看用户数据及购买记录</h4>
+            <p>您可通过管理台左侧的用户列表查看用户数据及购买记录。</p>
+            <p><a href="http://mp.weixin.qq.com/s?__biz=MzI0MTYzMDU3NQ==&mid=100000425&idx=1&sn=6ea10c9ba9b2d4d8972973955d0546ce&chksm=6909eea95e7e67bff8a04e82cfa1724fcd33c0a57e6de8df37b06caa79c9e3a5306b031d5f22#rd">点此查看用户列表相关教程</a></p>
+        </div>
+
+        <div>
+            <h4 class="b"> 五、向用户推送定向触达及接受反馈信息</h4>
+            <p>点击管理台左侧消息列表及反馈列表，您可以向用户推送定向触达及接受反馈信息及管理这些信息。</p>
+            <p><a href="http://mp.weixin.qq.com/s?__biz=MzI0MTYzMDU3NQ==&mid=100000426&idx=1&sn=4835ef4246fdc6ad1d1c0e05a4935845&chksm=6909eeaa5e7e67bc8ab8ca1d8568592c2770c81be8ea4559e418d2b0bb4336842afddbf776ac#rd">点此查看相关教程</a></p>
+        </div>
+
+        <div>
+            <h4 class="b"> 六、营销相关功能</h4>
+            <p>您可在这个模块实现邀请卡、免费码等营销功能，促进C端裂变式传播。</p>
+            <p><a href="http://mp.weixin.qq.com/s?__biz=MzI0MTYzMDU3NQ==&mid=100000427&idx=1&sn=f5a6de0711b865f392bd2c5ad07c7753&chksm=6909eeab5e7e67bdbf0e21af4d803639107a960839a20418a76612879b0f30b66a0b83a68bb2#rd">点此查看邀请卡相关教程</a></p>
+            <p><a href="http://mp.weixin.qq.com/s?__biz=MzI0MTYzMDU3NQ==&mid=100000428&idx=1&sn=e9879b2a82b454ffb7ee8d729bcddf20&chksm=6909eeac5e7e67baaf2dc8e976370bf452f9312752a31aaa5c907b43199dbbafcfbb4dc03ae8#rd">点此查看免费码相关教程</a></p>
+        </div>
+
+
+    </div>
+    <br>
+
+
+    <div class="hearder_title" id="hp1">
+        <h2>单品教程</h2>
+        <hr />
+    </div>
+
+    <div>
+        <p>单品是用户可单独付费购买的内容商品，包括音频、视频、图文、直播；在单品管理中的内容，将会展示在手机端页面的“最新”列表当中，独立于“专栏”与“会员”进行售卖。</p>
+        <br>
+
+        <p>
+            <h3>新建单品</h3>
+        </p>
+        <br>
+
+        <p>
+            <h4>1.进入商品管理，点击左上角【单品】，选择【新建】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_1.png"></p>
+        <p>
+            <h4>2.点击选择单品类型</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_2.png"></p>
+        <p>
+            <h4>3.信息填好后点击【完成】，该单品即创建成功</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_3.png"></p>
+        <p>
+            <h4>4．您可在单品列表中看到刚刚添加的单品</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_4.png"></p>
+
+        <br>
+        <p>
+            <h3>选择已有单品</h3>
+        </p>
+        <br>
+        <p>如果您在“专栏”或“会员”中创建了内容，想要将该内容也作为单品单独售卖，您可以在单品管理中添加已有单品。</p>
+
+        <p>
+            <h4>1. 进入商品管理，点击左上角【单品】，选择【选择已有】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_select_goods_1.png"></p>
+        <p>
+            <h4>2.在弹出窗口中选择想要单卖的内容，选好后点击下一步</h4>
+        </p>
+        <p>注:（窗口中的列表不包含已经作为单品销售的内容）</p>
+        <p><img src="../images/help/goodsManage/h_select_goods_2.png"></p>
+        <p>
+            <h4>3.设置该单品的售价（如10元）</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_select_goods_3.png"></p>
+        <p>
+            <h4>4．设置好后点击确定，该单品即添加完成，您可在单品列表中看到刚刚添加的单品，未定阅专栏的用户可单独付费订阅该单品</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_select_goods_4.png"></p>
+
+    </div>
+    <br>
+
+
+    <div class="hearder_title" id="hp2">
+        <h2>专栏教程</h2>
+        <hr />
+    </div>
+
+    <div>
+        <p>
+            <h3>专栏内添加内容</h3>
+        </p>
+        <br>
+
+        <h4 class="b"> 新建单品至专栏</h4>
+
+        <p>
+            <h4>1.在专栏列表中点击想要添加内容的专栏，进入专栏详情页</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_1.png"></p>
+        <p>
+            <h4>2. 在右侧添加单品中，选择【新建】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_2.png"></p>
+        <p>
+            <h4>3.选择想要创建的单品类型</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_3.png"></p>
+        <p>
+            <h4>4.编辑完单品信息后，点击【完成】按钮，一个新的单品就成功添加到了专栏中。</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_4.png"></p>
+
+        <br>
+        <h4 class="b"> 将已经在售的单品添加到专栏中</h4>
+        <p>
+            <h4>1.在专栏列表中点击想要添加内容的专栏，进入专栏详情页</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_5.png"></p>
+        <p>
+            <h4>2. 在右侧添加单品中，选择【选择已有】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_6.png"></p>
+        <p>
+            <h4>3.在弹出窗口中选择想要添加至专栏的单品</h4>
+        </p>
+        <p>注：此列表显示的是所有在售且未被添加至其他专栏/会员的单品</p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_7.png"></p>
+        <p>
+            <h4>4．点击确定后，单品就成功添加到了专栏中，已购买专栏的用户可免费查看该单品</h4>
+        </p>
+        <p>注：此列表显示的是所有在售且未被添加至其他专栏/会员的单品</p>
+        <br>
+
+        <br>
+        <h4 class="b"> 试听/试看</h4>
+
+        <p>您可以将专栏内的音频、视频、图文设为试听/试看，未订阅专栏的用户可免费查看试听/试看内容</p>
+        <p>使用方法：找到想设为试听/试看的内容，在更多操作中点击【设为试听/试看】，该内容即成为免费内容供未定阅专栏的用户查看，设置成功后可在该内容名称右侧看到“试听/试看”标签</p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_8.png"></p>
+
+        <p>您也可随时在更多操作中取消试听/试看，取消后未订阅专栏的用户将不可查看该内容</p>
+        <p><img src="../images/help/goodsManage/h_create_goods_in_package_9.png"></p>
+
+    </div>
+
+
+    <div class="hearder_title" id="hp3">
+        <h2>会员教程</h2>
+        <hr />
+    </div>
+    <br>
+    <p>会员是一种全新的付费形式，用户开通会员后可在会员有效期内查看权益内容，同时开通会员后可点亮会员专属标识，彰显会员身份。</p>
+
+    <div>
+        <p>
+            <h3>创建会员</h3>
+        </p>
+        <br>
+        <p>
+            <h4>1.进入商品管理>会员管理，点击【创建会员】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_member_help_1.png"></p>
+        <p>
+            <h4>2.填写会员信息并保存后，会员即创建成功</h4>
+        </p>
+
+        <br>
+        <p>
+            <h3>新建会员权益</h3>
+        </p>
+        <br>
+        <p>
+            <h4>1.在会员列表中点击想要添加权益内容的会员，进入会员详情页</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_member_help_2.png"></p>
+        <p>
+            <h4>2.在右侧添加会员权益中，选择【新建】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_member_help_3.png"></p>
+        <p>
+            <h4>3.选择单品类型并填写相应信息</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_member_help_4.png"></p>
+        <p>
+            <h4>4.编辑完单品信息后，点击【完成】按钮，一个新的单品就成功添加到了会员中</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_member_help_5.png"></p>
+
+        <br>
+        <p>
+            <h3>从已有单品中选择</h3>
+        </p>
+        <br>
+        <p>
+            <h4>1.在右侧添加会员权益中，选择【选择已有】</h4>
+        </p>
+        <p><img src="../images/help/goodsManage/h_member_help_6.png"></p>
+        <p>
+            <h4>2.在弹出窗口中选择想要添加至会员的单品</h4>
+        </p>
+        <p>注：此列表显示的是所有在售且未被添加至其他专栏/会员的单品</p>
+        <p><img src="../images/help/goodsManage/h_member_help_7.png"></p>
+        <p>3．点击确定后，单品就成功添加到了会员中，已购买会员的用户可在会员有效期内免费查看该单品</p>
+
+
+    </div>
+
+
+    <div style="margin-top: 80px;">
+        <p>联系我们<hr /></p>
+        <p>联系电话：+86 400-640-8800</p>
+        <p>商务合作：support@xiaoe-tech.com</p>
+        <p>公司地址： 深圳市南山区科技园讯美科技广场3号楼16A09</p>
+        <p class="tc"><img src="../images/help/help_1-0.png" style="padding: 1px 240px;" alt="官方微信公众号二维码" /> </p>
+        <p class="tc">微信扫一扫 关注小鹅通</p>
+        <p class="tc">Copyright ©  深圳小鹅网络技术有限公司</p>
+        <p></p>
+        <p></p>
+    </div>
+
+@stop
+
+
+
+
+
+
+
+
+

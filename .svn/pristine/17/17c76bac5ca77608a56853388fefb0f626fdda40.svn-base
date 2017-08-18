@@ -1,0 +1,374 @@
+
+$(document).ready(function () {
+    $goodsList.init();
+});
+
+var $goodsList = (function () {
+
+    var $homePage = $("#_mainContentPart"),
+        setGradientInfo = {},
+        setGradientWindowState = "edit",         //"edit", "set"
+        addResourceParams = new Array;         //添加精选商品的接口参数
+
+    var $goodsList = {
+
+        goodsCount: $("#addDistributeGoods").data("count"),
+
+        init: function () {
+
+            /*********************** 添加推广商品窗口 *************************/
+
+            //打开添加推广商品窗口
+            $homePage.on("click", "#addDistributeGoods", function () {
+
+                var switchState = $("._switchOperateArea").data("switch_state");//当前状态
+                if (!switchState) {
+                    $chosenShop.showOpenChosenTip();
+                    return false;
+                }
+                if ($goodsList.goodsCount >= 20) {
+                    baseUtils.show.redTip("添加的推广商品数量已达到20个，不能再添加");
+                    return false;
+                }
+                baseUtils.showWindow("_addDistributeGoodsWindow");
+                $goodsList.getDistributeGoodsContent();
+            });
+            //关闭添加推广商品窗口
+            $("#_addDistributeGoodsWindow").on("click", "._HeaderIcon, #_cancelAddDistributeGoods", function () {
+                baseUtils.hideWindow("_addDistributeGoodsWindow");
+            });
+            $("#_addDistributeGoodsWindow").on("click", "._addGoodsWindowTableItem", function () {
+                var $target = $(this).children("._selectSingleDistributeGoods"),
+                    currentState = $target.prop("checked");
+                if (!currentState) {
+                    var allCount = $goodsList.goodsCount + $("#_addGoodsWindowTableBody").find("._selectSingleDistributeGoods:checked").length;
+                    if (allCount >= 20) {
+                        baseUtils.show.redTip("添加的推广商品数量已达到20个，不能再添加");
+                        return false;
+                    }
+                }
+                $target.prop("checked", !currentState);
+            });
+            $("#_addDistributeGoodsWindow").on("click", "._selectSingleDistributeGoods", function (e) {
+                e.stopPropagation();
+                var currentState = $(this).prop("checked");
+                if (currentState) {
+                    var allCount = $goodsList.goodsCount + $("#_addGoodsWindowTableBody").find("._selectSingleDistributeGoods:checked").length;
+                    if (allCount > 20) {
+                        baseUtils.show.redTip("添加的推广商品数量已达到20个，不能再添加");
+                        return false;
+                    }
+                }
+            })
+            //添加推广商品窗口搜索商品
+            $("#_addDistributeGoodsWindow").on("click", "#_searchDistributeGoods", function () {
+                var searchContent = $.trim($("#_searchDistributeGoodsInput").val());
+                $goodsList.getDistributeGoodsContent(searchContent);
+            });
+            $("#_searchDistributeGoodsInput").on("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    $("#_searchDistributeGoods").click();
+                }
+            });
+            //保存推广商品窗口内容
+            $("#_confirmAddDistributeGoods").click(function () {
+                $("#_addGoodsWindowTableBody").find("._selectSingleDistributeGoods:checked").each(function () {
+                    var obj = {
+                        id: $(this).data("resource_id"),
+                        type: $(this).data("resource_type")
+                    }
+                    addResourceParams.push(obj);
+                });
+                if ($goodsList.goodsCount + addResourceParams.length > 20) {
+                    baseUtils.show.redTip("添加的推广商品数量不能超过20个");
+                    return false;
+                }
+                baseUtils.showLoading("addDistributeGoodsLoading");
+                $.ajax("/chosen/add_resource_chosen", {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        params: addResourceParams,
+                    },
+                    success: function (result) {
+                        baseUtils.hideLoading("addDistributeGoodsLoading");
+                        if (result.code == 0) {
+                            baseUtils.hideWindow("_addDistributeGoodsWindow");
+                            baseUtils.show.blueTip("保存成功");
+                            if ($goodsList.goodsCount == 0) {
+                                $.alert("您最多可添加20个商品，且商品添加后不支持删除，请谨慎选择。<br>您可以继续添加商品和设置商品相关属性", "info", {
+                                    btn: 2,
+                                    onOk: function () {
+                                        $chosenShop.getNewPage("goods");
+                                    },
+                                });
+                            } else {
+                                $chosenShop.getNewPage("goods");
+                            }
+                        } else {
+                            baseUtils.show.redTip("操作失败，请稍后再试");
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        baseUtils.hideLoading("addDistributeGoodsLoading");
+                        console.log(err);
+                        alert("服务器出小差了，请稍后再试！");
+                    }
+                });
+
+            });
+
+
+            /*********************** 设置梯度窗口 *************************/
+
+            //打开设置梯度窗口
+            $homePage.on("click", ".setGradient", function () {
+                var resId = $(this).parents(".tableBodyItem").data("resource_id"),
+                    resType = $(this).parents(".tableBodyItem").data("resource_type"),
+                    type = $(this).data("type");
+                setGradientInfo = {
+                    resId : resId,
+                    resType: resType
+                }
+                if (type == "set") {
+                    $("#_setGoodsGradientWindow ._windowEditableValue").val("");
+                    setGradientWindowState = "set";
+                } else if (type == "edit") {
+                    setGradientWindowState = "edit";
+                    //回显原来的数据
+                    var distributeData = $(this).data("distribute_data");
+                    $("#_windowValue1").val(distributeData.end1);
+                    $("#_windowValue2").val(distributeData.start2);
+                    $("#_windowValue3").val(distributeData.end2);
+                    $("#_windowValue4").val(distributeData.start3);
+                    $("#_windowRatio1").val(distributeData.percent1);
+                    $("#_windowRatio2").val(distributeData.percent2);
+                    $("#_windowRatio3").val(distributeData.percent3);
+                }
+                baseUtils.showWindow("_setGoodsGradientWindow");
+
+            });
+
+            //关闭设置梯度窗口
+            $("#_setGoodsGradientWindow").on("click", "._HeaderIcon, #_windowCancelBtn", function () {
+                baseUtils.hideWindow("_setGoodsGradientWindow");
+            });
+
+            //关联设置梯度窗口input值
+            $("#_setGoodsGradientWindow").on("keyup", "._windowEditableValue", function () {
+                var id = $(this).attr("id");
+                if (id == "_windowValue1") {
+                    $("#_windowValue2").val(+$.trim($("#_windowValue1").val())+1);
+                } else if (id == "_windowValue3") {
+                    $("#_windowValue4").val(+$.trim($("#_windowValue3").val())+1);
+                }
+            });
+
+            //保存设置梯度
+            $("#_setGoodsGradientWindow").on("click", "#_windowConfirmBtn", function () {
+
+                var value1 = parseInt($("#_windowValue1").val()),
+                    value2 = parseInt($("#_windowValue2").val()),
+                    value3 = parseInt($("#_windowValue3").val()),
+                    value4 = parseInt($("#_windowValue4").val()),
+                    ratio1 = parseInt($("#_windowRatio1").val()),
+                    ratio2 = parseInt($("#_windowRatio2").val()),
+                    ratio3 = parseInt($("#_windowRatio3").val());
+
+                var isDistribute,distribute_percent;
+                //判断梯度分成比例，第一梯度分成不低于推广员
+                $.ajax("/chosen/get_resource_distribute_info/"+setGradientInfo.resType+'/'+setGradientInfo.resId, {
+                    type: "GET",
+                    dataType: "json",
+                    async:false,
+                    data: {},
+                    success: function (result) {
+                        console.log(result);
+                        if(result.code == 0){
+                            isDistribute = result.data.has_distribute;
+                            distribute_percent = result.data.first_distribute_percent;
+                        }else{
+                            console.error('获取推广员信息失败')
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        console.log(err);
+                        baseUtils.show.redTip("服务器出小差了，请稍后再试！");
+                    }
+                });
+                if(isDistribute && ratio1 <= distribute_percent ){
+                    baseUtils.show.redTip("第一区间分成比例要大于该商品的推广员分成比例噢");
+                    return false;
+                }
+                if (!value1 || !value2 || !value3 || !value4 || !ratio1 || !ratio2 || !ratio3) {
+                    baseUtils.show.redTip("数据没有填写完整哦");
+                    return false;
+                }
+                if((( value1 + 1) != value2) || (( value3 + 1) != value4) || (value2 >= value3) || (value1 <= 1)){
+                    baseUtils.show.redTip('区间填写有误，请检查后重试');
+                    return false;
+                }
+                if((ratio1 <= 0) || (ratio1 > ratio2) || (ratio2 > ratio3)){
+                    baseUtils.show.redTip('分成比例填写有误，请参考示例');
+                    return false;
+                }
+                if (ratio1>99 || ratio2 > 99 || ratio3 > 99) {
+                    baseUtils.show.redTip("分成比例不能超过99%");
+                    return false;
+                }
+
+                var params = {
+                    data1: {
+                        end_order_num: value1,
+                        distribute_percent: ratio1,
+                    },
+                    data2: {
+                        start_order_num: value2,
+                        end_order_num: value3,
+                        distribute_percent: ratio2,
+                    },
+                    data3: {
+                        start_order_num: value4,
+                        distribute_percent: ratio3,
+                    },
+                    resource_id: setGradientInfo.resId,
+                    resource_type: setGradientInfo.resType,
+                    edit: setGradientWindowState == "edit" ? "edit" : "set",
+                }
+
+                $.ajax("/chosen/set_xiaoe_distribute", {
+                    type: "POST",
+                    dataType: "json",
+                    data: params,
+                    success: function (result) {
+                        if (result.code == 0) {
+                            baseUtils.show.blueTip("梯度设置成功");
+                            baseUtils.hideWindow("_setGoodsGradientWindow");
+                            $chosenShop.getNewPage("goods");
+                        } else if(result.code == 4){
+                            baseUtils.show.blueTip("梯度设置失败，最低分成比例不能低于推广员的分销比例"+result.data.distribute_percent+"%");
+                        } else if(result.code == 8){
+                            baseUtils.show.blueTip("梯度设置失败，请您刷新页面重试");
+                        } else {
+                            baseUtils.show.redTip("梯度设置失败，请稍后再试");
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        console.log(err);
+                        baseUtils.show.redTip("服务器出小差了，请稍后再试！");
+                    }
+                });
+
+            });
+
+            /*********************** 设置分类 *************************/
+
+            $homePage.on("change", ".selectChosenGoodsClass", function () {
+
+                var $select = $(this),
+                    $option = $select.children("option:selected"),
+                    classId = $option.val(),
+                    className = $option.text();
+
+                if (classId == -1) {
+                    console.log(classId + " - " + className);
+                    return false;
+                }
+                var $delegate = $select.parents(".tableBodyItem"),
+                    resId = $delegate.data("resource_id"),
+                    resType = $delegate.data("resource_type"),
+                    oldClassId = $delegate.data("old_class_id") || -1;
+
+                $.ajax("/chosen/set_classify", {
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        class_id: classId,
+                        resource_id: resId,
+                        resource_type: resType,
+                    },
+                    success: function (result) {
+                        if (result.code == 0) {
+                            baseUtils.show.blueTip("设置分类成功。");
+                        } else {
+                            baseUtils.show.redTip("设置分类失败。");
+                            $select.val(oldClassId);
+                        }
+                    },
+                    error: function (xhr, status, err) {
+                        console.log(err);
+                        alert("服务器出小差了，请稍后再试！");
+                    }
+                });
+
+            });
+
+            /*********************** 生成预览二维码 *************************/
+
+            $homePage.find(".qrCodeImage").each(function () {
+                var qrCodeUrl = $(this).data("url"),
+                    id = $(this).attr("id");
+
+                createQrCode(id, qrCodeUrl, 160, 160);
+            });
+
+
+
+        },
+        getDistributeGoodsContent: function (searchContent) {
+            baseUtils.showLoading("addDistributeGoodsLoading");
+            $.ajax("/chosen/search_resource", {
+                type: "POST",
+                dataType: "json",
+                data: {
+                    search: searchContent || "",
+                },
+                success: function (result) {
+
+                    var htmlStr = "";
+                    $.each(result, function (k, v) {
+                        htmlStr +=
+                            '<div class="_addGoodsWindowTableItem clearfix">' +
+                                '<input type="checkbox" class="_selectSingleDistributeGoods" ' +
+                                    'data-resource_id="'+v.id+'" data-resource_type="'+v.type+'">' +
+                                '<div class="_singleDistributeGoodsCover">' +
+                                    '<img src="' + v.img_url_compressed + '">' +
+                                '</div>' +
+                                '<div class="_singleDistributeGoodsTitle" title="'+v.name+'">'+v.name+'</div>' +
+                                '<div class="_singleDistributeGoodsTime">'+v.created_at+'</div>' +
+                            '</div>';
+                    });
+                    if (htmlStr.length == 0) {
+                        htmlStr = "<div class='contentNoData'>暂无数据</div>";
+                    }
+                    $("#_addGoodsWindowTableBody").html(htmlStr);
+                    $("#_addGoodsWindowTableBody").scrollTop(0);
+                    baseUtils.hideLoading("addDistributeGoodsLoading");
+                },
+                error: function (xhr, status, err) {
+                    console.log(err);
+                    alert("服务器出小差了，请稍后再试！");
+                }
+            });
+
+        },
+        checkInputValue: function (currentDom) {
+
+            var value = $(currentDom).val();
+
+            //清除"数字"和"."以外的字符
+            value = value.replace(/[^\d]/g, "");
+            //清除0后面的数字
+            value = value.replace(/^0[\d]+/g, "0");
+
+            $(currentDom).val(value);
+
+        },
+
+
+
+    };
+
+    return $goodsList;
+
+})();

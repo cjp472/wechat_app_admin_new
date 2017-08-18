@@ -1,0 +1,55 @@
+<template>
+    <transition name="fade">
+        <div class="top-prompt" v-show="is_show_prompt">
+            <div class="top-prompt-content">{{tip_text}}</div>
+        </div>
+    </transition>
+</template>
+
+<script>
+    import EventBus from '../libs/eventbus.js';
+    export default {
+        data:function () {
+            return {
+                tip_text:'',
+                is_show_prompt: false
+            }
+        },
+        created: function () {
+            let that = this;
+            EventBus.$on('show_top_prompt_tip',function (txt) {
+                that.tip_text = txt;
+                that.is_show_prompt = true;
+                setTimeout(function () {
+                    that.is_show_prompt = false;
+                },2000);
+            })
+        }
+    }
+</script>
+
+<style>
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0
+    }
+    .top-prompt {
+        background-color: rgb(42, 117, 237);
+        width: 450px;
+        border-radius: 2px;
+        box-shadow: 0 4px 12px 0 rgba(41,117,237,.2);
+        position: fixed;
+        top: 0;
+        left: 50%;
+        margin-left: -225px;
+        z-index: 10000;
+    }
+    .top-prompt-content{
+        margin: 10px;
+        text-align: center;
+        font-size: 14px;
+        color: #fff;
+    }
+</style>

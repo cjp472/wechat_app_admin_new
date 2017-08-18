@@ -1,0 +1,448 @@
+/**
+ * Created by jserk on 2017/3/23.
+ */
+
+$(function () {
+    manageAlive.init();
+});
+var manageAlive = function () {
+    var manageAlive = {};
+
+    var resUrl;
+
+    //检查直播提交表单
+    function checkAliveForm(info) {
+        if ($formCheck.emptyString(info.title)) {
+            baseUtils.show.redTip("直播名称不能为空！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.summary)) {
+            baseUtils.show.redTip("直播简介不能为空！");
+            return false;
+        }
+        if (info.alive_type==1&&(fileId == null)) {
+            baseUtils.show.redTip("请上传直播资源！");
+            return false;
+        }
+        if (is_edit) {
+            baseUtils.show.redTip("直播资源上传中！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.img_url)) {
+            baseUtils.show.redTip("请上传您的直播封面！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.start_at)) {
+            baseUtils.show.redTip("请填入您的直播上架时间！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.zb_start_at)) {
+            baseUtils.show.redTip("请填入您的直播开始时间！");
+            return false;
+        }
+        if ($formCheck.emptyString(info.zb_stop_at)) {
+            baseUtils.show.redTip("请填入您的直播结束时间！");
+            return false;
+        }
+        if (!$formCheck.checkTime(info.start_at)) {
+            baseUtils.show.redTip("直播上架时间错误");
+            return false;
+        }
+        if (!$formCheck.checkTime(info.zb_start_at)) {
+            baseUtils.show.redTip("直播开始时间错误");
+            return false;
+        }
+        if (!$formCheck.checkTime(info.zb_stop_at)) {
+            baseUtils.show.redTip("直播结束时间错误");
+            return false;
+        }
+        if (uploadChannelType==1 && info.payment_type == 2 && $formCheck.emptyString(info.piece_price)) {
+            baseUtils.show.redTip("您选择的付费形式为付费，请输入价格！");
+            return false;
+        }
+        if (uploadChannelType==1 && info.payment_type == 2 && !$formCheck.checkNum(info.piece_price)) {
+            baseUtils.show.redTip("您的价格输入格式有误，请重新输入！");
+            return false;
+        }
+        if(uploadChannelType== 1 && info.payment_type== 2 && info.piece_price > baseUtils.maxInputPrice * 100){
+            baseUtils.show.redTip("价格不能大于 " + baseUtils.maxInputPrice + " 元");
+            return false;
+        }
+        if(!$formCheck.checkTimeOrder(info.zb_start_at,info.zb_stop_at)){
+            baseUtils.show.redTip("直播结束时间必须大于直播开始时间！");
+            return false;
+        }
+        return true;
+    }
+    //提交信息
+    function submitForm(url, allParams) {
+        showLoading();
+        $.ajax(url, {
+            type: 'POST',
+            dataType: 'json',
+            data:allParams,
+            success:function (data) {
+                if (parseInt(data.code) === 0) {
+                    baseUtils.show.blueTip("保存成功");
+                    window.location.href = backURL;
+                }
+                else {
+                    hideLoading();
+                    baseUtils.show.redTip(data.msg);
+                    submitLimt = false;
+                }
+            },
+            error: function(xhr,status,err) {
+                hideLoading();
+                console.error(err);
+                baseUtils.show.redTip('网络错误，请稍后再试！');
+                submitLimt = false;
+            }
+        });
+    }
+
+    //当前添加的用户
+    var nowUserid = '';
+
+    //选中用户的用户名
+    var nowUserName;
+
+    //当前选中的次序
+    var addIndex;
+
+    //相同导师判定id
+    var  sameId;
+
+    //置空分类数组
+    classArray=[];
+    var page;
+    var seacher ;
+    var hasDown ;
+    var isLoading;
+    //重置弹出框内容并关闭弹出框
+    function boxContentReset(){
+        $("#searchInput").val("");
+        $(".memberPart").remove();
+        $(".darkScreen").fadeOut(300);
+    }
+
+    manageAlive.init = function () {
+
+        aliveTimeConfig("#zb_start_at");
+        aliveTimeConfig("#zb_stop_at");
+        // 添加讲师类
+        $(".memberClassAdd").click(function(){
+            nowUserid='';
+            $(".eachLineContent").append("<div class='eachLine'>"+
+                "<div class='memberName'>点击添加</div>"+
+                "<input type='text' class='inputDefault memberCall' value='讲师'>"+
+                "<div class='memberClear'>清空</div>"+
+                "<input type='hidden' class='userId' />"+
+                "<div class='btnLine'></div>"+
+                "<div class='memberClassDelete'>删除</div>"+
+                "</div>");
+        });
+
+        //删除导师类
+        $(".eachLineContent").on("click",".memberClassDelete",function () {
+            $(this).prev().prev().click();
+            $(this).parent().remove();
+        });
+
+        //点击添加
+        $(".eachLineContent").on("click",".memberName",function(){
+            addIndex = ($(".memberName").index($(this)));
+            console.log($(".memberName").eq(addIndex).text());
+            if($(".memberName").eq(addIndex).text()=="点击添加") {
+                console.log(addIndex);
+               // page=1;
+               // seacher="" ;
+               // hasDown =false;
+                //isLoading=false;
+                seacher="" ;
+                var str =" <p class='search_none'>暂无搜索结果，已成为讲师的用户可以在直播间快速邀请好友成为讲师</p>";
+                $(".darkScreen").find('.memberList').html(str);
+                $(".darkScreen").show();
+            }
+        });
+
+        //清空
+        $(".eachLineContent").on("click",".memberClear",function () {
+            var tempIndex = $(".memberClear").index($(this));
+            $(".memberName").eq(tempIndex).text("点击添加");
+            $(".memberCall").eq(tempIndex).val("讲师");
+            $(".userId").eq(tempIndex).val("");
+        })
+
+        //关闭弹出框
+        $(".boxCancel,.userSelectBoxClose").click(function () {
+            boxContentReset();
+        });
+
+        //给弹出框用户列表子单元绑定click事件
+        $(".memberList").on("click", ".memberPart", function () {
+            $(this).find("input").prop("checked", true);
+            //    获取选中用户的id名
+            nowUserid = $(this).attr('id');
+            console.log(nowUserid);
+            //    获取选中用户的昵称
+            nowUserName = $(this).find(".memberNickName").text();
+        });
+
+        //确认添加讲述
+        $(".boxConfirm").click(function () {
+            console.log(nowUserid);
+            if(nowUserid=='') {
+                baseUtils.show.redTip("亲,请选择人哦~");
+                return false;
+            }else {
+                $(".userId").each(function (i) {
+                    if ($(this).val() == nowUserid) {
+                        sameId = true;
+                    }
+                });
+            }
+            if(sameId){
+                baseUtils.show.redTip("亲，请勿重复选择人员哦~");
+                sameId=false;
+                return false;
+            }
+                if (nowUserid == "") {
+                    baseUtils.show.redTip("亲，请选择人员哦~");
+                } else {
+                    sameId=false;
+                    //    面板赋值
+                    $(".memberName").eq(addIndex).html(nowUserName);
+                    //带入userid
+                    $(".userId").eq(addIndex).val(nowUserid);
+                    nowUserid = "";
+                    boxContentReset();
+                }
+        });
+
+
+        $("#searchInput").on("keypress", function (e) {
+                if (e.keyCode == 13) {
+                       $(".memberSearchBtn").click();
+                     }
+                });
+
+        $(".memberSearchBtn").click(function () {
+            isDown = false;
+            seacher = $("#searchInput").val();
+            page = 1;
+            if (seacher.length == 0) {
+                baseUtils.show.redTip("请输入搜索内容！");
+                return false;
+            }
+            getUserList();
+        });
+
+        function getUserList(){
+            isLoading =true;
+            $("#loadingRefund").show();
+            $.get("/zbsearch", {"search": seacher,"page":page}, function (data) {
+                console.log(data);
+                var str="",
+                    $area =  $(".memberList");
+                if (data.data.length == 0){
+                    $("#loadingRefund").fadeOut(100);
+                    str += '<div class="contentNoneTip">暂无数据</div>';
+                    $area.html(str);
+                }else {
+                    for (var i = 0; i < data.data.length; i++) {
+                        str+=
+                            "<div class='memberPart' id='" + data.data[i].user_id + "'> " +
+                                "<div class='memberCheck'> <input class='with-gap' name='group10' type='radio' id='test" + i + "'/> " +
+                                "<label for='test" + i + "'></label> </div> " +
+                                "<div class='memberlogo'> <div class='memberImage'><img src=" + data.data[i].wx_avatar + " alt=''>" +
+                                "</div> <div class='memberNickName'>" + data.data[i].wx_nickname + "</div> </div>" +
+                                "<div class='memberSex'>" +data.data[i].wx_gender + "</div>" +
+                            "<div class='memberPhone'>" + data.data[i].phone + "</div>" +
+                            " </div>";
+                    }
+                    $("#loadingRefund").fadeOut(100);
+                    if( page ==1 ){
+                        $area.html(str);
+                        $area.append('<div class="hasDown">资源加载中...</div>');
+                    }else{
+                        $area.find('.hasDown').before(str);
+                    }
+                    if (data.page_offset.current_page >= data.page_offset.total_pages) {
+                          $area.find('.hasDown').html("数据加载完毕。");
+                          isDown = true;
+                    }
+                    isLoading = false;
+                    page++;
+                }
+            })
+        };
+
+
+        $('.darkScreen .memberListWrapper').scroll(function(e){
+            var DivHeight = $('.memberList').height(),
+                ScrollHeight = $(this).height(),
+                ScrollTop = $(this).scrollTop();
+            if ((ScrollTop + ScrollHeight >= DivHeight - 5) &&
+                !isDown && !isLoading ) {
+                getUserList();
+               /* $("#loadingRefund").show();
+                getUserList(function () {
+                    $("#loadingRefund").fadeOut(100);
+                });*/
+            }
+        });
+
+        //  弹窗提示邀请讲师预览图
+        // $(".invite_teacher_tip span").click(function () {
+        //
+        //
+        //
+        // });
+
+
+
+        // 提交直播表单
+        $(".completeBtn").click(function () {
+
+            //获取直播表单数据
+            //直播名称
+            var title = $.trim($(".resName").val());
+
+            //直播简介
+            var summary=$.trim($("#aliveAbstract").val());
+
+            //直播类型
+            var aliveType=aliveT;
+
+            //直播点播id
+            var AliveFileId = fileId;
+
+            //直播开始时间
+            var zbStartAt = $.trim($("#zb_start_at").val());
+
+            //直播结束时间
+            var zbEndAt = $.trim($("#zb_stop_at").val());
+
+            //直播大小
+            var AliveSize = videoGsize;
+
+            //直播封面地址
+            var image1Url = $.trim($("#Image1Url").val());
+
+            //直播贴片地址
+            var image3Url = $.trim($("#Image3Url").val());
+
+            //直播原始内容详情
+            var ue = UE.getEditor('resource_desc');
+            var orgContent = ue.getContent();
+
+            //直播内容描述
+            var describ = ue.getPlainTxt();
+            if (describ.length == 0) {
+                baseUtils.show.redTip('描述不能为空!');
+                return false;
+            }
+
+
+            //付费价格
+            var resPrize = $.trim($(".resPrize").val()) * 100;
+
+            //直播选择分类
+            $('input[name="aliveClass"]:checked').each(function(){
+                classArray.push($(this).attr('id'));
+            });
+            console.log(classArray);
+
+            //直播状态
+            var state=aliveState;
+            //上架时间
+            var startAt = $.trim($("#dateInput").val());
+
+            for(var i=0,j=0;i<$(".eachLine").length;i++) {
+                //直播角色的值
+                var tmp = {};
+                tmp["role_name"] = $(".memberCall").eq(i).val().trim();
+                tmp["user_name"] = $(".memberName").eq(i).html().trim();
+                tmp["user_id"] = $(".userId").eq(i).val().trim();
+                if (tmp["user_id"].length != 0) {
+                    //讲师列表
+                    roleParams[j] = tmp;
+                    j++;
+                }
+            }
+            //直播单品上传信息
+            var resInfo = {
+                // 直播名称
+                title: title,
+                //直播简介
+                summary:summary,
+                //直播类型
+                alive_type:aliveType,
+                //   直播封面地址
+                img_url: image1Url,
+                //直播宣传封面地址
+                alive_img_url: image3Url,
+                //视频名称
+                file_name: VideoName,
+                //直播开始时间
+                zb_start_at:zbStartAt,
+                //直播结束时间
+                zb_stop_at:zbEndAt,
+                //云点播文件id
+                //file_id: AliveFileId,
+                //// 直播大小
+                //video_size: AliveSize,
+                //直播详情
+                descrb: describ,
+                //原始文本
+                org_content: orgContent,
+                //付费价格
+                piece_price: resPrize,
+                //直播状态
+                state:state,
+                //上架时间
+                start_at: startAt,
+                //id
+                id: GetQueryString('id') || null
+            };
+            //直播额外信息
+            var resourceParams = {
+                //云点播直播id
+                public_video: AliveFileId,
+                //直播大小
+                public_size_text: AliveSize
+            }
+            //是否付费（1表示免费，2表示单笔）
+            if(resourceFree) {
+                resInfo.payment_type = resourceFree;
+            }
+
+            //直播提醒
+            resInfo.if_push = if_push;
+            if(if_push==0 || if_push==1){
+                resInfo.push_ahead = push_ahead;
+            }
+
+            //获取表单中的数据
+            if (checkAliveForm(resInfo)) {
+                var allParams = {
+                    params: resInfo,
+                    resource_type: resourceType,
+                    upload_channel_type: uploadChannelType,
+                    package_id: packageId,
+                    resource_params: resourceParams,
+                    package_name: packageName,
+                    roleParams: roleParams,
+                    category_type:classArray
+                };
+                submitForm(golbalUrl, allParams);
+                console.log(allParams);
+            } else {
+                return false;
+            }
+        })
+    }
+
+    return manageAlive;
+}();

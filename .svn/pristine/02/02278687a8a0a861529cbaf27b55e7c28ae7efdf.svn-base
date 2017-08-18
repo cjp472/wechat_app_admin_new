@@ -1,0 +1,225 @@
+<template>
+    <div class="banner_drag_item">
+        <!--轮播图上传组件-->
+        <banner_img_upload :banner_inside_item="banner_inside_item" :index="index"></banner_img_upload>
+
+        <div class="other-part">
+            <div class="other-part-top">
+                <span class="other-part-title">标题</span>
+                <input class="title-input" v-model="banner_inside_item.title" placeholder="请输入标题" maxlength="20"/>
+            </div>
+            <div class="other-part-bottom">
+                <div style="float: left">
+                    <span class="skip-part-title">跳转链接</span>
+                </div>
+                <div style="float: left">
+                    <select class="form-control" v-model="selectTypeValue" @change="selectSkipType">
+                        <option v-for="option in skip_type_sort" v-bind:value="option">
+                            <span v-if="option==0">不跳转</span>
+                            <span v-if="option==1">图文</span>
+                            <span v-if="option==2">音频</span>
+                            <span v-if="option==3">视频</span>
+                            <span v-if="option==4">直播</span>
+                            <span v-if="option==5">外部链接</span>
+                            <span v-if="option==6">专栏</span>
+                        </option>
+                    </select>
+                </div>
+                <div style="float: left;margin-left: 10px;overflow: hidden;width: 137px">
+                    <select v-show="selectTypeValue!=5 && selectTypeValue!=0" class="form-control" v-model="selectTargetValue" @change="selectSkipTarget" style="width: 137px">
+                        <option v-for="option in skip_list[skip_type_sort_index]" v-bind:value="option.skip_target">
+                            {{ option.skip_title }}
+                        </option>
+                    </select>
+                    <input v-show="selectTypeValue==5" class="out-link-input" v-model="banner_inside_item.skip_target" placeholder="请输入外部链接"/>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+</template>
+
+<script>
+    import EventBus from '../../../libs/eventbus';
+    import banner_img_upload from './banner_img_upload.vue';
+
+    export default {
+        props: ['index','banner_item','skip_type_sort','skip_list'],
+        data:function () {
+            return {
+                banner_inside_item: this.banner_item,
+                //联动数据的下标
+                skip_type_sort_index: 0,
+                //新增时默认选择的类型 或者 显示已选择的类型
+                selectTypeValue:  this.banner_item.skip_type,
+                //新增时默认选择的跳转标题 或者 显示已选择的跳转标题
+                selectTargetValue: this.banner_item.skip_target,
+                selectTitleValue: this.banner_item.skip_title
+            };
+        },
+        created:function () {
+            this.banner_inside_item.skip_type = this.selectTypeValue;
+            this.banner_inside_item.skip_target = this.selectTargetValue;
+            this.banner_inside_item.skip_title = this.selectTitleValue;
+
+        },
+        methods: {
+            //检测selectTypeValue值的变化
+            selectSkipType: function () {
+
+                let skip_target = '';
+                let skip_title = '';
+
+                if(this.selectTypeValue !== 5 && this.selectTypeValue !== 0){
+                    //联动变化
+                    //用户选择的skip_type_sort类型的下标
+                    this.skip_type_sort_index = this.skip_type_sort.indexOf(parseInt(this.selectTypeValue));
+
+                    //默认选择第一个skip_title
+                    if(this.skip_list && this.skip_list.length && this.skip_list[this.skip_type_sort_index].length){
+                        this.selectTargetValue = this.skip_list[this.skip_type_sort_index][0].skip_target;
+                        //变化后赋值给banner_inside_item
+                        skip_target = this.selectTargetValue;
+                        skip_title = this.skip_list[this.skip_type_sort_index][0].skip_title;
+                    }
+                }
+                //变化后赋值给banner_inside_item
+                this.banner_inside_item.skip_type = parseInt(this.selectTypeValue);
+                this.banner_inside_item.skip_target = skip_target;
+                this.banner_inside_item.skip_title = skip_title;
+
+            },
+            //检测selectTargetValue值的变化
+            selectSkipTarget: function () {
+                //变化后赋值给banner_inside_item
+                this.banner_inside_item.skip_target = this.selectTargetValue;
+                for(let i = 0; i < this.skip_list[this.skip_type_sort_index].length; i++){
+                    if(this.skip_list[this.skip_type_sort_index][i].skip_target === this.selectTargetValue){
+                        this.banner_inside_item.skip_title = this.skip_list[this.skip_type_sort_index][i].skip_title;
+                        break;
+                    }
+                }
+            }
+        },
+        watch :{
+            //传回父组件
+            banner_inside_item:{
+                handler:function () {
+                    console.log("watch banner_inside_item")
+                    console.log(this.banner_inside_item)
+
+                    this.banner_inside_item.skip_title = "111";
+
+                    let parm = {
+                        index:this.index,
+                        banner_item:this.banner_inside_item
+                    };
+                    EventBus.$emit('banner_part_change',parm);
+                },
+                deep:true
+            },
+            //监听异步请求的数据
+            skip_type_sort:function () {
+                this.skip_type_sort_index = this.skip_type_sort.indexOf(parseInt(this.selectTypeValue));
+            }
+        },
+        components: {
+            banner_img_upload
+        }
+    }
+</script>
+
+<style>
+    .banner_drag_item {
+        width: 100%;
+        height: 102px;
+        border-radius: 2px;
+        background-color: #ffffff;
+        border: solid 1px #e3e3e3;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+    .banner_drag_item .image-part {
+        position: relative;
+        float: left;
+        width: 212px;
+        height: 80px;
+        border: solid 1px #e5e5e5;
+        text-align: center;
+        cursor: pointer;
+    }
+    .banner_drag_item .image-part img {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+    .banner_drag_item .image-part .tip-wrapper {
+        width: 100%;
+        margin-top: 18px;
+    }
+    .banner_drag_item .image-part .tip-wrapper img {
+        width: 24px;
+        height: 24px;
+    }
+    .banner_drag_item .image-part .tip-wrapper .tip-text {
+        font-size: 12px;
+        color: #b2b2b2;
+        text-align: center;
+    }
+
+    .other-part {
+        float: left;
+        margin-left: 10px;
+        box-sizing: border-box;
+    }
+    .other-part-top {
+        margin-bottom: 10px;
+    }
+    .other-part-bottom {
+        width: 312px;
+        overflow: hidden;
+    }
+    .title-input {
+        width: 244px;
+        height: 36px;
+        margin-left: 35px;
+        border: 1px solid #e5e5e5;
+        padding: 0 10px;
+    }
+    .out-link-input {
+        width: 137px;
+        height: 34px;
+        font-size: 12px;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        padding: 0 10px;
+    }
+    .pic_input_banner {
+        position: absolute;
+        opacity: 0;
+        width: 212px;
+        height: 80px;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+    .pic_close_banner {
+        position: absolute;
+        top: 0;
+        right:0;
+        width: 16px !important;
+        height: 16px !important;
+        cursor: pointer !important;
+    }
+    .skip-part-title {
+        height: 36px;
+        line-height: 36px;
+        margin-right: 11px;
+        font-size: 14px;
+        color: #353535;
+    }
+    input:focus {
+        outline:none;
+        border: 1px solid #a9ddff;
+    }
+</style>

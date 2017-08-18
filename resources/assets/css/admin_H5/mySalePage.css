@@ -1,0 +1,376 @@
+.page{
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 1rem;
+    overflow: auto;
+    background-color: white;
+}
+
+/*我的分销*/
+.mysale_product{
+    width: 100%;
+    float: left;
+    padding: 0.4rem;
+    border-bottom: 0.1rem solid #f1f1f1;
+    background-color: white;
+}
+
+.mysale_product_link{
+    text-decoration:none;
+}
+
+.mysale_product_desc{
+    width: 100%;
+    position: relative;
+    height: 1.1rem;
+    padding-bottom: 0.1rem;
+
+}
+.mysale_product_icon_wrapper{
+    float: left;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.4rem;
+    height: 1rem;
+    padding-right: 0.2rem;
+}
+.mysale_product_icon{
+    float: left;
+    width: 1.2rem;
+    height: 0.9rem;
+    border: none;
+    /*padding-bottom: 0.04rem;*/
+}
+.mysale_resource_title{
+    float: left;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: inherit;
+    display: block;
+    height: 0.4rem;
+    padding-left: 1.4rem;
+    font-size: 0.34rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: -0.008rem;
+    color: #353535;
+}
+.myale_resource_name{
+    float: left;
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: inherit;
+    height: 0.3rem;
+    padding: 0 0 0 1.4rem;
+    font-size: 0.28rem;
+    letter-spacing: -0.006rem;
+    color: #888888;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+}
+.mysale_product_apply{
+    float: right;
+    height: 1rem;
+    line-height: 0.36rem;
+    padding: 0.6rem 0 0.1rem;
+    font-size: 0.26rem;
+    color: #1ab6e6;
+    font-weight: 600;
+}
+.mysale_product_apply_failed {
+    float: right;
+    height: 1rem;
+    line-height: 0.36rem;
+    padding: 0.6rem 0 0.1rem;
+    font-size: 0.26rem;
+    color: #999;
+    font-weight: 500;
+}
+/*CountShow*/
+.mysale_count{
+    width: 100%;
+    float: left;
+    border-top: 0.05rem solid #f2f2f2;
+}
+.sale_url{
+    display: none;
+}
+.view_count{
+    width: 50%;
+    float: left;
+    height: 1rem;
+}
+.open_count{
+    width: 50%;
+    float: left;
+    height: 1rem;
+}
+.count_title {
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 0.28rem;
+    height: 0.5rem;
+    line-height: 0.4rem;
+    padding: 0.18rem 0 0.08rem 0;
+    color: #777777;
+}
+.count_num{
+    width: 100%;
+    float: left;
+    text-align: center;
+    font-size: 0.46rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    padding: 0.1rem;
+    color: #333333;
+}
+
+
+/*我的分销详情*/
+.mysale_product_detail{
+    width: 100%;
+    float: left;
+    padding: 0.02rem;
+    border-bottom: 0.1rem solid #FFFFFF;
+    background-color: white;
+}
+
+.mysale_detail{
+    width: 100%;
+    float: left;
+    padding: 0.4rem;
+    background-color: white;
+}
+.pbottom{
+    bottom: 0;
+}
+.mysale_detail_content{
+    width: 100%;
+    padding: 0.04rem 0 0.4rem;
+    margin-bottom: 0.2rem;
+}
+.detail_title{
+    width: 100%;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    text-align: center;
+    font-size: 0.32rem;
+}
+.detail_content_url{
+    width: 100%;
+    height: 3.8rem;
+    line-height: 0.46rem;
+    font-size: 0.3rem;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    padding: 0.2rem 0 0.2rem;
+}
+#sourceUrl{
+    width: 100%;
+    height: 3.4rem;
+    resize: none;
+    padding: 0.2rem;
+    border-radius: 0.12rem;
+    border: solid 0.02rem #dcdcdc;
+    font-size: 0.32rem;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: -0.01rem;
+    color: #243042;
+}
+.remarktext{
+    width: 100%;
+    height: 3.4rem;
+    resize: none;
+    padding: 0.2rem;
+    border-radius: 0.12rem;
+    border: solid 0.02rem #eee;
+    font-size: 0.32rem;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: -0.01rem;
+    color: #243042;
+}
+.detail_content_remark{
+    width: 100%;
+    height: 4.68rem;
+    line-height: 0.4rem;
+    font-size: 0.26rem;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    padding: 0.3rem 0;
+}
+.detail_url_copy{
+    width: 100%;
+    text-align: center;
+    height: 0.34rem;
+    font-size: 0.3rem;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.42;
+    letter-spacing: normal;
+    color: #888888;
+}
+
+.loctoBtn{
+    width: 100%;
+    height: 0.86rem;
+    line-height: 0.86rem;
+    background-color: #f7f4f4;
+    color: #333333;
+    font-size: 0.4rem;
+    text-align: center;
+    -webkit-border-radius: 0.1rem;
+    -moz-border-radius: 0.1rem;
+    border-radius: 0.1rem;
+    margin-top: 0.3rem;
+    border: 0.02rem solid #ddd;
+}
+
+/*CopyRight*/
+.xiaoetong{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1.1rem;
+    padding: 0.2rem 0.3rem;
+}
+.domain_name{
+    width: 100%;
+    text-align: center;
+    color: #6b8ca9;
+    font-size: 0.26rem;
+    height: 0.3rem;
+    line-height: 0.16rem;
+    font-weight: 600;
+}
+.copyright{
+    width: 100%;
+    text-align: center;
+    color: #c7c7c7;
+    font-size: 0.2rem;
+    height: 0.3rem;
+    line-height: 0.4rem;
+}
+
+
+
+/*底部tab栏 - start*/
+.tab_selector{
+    z-index: 999999;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 1rem;
+    width: 100%;
+    /*border-top: 0.3rem solid transparent;*/
+}
+
+.tab_selector_inner{
+    border-top: 1px solid rgba(53, 53, 53, 0.2);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #f7f6fb;
+}
+
+.tab_item{
+    float: left;
+    height: 100%;
+    width: 50%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+#tab_item_search.searchOn{
+    color: #2f96e6;
+}
+#tab_item_search.searchOff{
+    color: #b2b2b2;
+}
+
+#tab_item_mine.mineOn{
+    color: #2f96e6;
+}
+#tab_item_mine.mineOff{
+    color: #b2b2b2;
+}
+
+.tab_icon_box {
+    width: 100%;
+    height: 0.42rem;
+    text-align: center;
+    margin-top: 0.1rem;
+}
+
+/*tabIcon*/
+.searchOn .tabIcon {
+    /*D:\PhpstormProjects\BackManage\wechat_app_admin\public\images\icon_fenxiao_search_pre.png*/
+    background: url(/images/icon_fenxiao_search_pre.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.searchOff .tabIcon {
+    background: url(/images/icon_fenxiao_search.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.mineOn .tabIcon {
+    background: url(/images/icon_fenxiao_mine_pre.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.mineOff .tabIcon {
+    background: url(/images/icon_fenxiao_mine.png);
+    background-size: 0.5rem 0.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin: 0 1.65rem;
+}
+
+.tab_hint {
+    text-align: center;
+    width: 100%;
+    margin-top: 0.1rem;
+}
+
+/*底部tab栏 - end*/

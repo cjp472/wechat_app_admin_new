@@ -1,0 +1,356 @@
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+    background-color: #efeff4;
+    font:normal normal normal 16px/62px 'Microsoft YaHei';
+}
+/**********************************共用标题区 - start ************************************/
+
+/*每个块*/
+.mainContentPart {
+    width: 100%;
+    min-height: 600px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 0 0 10px 0;
+    padding: 30px 20px;
+}
+.titleOne{
+    float: left;
+    width: inherit;
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.titleTwo{
+    float: left;
+    width: inherit;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 30px;
+    font-size: 36px;
+    color: #dd2c32;
+}
+
+.remaining_number{
+    height: 50px;
+    line-height: 50px;
+    font-size: 36px;
+    color: #dd2c32;
+    float: left;
+}
+
+.remaining_unit{
+    width: 20px;
+    height: 50px;
+    line-height: 15px;
+    font-size: 18px;
+    color: #282828;
+    float: left;
+    padding-top: 25px;
+}
+
+.titleTwo .mn{
+    font-size: 18px;
+    color: #282828;
+}
+.paytype{
+    float: left;
+    width: inherit;
+    height: 50px;
+    line-height: 50px;
+    margin-bottom: 20px;
+
+}
+.paytype_title{
+    float: left;
+    width: 100px;
+    margin-right: 6px;
+    font-size: 14px;
+
+}
+.paytype_set{
+    float: left;
+}
+
+.paytype_check{
+    width: 248px;
+    height: 50px;
+    border-radius: 2px;
+    border: solid 1px #dcdcdc;
+    background-color: #FFFFFF;
+}
+
+.wx_icon_wrapper{
+    width: 30px;
+    height: 30px;
+    float: left;
+    margin: 10px;
+}
+
+.wx_icon{
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+
+.wx_pay{
+    float: left;
+    height: 20px;
+    font-size: 14px;
+    color: #243042;
+}
+
+.usable_icon_wrapper{
+    width: 16px;
+    height: 16px;
+    float: right;
+    margin: 17px 10px;
+}
+
+.usable_icon{
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+
+
+.paytype_set .fill{
+    float: right;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    line-height: 28px;
+    background-color: #2a75ed;
+}
+.paytype_set input[type=checkbox]{
+    float: right;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    line-height: 28px;
+    background-color: #2a75ed;
+}
+
+.payin{
+    float: left;
+    width: inherit;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+.paymentInputArea {
+    float: left;
+    padding: 2px 0;
+}
+.paymentInputArea .mny {
+    float: left;
+    height: 36px;
+    padding: 9px 10px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #282828;
+}
+.paymentInputArea .input_Tip {
+    float: left;
+    height: 36px;
+    padding: 9px 10px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #999999;
+}
+.paymentInputArea input {
+    float: left;
+    width: 180px;
+    height: 36px;
+    padding: 8px 10px;
+    border-radius: 2px;
+    line-height: 20px;
+    font-size: 14px;
+    border: solid 1px #dcdcdc;
+
+}
+
+.qrCodeScanArea {
+    display: none;
+    width: 100%;
+    height: auto;
+    float: left;
+}
+.qrCodePicWrapper {
+    width: inherit;
+    height: 150px;
+    float: left;
+    padding-left: 106px;
+}
+.qrCodePic {
+    width: 150px;
+    height: 150px;
+    /*background:url(/images/icon_background.png);*/
+    /*background-size: 100%;*/
+}
+.qrCodeScanTipWrapper {
+    display: none;
+    width: inherit;
+    height: 150px;
+    float: left;
+    margin-top: 10px;
+    padding-left: 106px;
+}
+.qrCodeScanTip {
+    width: 150px;
+    height: 48px;
+    border-radius: 2px;
+    background-color: #506993;
+}
+.qrCodeScanTipPic {
+    width: 24px;
+    height: 24px;
+    margin: 13px 0 0 24px;
+    float: left;
+}
+.qrCodeScanTipPic img {
+    float: left;
+}
+.qrCodeScanTipText {
+    width: 48px;
+    height: 34px;
+    line-height: 17px;
+    font-size: 12px;
+    color: #ffffff;
+    margin: 8px 0 0 10px;
+    float: left;
+}
+
+
+/*********************** 支付结果窗口 *************************/
+.successWindow, .failureWindow, .refreshWindow {
+    width: 100%;
+    height: 100%;
+}
+.windowBg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1050;
+    background: rgba(0,0,0,0.7);
+}
+.successWindowContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 300px;
+    width: 600px;
+    z-index: 1060;
+    margin-left: -300px;
+    margin-top: -150px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+}
+.paymentSuccessPic {
+    width: 80px;
+    height: 80px;
+    margin: 58px auto 0;
+
+}
+.paymentSuccessTip {
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
+    margin-top: 30px;
+    font-size: 16px;
+    text-align: center;
+    color: #243042;
+}
+.paymentSuccessReturnTip {
+    width: 100%;
+    height: 16px;
+    line-height: 16px;
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+    color: #243042;
+}
+.returnAccountBtn {
+    width: 92px;
+    height: 30px;
+    float: left;
+    line-height: 30px;
+    text-align: center;
+    margin: 20px 0 0 198px;
+    border-radius: 2px;
+    background-color: #2a75ed;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.continueChargeBtn {
+    width: 92px;
+    height: 30px;
+    float: left;
+    line-height: 30px;
+    text-align: center;
+    margin: 20px 0 0 20px;
+    border-radius: 2px;
+    background-color: #2a75ed;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.refreshCurrentWindowBtn {
+    width: 92px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: 30px auto 0;
+    border-radius: 2px;
+    background-color: #2a75ed;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.refreshCurrentWindowBtn:hover {
+    background: #2e63dc;
+}
+
+.failureWindowContent {
+    height: 300px;
+    width: 600px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1060;
+    margin-left: -300px;
+    margin-top: -150px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+}
+
+.refreshWindowContent {
+    height: 300px;
+    width: 600px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1060;
+    margin-left: -300px;
+    margin-top: -150px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+}
+

@@ -1,0 +1,140 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'communityOperate';
+$pageData['barTitle'] = '社群运营';
+?>
+@extends('admin.baseLayout',$pageData)
+
+
+@section('page_css')
+    <link type=text/css rel="stylesheet" href="../css/admin/acitvity/activeBaseLayout.css?{{env('timestamp')}}"/>
+    <link type=text/css rel="stylesheet" href="../css/admin/acitvity/activityManage.css?{{env('timestamp')}}"/>
+@endsection
+
+@section('page_js')
+    <script type="text/javascript" src="../js/external/clipboard.min.js"></script>
+    <script type="text/javascript" src="../js/admin/acitvity/activeBaseLayout.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript" src="../js/admin/acitvity/activityManage.js?{{env('timestamp')}}"></script>
+    <script>
+        var searchContent = "{{$search_content}}";
+        //        页面带下来变量
+        var $pageParm = {
+            //        页面类型，0是进行中，1是已结束
+            pageType: parseInt({{$type}})
+        }
+    </script>
+@endsection
+
+@section('base_modal')
+    <div class="darkScreen" style="display: none"></div>
+    <div class="activeCancelBox" style="display: none">
+        <div class="CancelBoxClose"><img src="../images/icon_Pop-ups_close.svg"></div>
+        <div class="CancelBoxIcon"><img src="../images/version_charge_fail.png" alt="关闭提示icon"></div>
+        <div class="CancelBoxWord1">取消活动</div>
+        <div class="CancelBoxWord2">取消活动后，用户将无法报名该活动</div>
+        <div class="CancelBoxBtnGroup">
+            <div class="btnMid xeBtnDefault CancelBoxBtnCancel">取消</div>
+            <div class="btnMid btnRed CancelBoxBtnDelete">删除</div>
+        </div>
+    </div>
+@endsection
+
+@section('base_mainContent')
+    <div class="pageTopTitle">
+        <a>社群运营</a> > 活动管理
+        <a class="help pull-right" href="https://admin.xiaoe-tech.com/help_document?id=d_59005ee74f52e_XpAtqGxm" target="_blank">活动管理教程</a>
+    </div>
+    {{--活动发布和搜索操作--}}
+    <div class="manageHeaderPart">
+        <a href="/createActivity" class="btnMid btnBlue createBtn">发布活动</a>
+        <div class="activeSearch">
+            <input type="text" class="SearchInput" id="actSearchInput" placeholder="活动名称"
+                   value="{{$search_content}}"/>
+            <button class="btnMid xeBtnDefault activeSearchBtn">搜索</button>
+        </div>
+    </div>
+    {{--活动模块导航栏--}}
+    <div class="activeNav clearfix">
+        <a href="/activityManage"
+           class="activeNavPart activeNavPart1 @if($type==0) activeNavPartActive @endif">进行中</a>
+        <a href="/activityListEnd"
+           class="activeNavPart activeNavPart2 @if($type==1) activeNavPartActive @endif">已结束</a>
+    </div>
+    {{--活动列表内容--}}
+    <div class="actManageContent">
+        @foreach($activityList as $key=>$act)
+            <div class="actManageCPart">
+                @if($type==0)
+                    {{--活动涉及到人数一览--}}
+                    <div class="activeNumGroup">
+                        <div class="activeNum1">
+                            <div class="activeNumTitle">报名人数</div>
+                            <div class="activeNumContent">{{$actor_all_num_list[$key]}}</div>
+                        </div>
+                        <div class="activeNum2">
+                            <div class="activeNumTitle">报名成功</div>
+                            <div class="activeNumContent">{{$actor_successed_num_list[$key]}}</div>
+
+                        </div>
+                        <div class="activeNum3">
+                            <div class="activeNumTitle">待审核</div>
+                            <div class="activeNumContent">{{$actor_confirming_num_list[$key]}}</div>
+                        </div>
+                    </div>
+                @endif
+                @if(($type==1&&$act->activity_state==1)||($type==1&&$act->activity_state==0))
+                    <div class="activeEndIcon"><img src="../images/admin/activity/icon_activity_end.png"
+                                                    alt="活动结束图标"></div>
+                @endif
+                <div class="cmContentPart1">{{$act->title}}</div>
+                <div class="cmContentPart2">
+                    @if($package_list[$key])
+                        所属专栏：{{$package_list[$key]->product_name}}
+                    @endif
+                </div>
+                <div class="cmContentPart3">
+                    <span>
+                        @if(($type==1&&$act->activity_state==2))
+                            已取消活动
+                        @else
+                            活动时间：{{$act->activity_start_at}} — {{$act->activity_end_at}}
+                        @endif
+                        </span>
+                </div>
+                <div class="cmContentPart4">
+                    <div class="cmContentPart4Link1">
+                        <a class="mangerMenu" href="/activityEnrollment?activity_id={{$act->id}}">名单管理</a>
+                        @if($type==0)
+                            <a class="mangerMenu" href="/editActivity?id={{$act->id}}">活动编辑</a>
+                        @endif
+                        <a class="mangerMenu copyHref" href="javascript:;"
+                           data-clipboard-text="{{$act->activity_url}}" title="获取访问链接">复制链接</a>
+                        @if($package_list[$key])
+                            @if($act->activity_state==0)
+                                <a class="activeDown" data-activeid="{{$act->id}}">下架</a>
+                            @elseif($act->activity_state==1)
+                                <a class="activeUp" data-activeid="{{$act->id}}">立即上架</a>
+                            @endif
+                        @endif
+                    </div>
+                    <div class="cmContentPart4Link2">
+
+                        @if($type==0)
+                            <a class="activeClose" data-activeid="{{$act->id}}">取消活动</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endforeach
+        @if(count($activityList)==0)
+            <div class="contentNoneTip">没有相应的数据</div>
+        @endif
+        <div class="list-page">
+            @if(!empty($search_content))
+                <?php echo $activityList->appends(['searchContent' => $search_content])->render(); ?>
+            @else
+                <?php echo $activityList->render(); ?>
+            @endif
+        </div>
+    </div>
+@endsection

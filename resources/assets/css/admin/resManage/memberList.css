@@ -1,0 +1,208 @@
+
+.base_mainContent {
+    padding:0;
+}
+
+.content {
+    min-height: 708px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/*********************** 顶部操作栏 - start *************************/
+.createMemberBtn {
+    margin: 20px 0 0 20px;
+}
+
+.right_operate {
+    height: 36px;
+    margin: 20px 20px 0 0;
+    float: right;
+}
+
+.selector_member_type {
+    width: 78px;
+    float: left;
+    padding: 0 0 0 10px;
+    margin-right: 10px;
+    border-radius: 2px;
+}
+
+.inputSearchAll {
+    width: 240px;
+    height: 36px;
+    margin-right: 10px;
+    border-radius: 2px;
+    float: left;
+}
+
+.searchAllBtn {
+    float: left;
+    width: 80px;
+}
+/*********************** 顶部操作栏 - end *************************/
+
+.member_list_content {
+    margin: 20px 20px 50px;
+    border-top: solid 1px #eeeeee;
+}
+
+/*********************** 会员列表条目 - start *************************/
+
+.member_list_item {
+    height: 130px;
+    border-bottom: solid 1px #eeeeee;
+    position: relative;
+    cursor: pointer;
+}
+.member_list_item:hover {
+    height: 130px;
+    border-bottom: solid 1px #deeeff;
+    background-color: #f6faff;
+}
+
+.left_item_part {
+    height: 90px;
+    margin: 20px 0 20px 20px;
+    float: left;
+}
+.left_item_part > a {
+    float: left;
+    margin-right: 10px;
+}
+.member_cover_img {
+    width: 120px;
+    height: 90px;
+    float: left;
+    background-color: #f6faff;
+}
+.member_list_item_desc{
+    height: 90px;
+    float: left;
+}
+.member_list_item_desc > a {
+    display: block;
+}
+.item_title {
+    height: 22px;
+    width: 600px;
+    line-height: 22px;
+    font-size: 16px;
+    color: #353535;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.member_icon_img {
+    height: 16px;
+    width: 16px;
+    margin: 3px;
+}
+
+.member_num {
+    width: 700px;
+    margin: 6px 0 24px 0;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #666666;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.distribute_target {
+    width: 32px;
+    height: 16px;
+    border-radius: 2px;
+    margin-left: 10px;
+    background-color: #ff6d28;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: -0.2px;
+    color: #ffffff;
+}
+.member_price {
+    margin-top: 4px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #f67849;
+}
+
+.right_item_part {
+    height: 90px;
+    margin: 20px 0 0 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/************* 悬浮显示的操作按钮 - start *************/
+.toolBox{
+    display: none;
+    float: right;
+    margin-right: 20px;
+}
+.toolBox ul li{
+    color: #2a75ed;
+    list-style: none;
+    float: left;
+}
+.toolBox ul li.operate{
+    cursor: pointer;
+}
+.toolBox ul li a{
+    display: block;
+    color: #2a75ed;
+}
+
+/************ 悬浮显示的操作按钮 - end ************/
+
+.show_state {
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+    line-height: 20px;
+    width: 51px;
+    height: 20px;
+    background: #e64340;
+    color: white;
+    border-radius: 5px;
+    font-size: 0.8em;
+    display: inline-block;
+    text-align: center;
+}
+
+.member_list_item:hover .toolBox {
+    display: block;
+}
+
+/*********************** 会员列表条目 - end *************************/
+
+.contentNoneTip {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    margin-top: 30px;
+    color: #888888;
+    font-size: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

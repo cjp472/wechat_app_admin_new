@@ -1,0 +1,202 @@
+/**
+ * Created by Stuphin on 2016/9/26.
+ */
+//腾讯云资源
+//var bucketName = window.cos_bucket_name;
+//var cos = new CosCloud(window.cos_app_id);
+var cos = new InitCosCloud();
+var params={};
+var file = null, imgUrl = null;
+$(document).ready(function() {
+    picHandle();
+
+    //点击保存
+    $("#save").click(function()
+    {
+        //标题
+        params['wx_share_title']=$.trim( $("#wx_share_title").val() );
+        if(params['wx_share_title'].length==0)
+        {
+            baseUtils.show.redTip("亲,请输入分享标题哦");
+            return false;
+        }
+
+        //描述
+        params['wx_share_content']=$.trim( $("#wx_share_content").val() );
+        if(params['wx_share_content'].length==0)
+        {
+            baseUtils.show.redTip("亲,请输入分享描述哦");
+            return false;
+        }
+
+        //是否存在分享配图
+        if( $("#reBackImg").attr("src")==undefined )
+        {
+            baseUtils.show.redTip("亲,请设置分享配图哦");
+            return false;
+        }
+
+        //是否存在分享二维码
+        //if( $(".picShow").eq(1).attr("src")==undefined || $(".picShow").eq(1).attr("src").length==0 )
+        //{
+        //    baseUtils.show.redTip("亲,请设置分享二维码哦");
+        //    return false;
+        //}
+
+        showLoading();
+        uploadShareImage();
+    });
+});
+
+
+//图片处理函数
+function picHandle() {
+    //回显图片
+    $("#uploadImage").change(function() {
+        /*var src=getObjectURL(this.files[0]);
+        $('#reBackImg').prop('src',src);*/
+
+        var newFile = this.files[0];
+        if(newFile){
+            file = newFile;
+            imgUrl = getObjectURL(newFile);
+            $('#reBackImg').prop('src', imgUrl);
+        }
+    });
+
+
+    // $("#wx_qr_url").change(function()
+    // {
+    //     var src=getObjectURL(this.files[0]);
+    //     $(this).nextAll().eq(0).removeClass('hide');
+    //     $(this).nextAll().eq(1).addClass('hide');
+    //     $(this).nextAll().eq(2).removeClass('hide');
+    //     $(this).nextAll().eq(2).attr('src',src);
+    // });
+
+    //关闭图片
+    /*$(".picClose").click(function()
+    {
+        $(this).prev().val('');
+        $(this).addClass('hide');
+        $(this).nextAll().eq(0).removeClass('hide');
+        $(this).nextAll().eq(1).addClass('hide');
+        $(this).nextAll().eq(1).attr("src","");
+    });*/
+}
+
+//获取上传文件的url
+function getObjectURL(file){
+    var url = null;
+    if (window.createObjectURL != undefined)
+    {
+        url = window.createObjectURL(file);
+    }
+    else if (window.URL != undefined)
+    {
+        url = window.URL.createObjectURL(file);
+    }
+    else if (window.webkitURL != undefined)
+    {
+        url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+}
+function removeObjectURL(url) {//释放资源URL
+    if (window.revokeObjectURL != undefined) {
+        window.revokeObjectURL(url);
+    } else if (window.URL != undefined) {
+        window.URL.revokeObjectURL(url);
+    } else if (window.webkitURL != undefined) {
+        window.webkitURL.revokeObjectURL(url);
+    }
+}
+
+//获取文件的后缀名
+function getSuffix(filename){
+    var names = filename.split('.');
+    return names[names.length - 1];
+}
+
+//上传分享图
+function uploadShareImage(){
+    /*var wx_share_image=$('#uploadImage').prop('files');
+    if(wx_share_image.length==0){//没修改分享图,直接上传
+        //uploadQrCode();
+        updateShareInfo();
+    } else {//修改过分享图,先上传
+        browserMD5File(wx_share_image[0],function(err,md5) {
+            var remotePath = get_cos_image_path() + md5 + "." + getSuffix(wx_share_image[0]['name']);
+            cos.uploadFileWithoutPro(function (result) {
+                //params['wx_share_image']=$.parseJSON(result).data.access_url;
+                params['wx_share_image']=result.data.access_url;
+                //uploadQrCode();
+                updateShareInfo();
+            },function (result){     //失败回调
+                baseUtils.show.redTip("上传失败!");
+            }, remotePath, wx_share_image[0],0);
+        });
+    }*/
+
+    if( imgUrl ) {
+        removeObjectURL(imgUrl);
+        imgUrl = null;
+        browserMD5File(file,function(err,md5) {
+            var remotePath = get_cos_image_path() + md5 + "." + getSuffix(file['name']);
+            cos.uploadFileWithoutPro(function (result) {
+                params['wx_share_image']=result.data.access_url;
+                updateShareInfo();
+            },function (result){     //失败回调
+                baseUtils.show.redTip("上传失败!");
+            }, remotePath, file, 0);
+        });
+    } else {
+        updateShareInfo();
+    }
+}
+
+//上传二维码
+/*function uploadQrCode()
+{
+    var wx_qr_url = $('#wx_qr_url').prop('files');
+    if(wx_qr_url.length==0)//没修改二维码,就更新两个字段
+    {
+        updateShareInfo();
+    }
+    else //修改过分享图,先上传
+    {
+        browserMD5File(wx_qr_url[0],function(err,md5)
+        {
+            var remotePath = get_cos_image_path() + md5 + "." + getSuffix(wx_qr_url[0]['name']);
+            cos.uploadFileWithoutPro(function (result)
+            {
+                //params['wx_qr_url']=$.parseJSON(result).data.access_url;
+                params['wx_qr_url']=result.data.access_url;
+                updateShareInfo();
+            },function (result)     //失败回调
+            {
+                baseUtils.show.redTip("上传失败!");
+            }, remotePath, wx_qr_url[0],0);
+        });
+    }
+}*/
+
+//更新分享信息
+function updateShareInfo(){
+    $.post("/updateshareinfo",{"params":params},function(data) {
+        hideLoading();
+        if(data.code==0) {
+            baseUtils.show.blueTip(data.msg,function()
+            {
+                window.location.reload();
+            });
+        } else {
+            baseUtils.show.redTip(data.msg);
+        }
+    });
+}
+
+
+
+
+

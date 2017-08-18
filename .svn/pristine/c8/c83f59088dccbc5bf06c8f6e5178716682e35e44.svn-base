@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+
+class APIMiddleware
+{
+	/**
+	 * Handle an incoming request.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  \Closure                 $next
+	 *
+	 * @return mixed
+	 */
+	public function handle ($request, Closure $next)
+	{
+		$uri           = $request->getUri();
+		$legalHomepage = env('InternalAccess', '');
+		$legalHomepage = "http://";
+		if (strpos($uri, $legalHomepage) !== 0) {
+			// 拒绝非内网请求
+			return response()->json('[FAILED]access ip is not correct!');
+		} else {
+			return $next($request);
+		}
+	}
+}

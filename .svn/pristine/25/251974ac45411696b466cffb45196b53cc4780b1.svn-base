@@ -1,0 +1,246 @@
+.content{
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    padding: 20px 20px 30px;
+}
+.topBox{
+    line-height: 40px;
+    font-size: 14px;
+    color: #243042;
+    padding-left: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.topBox a{ 
+    font-size: 14px;
+    line-height: 40px;
+    color: #243042;
+}
+
+.msgBox{
+    width: 100%;
+    margin: 30px 0 20px 5px;
+}
+.msgTitle{
+    display: inline-block;
+    font-size: 14px;
+    color: #243042;
+    line-height: 35px;
+}
+
+.msgInfo{
+    display: inline-block;
+    font-size: 14px;
+    line-height: 35px;
+    color: #243042;
+    margin-left: 18px;
+}
+
+.minContent{
+    padding: 30px 5px;
+    border-bottom: 2px solid #EEEEEE;
+}
+.minContent.firstmin{
+    padding-top: 0;
+}
+.minContent.lastmin{
+    border-bottom: none;
+}
+.litterContent{
+    margin-top: 20px;
+    margin-left: 11px;
+}
+/*块内的标题部分*/
+.contentTitle {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 14px;
+    padding-left: 8px;
+    margin: 10px 0;
+    color: #243042;
+    border-left: 3px solid #2A75ED;
+}
+
+
+
+/************************************展示区*************************************/
+.infoArea{
+    width: 100%;
+    height: 32px;
+    font-size: 14px;
+    line-height: 32px;
+    margin-top: 15px;
+}
+.infoLabel{
+    width: 150px;
+    float: left;
+    height: 34px;
+}
+.contentH4{
+    margin-top: 20px;
+    line-height: 32px;
+    font-size: 14px;
+    color: #243042;
+}
+.infoValue{
+    height: 34px;
+    float: left;
+}
+.reAuth{
+    cursor: pointer;
+    margin-left: 20px;
+    font-size: 14px;
+    color: #2a75ed;
+}
+
+/*二维码区域*/
+.codeContent{
+    margin-top: 30px;
+}
+.H5UrlCon{
+    padding: 8px;
+}
+.codeItem{
+    text-align: center;
+    height: 200px;
+    width: 150px;
+    float: left;
+}
+.codeItem p{
+    line-height: 20px;
+    margin-top: 25px;
+    font-size: 14px;
+    color: #243042;
+}
+.codeItem:first-child{
+    margin-right: 70px;
+}
+
+.btnBox{
+    margin-top: 50px;
+    width: 380px;
+    text-align: center;
+}
+.btnBox .btnMid{
+    width: 200px;
+}
+
+/*************************************每个复制按钮*********************************/
+.copyButton
+{
+    width: 42px;
+    height: 24px;
+    float: left;
+    border-radius: 2px;
+    border: solid 1px #2a75ed;
+    color: #2a75ed;
+    text-align: center;
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #fff;
+    margin:6px 0 0 20px;
+}
+/*每个复制按钮自带插件的位置调整*/
+#ZeroClipboardMovie_1,#ZeroClipboardMovie_2,#ZeroClipboardMovie_3
+{
+    margin-top: -16px;
+}
+/*编辑图片按钮*/
+#editImg
+{
+    cursor: pointer;
+    margin: -2px 0 0 12px;
+}
+/*************************************input不可编辑***********************************/
+.disEdit
+{
+    border: none;
+    box-shadow: none;
+    cursor: default!important;
+}
+/*大字体*/
+.bigFont
+{
+    font-size: 14px;
+	width:320px;
+}
+
+/*保存商户配置的按钮*/
+.saveBtn{
+    margin-left: 150px;
+}
+.inputDefault:disabled{
+    background-color: #fff;
+}
+.inputDefault{
+    margin-right: 10px;
+}
+#confirmButton
+{
+    width: 100px;
+    height: 36px;
+    border-radius: 2px;
+    background-color: #2A75ED;
+    font-size: 14px;
+    text-align: center;
+    color: #ffffff;
+    line-height: 36px;
+    border: none;
+    outline: none;
+}
+
+
+/*********************************************授权Modal*************************************/
+#bindSuccess
+{
+    width: 140px;
+    height: 42px;
+    border-radius: 2px;
+    background-color: #2fce6f;
+    font-size: 14px;
+    line-height: 40px;
+    outline: none;
+    border: none;
+    text-align: center;
+    color: #ffffff;
+    margin-right: 12px;
+}
+/*授权失败*/
+#bindFail
+{
+    width: 140px;
+    height: 42px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: solid 1px #979797;
+    font-size: 14px;
+    line-height: 40px;
+    outline: none;
+    text-align: center;
+    color: #000;
+    margin-right: 100px;
+}
+
+.red_hint{
+    color:#ff0000
+}
+.normal_weight{
+    font-weight: 400;
+}
+
+
+.reasonBox{
+    width: 100%;
+    margin: 0px 0 20px 5px;
+}
+.reasonDesc{
+    max-width: 80%;
+    vertical-align: top;
+}
+.reAudit{
+    cursor: pointer;
+    margin-left: 20px;
+    font-size: 14px;
+    color: #2a75ed;
+}

@@ -1,0 +1,2 @@
+.box{display:inline-block}.box .boxItem{width:100%;height:100%;background-color:#fff;display:-webkit-flex;display:-ms-flexbox;display:flex;transition:all 1s}
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3QvdGVzdC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsS0FBTyxRQUFTLGFBRWhCLGNBQWdCLE1BQU8sS0FBTSxPQUFRLEtBQU0saUJBQWtCLEtBQU0sUUFBUyxhQUFjLFFBQVMsWUFBYSxRQUFTLEtBQU0sV0FBWSxJQUFJIiwiZmlsZSI6InRlc3QvdGVzdC5jc3MiLCJzb3VyY2VzQ29udGVudCI6W251bGxdfQ== */

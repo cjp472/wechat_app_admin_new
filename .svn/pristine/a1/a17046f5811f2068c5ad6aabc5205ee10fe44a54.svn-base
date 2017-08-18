@@ -1,0 +1,198 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: breeze
+ * Date: 13/07/2017
+ * Time: 17:04
+ */
+
+namespace App\Http\Controllers\Tools;
+
+
+
+use Illuminate\Http\Request;
+
+class ImageUtils
+{
+    /**
+     * 获取可以被压缩的图片对象
+     * @param $table_name //表名
+     * @param $app_id //app_id
+     * @param $id //资源id
+     * @param $image_url //源url
+     * @param $compress_field //更新的压缩字段
+     * @param int $image_width //图片高度
+     * @param int $image_height //图片宽度
+     * @param int $image_quality //图片质量
+     * @param null $query_id    //主键app_id、query_id
+     * @return \stdClass
+     */
+    public static function getImageObj($table_name, $app_id, $id, $image_url, $compress_field,
+                                       $image_width = 160, $image_height = 120, $image_quality = 60, $query_id = null) {
+        $imageObj = new \stdClass();
+        $imageObj->table_name = $table_name;
+        $imageObj->app_id = $app_id;
+        $imageObj->id = $id;
+        $imageObj->image_url = $image_url;
+        $imageObj->compress_field = $compress_field;
+        $imageObj->image_width = $image_width;
+        $imageObj->image_height = $image_height;
+        $imageObj->image_quality = $image_quality;
+        $imageObj->query_id = $query_id;
+
+        return $imageObj;
+    }
+
+    /***
+     * 图片对象放入request的图片列表里
+     * @param Request $request
+     * @param $imageObj
+     */
+    public static function pushImageList(Request $request, $imageObj) {
+        if (!empty($request)) {
+            if (empty($request->image_list)) {
+                $request->image_list = [];
+            }
+            $request->image_list[] = $imageObj;
+        }
+    }
+
+    /**
+     * 压缩图片
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     * @param $compress_field
+     * @param int $image_width
+     * @param int $image_height
+     * @param int $image_quality
+     * @param null $query_id
+     */
+    public static function ImageCompress(Request $request, $table_name, $app_id, $id, $image_url, $compress_field,
+                                             $image_width = 320, $image_height = 240, $image_quality = 80, $query_id = null) {
+        $imageObj = self::getImageObj($table_name, $app_id, $id, $image_url, $compress_field,
+            $image_width, $image_height, $image_quality, $query_id);
+        self::pushImageList($request, $imageObj);
+        //Utils::logFrom("test audio last", "ImageDealMiddleware.log");
+    }
+
+    /**
+     * banner图压缩
+     * @param Request $request
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function bannerImgCompress(Request $request, $app_id, $id, $image_url) {
+        self::ImageCompress($request, 't_banner', $app_id, $id, $image_url, 'img_url_compressed', 750,280, 80);
+    }
+
+    /**
+     * 资源 缩略图 压缩  //专栏、会员、音频、视频、图文、直播
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function resImgCompress(Request $request, $table_name, $app_id, $id, $image_url) {
+        self::ImageCompress($request, $table_name, $app_id, $id, $image_url, 'img_url_compressed', 160, 120, 80);
+    }
+
+//    /**
+//     * 图文单品图片压缩
+//     * @param Request $request
+//     * @param $table_name
+//     * @param $app_id
+//     * @param $id
+//     * @param $image_url
+//     */
+//    public static function imgAndTextImgCompress(Request $request, $table_name, $app_id, $id, $image_url) {
+//        self::ImageCompress($request, $table_name, $app_id, $id, $image_url, 'img_url_compressed', 160, 120, 60);
+//    }
+
+    /**
+     * 店铺装修分享链接配图压缩
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $image_url
+     * @internal param $id
+     */
+    public static function shareImgCompress(Request $request, $table_name, $app_id, $image_url) {
+        self::ImageCompress($request, $table_name, $app_id, 1, $image_url, 'wx_share_image_compressed',
+            200, 200, 60, 'wx_app_type');
+    }
+
+    /**
+     * 公众号设置图片压缩
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function wxAccountImgCompress(Request $request, $table_name, $app_id, $image_url) {
+        self::ImageCompress($request, $table_name, $app_id, 1, $image_url, 'wx_qr_url_compressed',
+            100, 100, 80, 'wx_app_type');
+    }
+
+    /**
+     * 音频日签图片压缩
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function audioImgCompress(Request $request, $table_name, $app_id, $id, $image_url) {
+        //Utils::logFrom("test audio", "ImageDealMiddleware.log");
+        self::ImageCompress($request, $table_name, $app_id, $id, $image_url,'sign_url_compressed', 800, 600, 60);
+        //Utils::logFrom("test audio down", "ImageDealMiddleware.log");
+    }
+
+    /**
+     * 视频贴片图片压缩
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function videoImgCompress(Request $request, $table_name, $app_id, $id, $image_url) {
+        //Utils::logFrom("test audio", "ImageDealMiddleware.log");
+        self::ImageCompress($request, $table_name, $app_id, $id, $image_url, 'patch_img_url_compressed',750, 420, 60);
+        //Utils::logFrom("test audio down", "ImageDealMiddleware.log");
+    }
+
+    /**
+     * 直播封面图片压缩
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function aliveImgCompress(Request $request, $table_name, $app_id, $id, $image_url) {
+        //Utils::logFrom("alive compressed", "ImageDealMiddleware.log");
+        self::ImageCompress($request, $table_name, $app_id, $id, $image_url, 'alive_img_url',750, 240, 60);
+        //Utils::logFrom("test audio down", "ImageDealMiddleware.log");
+    }
+
+    /**
+     * 答主头像图片压缩
+     * @param Request $request
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $image_url
+     */
+    public static function headImgCompress(Request $request, $table_name, $app_id, $id, $image_url) {
+        //Utils::logFrom("headImg compressed", "ImageDealMiddleware.log");
+        self::ImageCompress($request, $table_name, $app_id, $id, $image_url, 'answerer_avatar',80, 80, 80,'answerer_id');
+        //Utils::logFrom("test audio down", "ImageDealMiddleware.log");
+    }
+
+}

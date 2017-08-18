@@ -1,0 +1,225 @@
+#当前时间戳
+timestamp=v2017062801
+
+#小鹅通服务号appId
+XIAOE_APP_ID=apppcHqlTPT3482
+
+#导出 - 小社群 - 小鹅通反馈需求与建议 - 社群id
+XIAOE_COMMUNITY_ID=c_591c46a0c4efd_iMndiBW37397
+
+APP_ENV=local
+APP_DEBUG=true
+APP_KEY=A1GrLrmSPHVmUfdmi7LhDCgyvCMYdhFt
+APP_URL=http://localhost
+DOMAIN_NAME=h5.inside.xiaoe-tech.com
+DOMAIN_DUAN_NAME=h5.inside.xiaoeknow.com
+APP_HTTP=http://
+ADMIN_HTTPS=https://admin.inside.xiaoe-tech.com/
+APP_HTTPS=https://app.inside.xiaoe-tech.com/platform/check_merchant
+
+ADMIN_ACCOUNT_HTTP=http://10.104.61.55:10888/done_c_refund
+# 短链接域名
+ShortHost=http://st.h5.inside.xiaoe-tech.com
+
+#外网-配置数据库
+DB_HOST=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT=5457
+DB_DATABASE=db_ex_config
+DB_USERNAME=root
+DB_PASSWORD=WorkBand2015
+
+
+#外网-财务核算数据库
+DB_HOST_FINANCE=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_FINANCE=5457
+DB_DATABASE_FINANCE=db_ex_finance
+DB_USERNAME_FINANCE=root
+DB_PASSWORD_FINANCE=WorkBand2015
+
+
+#外网-业务数据库
+DB_HOST_BUSINESS=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_BUSINESS=5457
+DB_DATABASE_BUSINESS=db_ex_business
+DB_USERNAME_BUSINESS=root
+DB_PASSWORD_BUSINESS=WorkBand2015
+
+
+#外网-日志数据库
+DB_HOST_LOG=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_LOG=5457
+DB_DATABASE_LOG=db_ex_logs
+DB_USERNAME_LOG=root
+DB_PASSWORD_LOG=WorkBand2015
+
+#外网-h5日志数据库
+DB_HOST_H5_LOG=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_H5_LOG=5457
+DB_DATABASE_H5_LOG=db_h5_log
+DB_USERNAME_H5_LOG=root
+DB_PASSWORD_H5_LOG=WorkBand2015
+
+
+#外网-中间表数据库
+DB_HOST_Mid=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_Mid=5457
+DB_DATABASE_Mid=db_ex_stat
+DB_USERNAME_Mid=root
+DB_PASSWORD_Mid=WorkBand2015
+
+#外网-帮助文档数据库
+DB_HOST_DOCUMENT=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_DOCUMENT=5457
+DB_DATABASE_DOCUMENT=db_ex_document
+DB_USERNAME_DOCUMENT=root
+DB_PASSWORD_DOCUMENT=WorkBand2015
+
+#帮助数据库
+DB_HOST_DOC=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_DOC=5457
+DB_DATABASE_DOC=db_help_document
+DB_USERNAME_DOC=root
+DB_PASSWORD_DOC=WorkBand2015
+
+#通知中心数据库
+DB_HOST_NOTICE=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_NOTICE=5457
+DB_DATABASE_NOTICE=db_ex_notice
+DB_USERNAME_NOTICE=root
+DB_PASSWORD_NOTICE=WorkBand2015
+
+#只读数据库
+DB_HOST_READ=56a6eb2a52290.gz.cdb.myqcloud.com
+
+#wxb数据库
+DB_HOST_WXB=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_WXB=5457
+DB_DATABASE_WXB=db_ex_chain
+DB_USERNAME_WXB=root
+DB_PASSWORD_WXB=WorkBand2015
+
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+QUEUE_DRIVER=sync
+
+REDIS_HOST=10.66.150.12
+REDIS_PASSWORD=crs-6m5ati3t:redis@1111
+REDIS_PORT=6379
+
+MAIL_DRIVER=smtp
+MAIL_HOST=mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+
+#腾讯云cos配置
+#COS_APP_ID=10011692
+#COS_SECRET_ID=AKIDveZ9aXe3rkSTYJTjB73M7P7Ew9p1HfxW
+#COS_SECRET_KEY=7aLvFRIp5dn85skeLdfaaQeQHatARxXE
+#COS_BUCKET_NAME=wechatappdev
+VIDEO_PATH=/video/source/
+MP4_VIDEO_PATH=/video/mp4/
+IMAGE_PATH=/image/
+IMAGE_COMPRESS_PATH=/image/compress/
+AUDIO_PATH=/audio/
+AUDIO_COMPRESS_PATH=/audio_compressed/
+EXCEL_PATH=/excel/
+
+#音频超过多少M压缩
+MAX_AUDIO_SIZE=20
+
+#后台日志
+Utils_log = true
+
+#用于本地连接访问
+HOST_URL=http://localhost
+HOST_PORT=80
+
+SSL_PORT=10443
+
+#二维码配置
+QRCODE_APP_ID=wxd321e17e386ddbca
+QRCODE_REDIRECT_URL=http://admin.inside.xiaoe-tech.com/codeinfo
+QRCODE_SECRET=d5d6f44cfda5d67b150a84378bb1a1c6
+// 小程序集二维码
+QRCODE_PERSON_MINI_URL = https://app.inside.xiaoe-tech.com/wxa/get_collection_qr_code
+// 独立小程序二维码
+QRCODE_MINI_URL = https://app.inside.xiaoe-tech.com/wxa/get_app_code
+//企业模式小程序：查询状态
+MINI_STATUS = https://app.inside.xiaoe-tech.com/wxa/get_app_status
+//企业模式小程序重新提交审核
+MINI_RESUBMIT = https://app.inside.xiaoe-tech.com/wxa/resubmit_audit
+
+
+#体验账号信息
+TEST_OPENID=orLBUwrNDlONMLqidr91J8T0XsSc1
+TEST_NICK_NAME=小鹅通体验
+TEST_GENDER=1
+TEST_LOGO=http://wechatappdev-10011692.file.myqcloud.com/image/logo.png
+TEST_APP_ID=apppcHqlTPT3482_apppcHqlTPT3482_quxiao
+
+
+#外网-科学队长数据库
+DB_HOST_KXDZ=56a6eb2a52290.gz.cdb.myqcloud.com
+DB_PORT_KXDZ=5457
+DB_DATABASE_KXDZ=tmp_kxdz
+DB_USERNAME_KXDZ=root
+DB_PASSWORD_KXDZ=WorkBand2015
+
+// 消息推送模板id请求url
+TEMPLATE_ID=https://app.inside.xiaoe-tech.com/platform/query_template_id_for_new/
+
+
+#视频点播秘钥
+#SecretId = AKIDHUZgdQnZt34thKv5INITXRDqKdzCfWn0
+#SecretKey = BD9vWyOwW5d4KTTTwSu33sdUH6ta8Yt8
+
+#视频点播秘钥 dev4.0账号
+SecretId = AKIDTdzn2PhgeuKvr2ue4dSbMHWSDMjK8d7v
+SecretKey = O4gThhgoyWCCZ3mp44CyovASyh96hmy4
+CLOUD_APP_ID = 1251748120
+
+#视频点播签名
+SignUrl = https://admin.inside.xiaoe-tech.com/getsig
+
+TransNotifyUrl = https://admin.inside.xiaoe-tech.com/transcode_notify
+
+TransNotifyUrl1 = https://admin.inside.xiaoe-tech.com/alivetranscode
+
+#第三方平台授权链接
+AUTH_PAGE_URL=https://app.inside.xiaoe-tech.com/platform/request_auth
+
+#域名验证文件上传路径
+MP_VERIFY_PATH=/Users/breeze/mnt/wx_mp_verify_txt/
+
+#直播房间接口域名
+ALIVE_ROOM_URL=http://119.29.7.130:16688/
+
+
+#腾讯云通通信---管理员id
+AliveVideoAdminId = admin
+#腾讯云通通信---appid
+AliveVideoAppId = 1400017628
+
+#慢查询日志时间配置(ms)
+SLOW_QUERY_TIME = 0
+
+#内网访问控制
+InternalAccess=http://
+
+#远程服务器业务域名文件上传地址
+REMOTE_UPLOAD_URI=http://118.89.49.65:12121/upload_txt.php
+
+#xiaoeApp
+XIAOEAPP_APPID = wxfc110b7a891884df
+XIAOEAPP_APPSECRET = f194750fda546599a0c58f3eb4378493
+
+#腾讯云
+QCLOUD_APPID = 1251748120
+QCLOUD_BIZID = 9599
+QCLOUD_PKEY = c9ef7bc57377bafb494d18c4172a534e
+QCLOUD_APIKEY = d75feb910ab728457e5b04d6673a30c7
+QCLOUD_EXPIRY = 31104000
+
+MYSQL_INT_MAX_VALUE=2147483647

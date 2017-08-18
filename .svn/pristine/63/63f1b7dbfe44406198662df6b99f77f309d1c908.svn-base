@@ -1,0 +1,324 @@
+
+
+li {
+    list-style: none;
+}
+
+.mainHeader {
+    height: auto;
+    width: 100%;
+}
+.headerContent {
+    height: 76px;
+    padding: 20px;
+    line-height: 36px;
+}
+.exerciseBookName {
+    font-size: 16px;
+    font-weight: 400;
+    padding-left: 12px;
+    color: #353535;
+    height: 36px;
+    display: inline-block;
+    float: left;
+}
+.exerciseBookTeacherName {
+    font-size: 14px;
+    color: #353535;
+    padding-left: 20px;
+    display: inline-block;
+    height: 36px;
+    float: left;
+}
+.submitSearchPart {
+    height: 36px;
+    float: right;
+}
+.searchContentInput {
+    width: 200px;
+    float: left;
+    margin-right: 20px;
+}
+.submitSearchBtn {
+    float: left;
+}
+
+.mainContent {
+    width: 100%;
+    padding: 0 20px 50px;
+    height: auto;
+}
+.tableHeader {
+    width: 100%;
+    height: 40px;
+    background: #f6f8fa;
+}
+.tableHeader > div {
+    width: 20%;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    font-weight: bold;
+    color: #353535;
+}
+.tableHeader > div:nth-child(1) {
+    text-align: left;
+    padding-left: 12px;
+}
+.tableHeader > div:nth-child(3) {
+    width: 27%;
+}
+.tableHeader > div:nth-child(4) {
+    width: 5%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(5) {
+    width: 8%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(6) {
+    text-align: center;
+}
+
+.tableContent {
+    width: 100%;
+    padding: 0;
+    color: #666666;
+}
+.singleExerciseItem {
+    width: 100%;
+    height: 75px;
+    padding: 15px 0;
+    line-height: 45px;
+    border-bottom: 1px solid #eeeeee;
+    overflow: hidden;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.singleExerciseItem:hover {
+    background-color: #f6faff;
+}
+.singleExerciseItem > div {
+    width: 20%;
+    height: 45px;
+    float: left;
+    text-align: left;
+}
+.singleExerciseItem > div:nth-child(1) {
+    text-align: left;
+    padding: 0 10px 0 12px ;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.singleExerciseItem > div:nth-child(3) {
+    width: 27%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.singleExerciseItem > div:nth-child(4) {
+    width: 5%;
+    text-align: center;
+}
+.singleExerciseItem > div:nth-child(5) {
+    width: 8%;
+    text-align: center;
+}
+
+/*********************** 操作部分 -start *************************/
+.singleExerciseItem .exerciseOperateArea {
+    text-align: center;
+}
+.operateList {
+    height: 45px;
+    width: 130px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+.operateList > li {
+    float: left;
+}
+.operateList > li.operate {
+    color: #2a75ed;
+    cursor: pointer;
+}
+.operateList > li.verticalGapLine {
+    color: #cccccc;
+}
+
+/*********************** 操作部分 -end*************************/
+
+/*********************** 详情窗口 - start *************************/
+.lookExerciseDetailWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 640px;
+    height: 520px;
+    margin-top: -260px;
+    margin-left: -320px;
+    z-index: 10000;
+    background-color: #fff;
+    display: none;
+}
+.windowHeader {
+    height: 22px;
+    line-height: 22px;
+    margin: 20px 0 20px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #353535;
+}
+.windowContentRegion {
+    height: 372px;
+    padding: 10px;
+    margin: 0 30px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    overflow-y: scroll;
+    border-left: 1px solid #eee;
+}
+.textContentArea {
+    width: 100%;
+    line-height: 22px;
+    height: auto;
+    font-size: 16px;
+    color: #353535;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.imgContentArea {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+
+
+.viewJsImgList {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}
+.viewJsImgList > li {
+    width: 155px;
+    height: 155px;
+    margin: 0 10px 10px 0;
+    float: left;
+}
+li > img {
+    width: 100%;
+    height: 100%;
+}
+.singleExeAudio {
+    width: 320px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    border: solid 1px #efefef;
+    margin: 10px 0 0;
+    float: left;
+}
+.audioController {
+    width: 100%;
+    height: 100%;
+    padding: 13px 0 0 10px;
+}
+.audioPlayStateIcon {
+    width: 24px;
+    height: 24px;
+    float: left;
+    cursor: pointer;
+    background-size: cover;
+}
+.playing {
+    background-image: url("/images/admin/exercise/audio_play.png");
+}
+.paused {
+    background-image: url("/images/admin/exercise/audio_pause.png");
+}
+.progressBar {
+    width: 230px;
+    height: 4px;
+    margin: 10px 0 0 10px;
+    border-radius: 2px;
+    background-color: #eeeeee;
+    float: left;
+    position: relative;
+}
+.finishedProgress {
+    width: 0%;
+    height: 4px;
+    background-color: #1bc570;
+    display: inline-block;
+    float: left;
+}
+.progressBarDot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -3px;
+    left: 0%;
+    margin-left: -3px;
+    border-radius: 5px;
+    display: inline-block;
+    background: #1bc570;
+    cursor: pointer;
+}
+.progressBarDot:hover {
+    width: 14px;
+    height: 14px;
+    top: -5px;
+    margin-left: -5px;
+    border-radius: 7px;
+    box-shadow: -2px 4px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 23px 0 rgba(0, 0, 0, 0.08), 0 0 4px 0 rgba(0, 0, 0, 0.2), 0 0 10px 0 rgba(0, 0, 0, 0.1), 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.audioLengthSecond {
+    width: auto;
+    height: 24px;
+    line-height: 24px;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #888888;
+    float: left;
+}
+
+.windowFooter {
+    width: 100%;
+    height: auto;
+}
+.closeExeDetailWindow {
+    margin: 20px 0 0 270px;
+}
+/*********************** 详情窗口 - end *************************/
+
+
+.contentNoData {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 50px;
+    font-size: 14px;
+    text-align: center;
+    color: #888;
+}
+
+.footerArea {
+    width: 100%;
+    height: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+

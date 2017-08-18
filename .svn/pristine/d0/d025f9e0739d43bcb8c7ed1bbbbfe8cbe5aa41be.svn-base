@@ -1,0 +1,85 @@
+/*垂直居中*/
+.verticalAlign{ vertical-align:middle; display:inline-block; height:100%; margin-left:-1px;}
+/*图层*/
+.xcConfirm{
+	opacity: 0; transition: opacity .5s;
+	position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,.3); z-index: 100000;
+}
+
+/*提示框大小*/
+.xcConfirm .popBox {
+	padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background-color: #ffffff;
+    z-index: 1000001;
+    width: 540px;
+    margin-left: -270px;
+    font-weight: bold;
+  	color: #353535;
+}
+/*关闭按钮*/
+.xcConfirm .popBox .clsBtn{
+	display: block; cursor: pointer; width: 18px; height: 18px; position: absolute; top: 20px; right: 30px; background: url(/images/icon_Pop-ups_close.svg) center no-repeat;}
+
+.xcConfirm .popBox .iconContent{
+	margin-top: 30px;
+	text-align: center;
+}
+/*标题*/
+.xcConfirm .popBox .iconContent .title{
+	margin: 20px auto 10px;
+	line-height: 30px;
+	font-size: 20px;
+	font-weight: normal;
+	color: #353535;
+}
+
+/*段落*/
+.xcConfirm .popBox .txtBox{
+	text-align: center;
+	margin: 10px auto; width:500px;overflow: hidden;
+	font:normal normal normal 16px/150px 'Microsoft YaHei';
+}
+
+.xcConfirm .popBox .txtBox p {
+	font-size: 14px;
+    text-align: center;
+    line-height: 150%;
+    padding: 0 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.xcConfirm .popBox .btnGroup{
+	text-align: center;
+}
+.xcConfirm .popBox .btnGroup .sgBtn{margin-top: 14px; margin: 0 10px;}
+.xcConfirm .popBox .sgBtn{
+	display: inline-block;
+	cursor: pointer;
+	width: 100px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	font-weight: normal;
+	border-radius: 2px;
+}
+.xcConfirm .popBox .sgBtn.ok{
+	background-color: #2a75ed;
+	color: #fff;
+}
+.xcConfirm .popBox .sgBtn.cancel{
+	background-color: #fafbfc;
+	color: #243042;
+	border: solid 1px #e5e7eb;
+}
+
+/*提示内容新增自定义样式*/
+.xcConfirm .popBox .txtBox p .msgdiv{line-height: 26px; overflow-x: hidden; overflow-y: auto;margin:26px 25px 10px 1px;}
+
+
+
+

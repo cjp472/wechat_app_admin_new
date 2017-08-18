@@ -1,0 +1,299 @@
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    min-width: 1000px;
+    background: #f9f9f9;
+    font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+img {
+    width: 100%;
+    height: 100%;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    background: #ffffff;
+    border-bottom: 1px solid #dcdcdc;
+    box-sizing: border-box;
+    padding-top: 16px;
+}
+.headerPic {
+    float: left;
+    width: 110px;
+    height: 32px;
+    margin-left: 25px;
+}
+
+.user {
+    float: right;
+    height: 30px;
+    margin-left: 20px;
+    margin-right: 30px;
+}
+
+.userLogo {
+    float: left;
+    width: 30px;
+    height: 30px;
+}
+
+.userName {
+    float: left;
+    margin-left: 6px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #353535;
+}
+
+.returnBtn {
+    float: right;
+    width: 92px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 14px;
+    background: #2a75ed;
+    border-radius: 3px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.mainContentPart {
+    width: 900px;
+    height: 530px;
+    background: #ffffff;
+    margin: 136px auto 0;
+    border: 1px solid #dcdcdc;
+}
+
+/*********************** 左边内容 - start *************************/
+.contentPartLeft {
+    float: left;
+    width: 480px;
+    height: 530px;
+    box-sizing: border-box;
+    border-right: 1px solid #dcdcdc;
+}
+.contentPic {
+    width: 420px;
+    height: 236px;
+    margin: 42px 30px 0;
+}
+
+.contentIntro {
+    width: 308px;
+    height: 40px;
+    line-height: 20px;
+    margin-left: 85px;
+    font-size: 14px;
+    letter-spacing: -0.2px;
+    color: #243042;
+}
+
+/*********************** 右边内容 - start *************************/
+.contentPartRight {
+    float: left;
+    width: 420px;
+    height: 530px;
+}
+.contentWord_1 {
+    width: 192px;
+    height: 45px;
+    line-height: 45px;
+    margin: 30px 0 0 30px;
+    font-size: 32px;
+    color: #3a7ada;
+}
+.contentWord_2 {
+    width:96px;
+    height: 20px;
+    line-height: 20px;
+    margin: 4px 0 0 30px;
+    font-size: 14px;
+    color: #999999;
+    cursor: pointer;
+}
+.contentChargePrice {
+    width: 360px;
+    height: 80px;
+    position: relative;
+    margin: 20px 0 0 30px;
+    box-sizing: border-box;
+    padding: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 2px;
+    font-size: 32px;
+    color: #353535;
+}
+.contentChargeSign {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    margin: 4px;
+    float: right;
+}
+.contentWord_3 {
+    width: 360px;
+    height: 40px;
+    line-height: 20px;
+    margin: 10px 0 0 30px;
+    font-size: 14px;
+    color: #243042;
+}
+.contentWord_4 {
+    height: 17px;
+    line-height: 17px;
+    margin: 16px 0 0 30px;
+    font-size: 12px;
+    color: #353535;
+}
+.contentWord_5 {
+    color: #00a0e9;
+    text-decoration: none;
+}
+.qrCodePic {
+    width: 150px;
+    height: 150px;
+    margin: 11px 0 0 30px;
+}
+.qrCodeScanTip {
+    width: 150px;
+    height: 48px;
+    margin: 10px 0 0 30px;
+    border-radius: 2px;
+    background-color: #506993;
+}
+.qrCodeScanTipPic {
+    width: 24px;
+    height: 24px;
+    margin: 13px 0 0 24px;
+    float: left;
+}
+.contentWord_6 {
+    width: 48px;
+    height: 34px;
+    line-height: 17px;
+    font-size: 12px;
+    color: #ffffff;
+    margin: 8px 0 0 10px;
+    float: left;
+}
+
+
+
+/*********************** 支付结果窗口 *************************/
+.successWindow {
+    height: 300px;
+    width: 600px;
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    margin-left: -300px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+}
+.paymentSuccessPic {
+    width: 80px;
+    height: 80px;
+    margin: 58px auto 0;
+
+}
+.paymentSuccessTip {
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
+    margin-top: 30px;
+    font-size: 16px;
+    text-align: center;
+    color: #243042;
+}
+.paymentSuccessReturnTip {
+    width: 100%;
+    height: 16px;
+    line-height: 16px;
+    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
+    color: #243042;
+}
+.closeCurrentWindowBtn {
+    width: 92px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: 20px auto 0;
+    border-radius: 2px;
+    background-color: #2a75ed;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.refreshCurrentWindowBtn {
+    width: 92px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: 30px auto 0;
+    border-radius: 2px;
+    background-color: #2a75ed;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.refreshCurrentWindowBtn:hover {
+    background: #2e63dc;
+}
+
+.failureWindow {
+    height: 300px;
+    width: 600px;
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    margin-left: -300px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+}
+
+.refreshWindow {
+    height: 300px;
+    width: 600px;
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    margin-left: -300px;
+    background-color: white;
+    border: 1px solid #e3e3e3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

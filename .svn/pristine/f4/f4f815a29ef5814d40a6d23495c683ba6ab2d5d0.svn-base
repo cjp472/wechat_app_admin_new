@@ -1,0 +1,163 @@
+<template>
+    <div class="banner-sidebar">
+        <div class="sidebar-title">轮播图</div>
+        <draggable class="drag-group" v-model="banner_list" :options="dragOptions" :move="onMove"
+                   @start="isDragging=true" @end="isDragging=false">
+            <transition-group type="transition" :name="'flip-list'">
+                <div class="drag-group-item" v-for="(item,index) in banner_list" :key="item.order"
+                     @mouseover="mouseOverShow(index)">
+
+                    <banner_drag_item :banner_item="item.banner_item"></banner_drag_item>
+
+                    <div class="show-tip-wrap" v-show="isActive==index">
+                        <img src="/images/admin/shopDiy/icon-drag-sidebar@2x.png"/>
+                        <img @click="onDelete(index)" class="delete" src="/images/admin/shopDiy/icon-close@2x.png"/>
+                    </div>
+
+                </div>
+            </transition-group>
+        </draggable>
+        <div class="add-banner-item" @click="addBannerItem">
+            <img src="/images/admin/shopDiy/icon-add-sidebar@2x.png"><span>添加轮播图</span>
+        </div>
+        <div class="sidebar-tip">最多添加12张轮播图</div>
+    </div>
+</template>
+
+<script>
+    import draggable from 'vuedraggable';
+    import EventBus from '../../../libs/eventbus';
+    import banner_drag_item from './banner_drag_item.vue';
+    export default {
+        props:['banner_part'],
+        data:function () {
+            return {
+                banner_list: [],
+                isDragging: false,
+                delayedDragging: false,
+                isActive: 0
+            };
+        },
+        created:function () {
+            this.banner_list = this.banner_part.list.map((item, index) => {
+                return {banner_item: item, order: index + 1};
+            });
+        },
+        methods:{
+            onMove: function () {
+            },
+            mouseOverShow: function (index) {
+                this.isActive = index;
+            },
+            addBannerItem: function () {
+                let item = {
+                    banner_item: {
+                        id:"",
+                        title:"",
+                        image_url:"",
+                        img_url_compressed:"",
+                        //跳转类型，0-不跳转， 1-图文，2-音频，3-视频，4-圈子贴子，5-url, 6-专栏
+                        skip_type:"",
+                        //跳转目的地,如果不是直接跳转的链接，就都是相应资源id
+                        skip_target:"",
+                        skip_title:""
+                    },
+                    order: this.banner_list.length+1
+                };
+                this.banner_list.push(item);
+            },
+            onDelete: function (index) {
+                this.banner_list.splice(index,1);
+            },
+        },
+        computed: {
+            dragOptions () {
+                return {
+                    animation: 150,
+                    group: 'banner',
+                    ghostClass: 'ghost'
+                };
+            }
+        },
+        watch: {
+            isDragging (newValue) {
+                if (newValue) {
+                    this.delayedDragging = true;
+                    return
+                }
+                this.$nextTick(() => {
+                    this.delayedDragging = false;
+                    console.log(this.banner_list);
+                })
+            }
+        },
+        components: {
+            draggable,
+            banner_drag_item
+        }
+    }
+</script>
+
+<style>
+    .sidebar-title {
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        color: #353535;
+        margin-bottom: 10px;
+    }
+    .flip-list-move {
+        transition: transform 0.5s;
+    }
+
+    .ghost {
+        opacity: .5;
+        background: #C8EBFB;
+    }
+
+    .drag-group-item {
+        position: relative;
+        cursor: move;
+    }
+    .drag-group-item .show-tip-wrap {
+        position: absolute;
+        top: -8px;
+        right: 0;
+        font-size: 0;
+        z-index: 4;
+    }
+    .show-tip-wrap img {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+    }
+    .show-tip-wrap .delete {
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    .add-banner-item {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 2px;
+        background-color: #ffffff;
+        border: dashed 1px #e5e5e5;
+        text-align: center;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+    .add-banner-item img {
+        width: 10px;
+        height: 10px;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+    .sidebar-tip {
+        font-size: 14px;
+        text-align: left;
+        color: #888888;
+        height: 20px;
+        line-height: 20px;
+        margin: 10px 0;
+    }
+</style>

@@ -1,0 +1,358 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'communityOperate';
+$pageData['barTitle'] = '社群运营';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--时间选择器--}}
+    <link type=text/css rel="stylesheet" href="../css/external/selectTime.css?{{env('timestamp')}}">
+
+    <link type="text/css" rel="stylesheet" href="../css/external/jquery-alert.css?{{env('timestamp')}}" />
+    <link type="text/css" rel="stylesheet" href="../css/admin/questionAndAnswer/questionAndAnswerDetail.css?{{env('timestamp')}}">
+@stop
+
+@section('ahead_js')
+    {{--时间选择器--}}
+    <script type="text/javascript" src="../js/external/dateRange.js?{{env('timestamp')}}"></script>
+
+    {{--复制链接--}}
+    <script type="text/javascript" src="../js/external/clipboard.min.js"></script>
+    {{--生成二维码--}}
+    <script type="text/javascript" src="../js/external/qrcode.js"></script>
+
+@stop
+
+@section('page_js')
+
+    {{-- 腾讯云上传V4 --}}
+    <script type="text/javascript" src="../sdk/cos-js-sdk-v4.js"></script>
+    <script type="text/javascript" src="../js/admin/utils/v4QcloudUpload.js"></script>
+    {{--获取文件MD5--}}
+    <script type="text/javascript" src="../js/external/browser-md5-file.js"></script>
+
+    {{--上传工具类--}}
+    <script src="../js/admin/utils/upload.js?{{env('timestamp')}}" type="text/javascript"></script>
+    {{--表单检查--}}
+    <script src="../js/admin/utils/formCheck.js?{{env('timestamp')}}" type="text/javascript"></script>
+
+    <script type="text/javascript" src="../js/external/jquery-alert.js?{{env('timestamp')}}"></script>
+
+    <script type="text/javascript" src="../js/admin/questionAndAnswer/questionAndAnswerDetail.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript">
+        //audio加载完毕回调,获取音频时长
+        function getResourceDuration(element) {
+            resAudio1Length = parseInt(element.duration);
+            console.log(resAudio1Length);
+        }
+    </script>
+@stop
+
+@section('base_mainContent')
+
+    <input id="admin_data" type="hidden" data-page_type="{{$page_type}}" data-code_url="{{$product_info->url}}">
+    <input type="hidden" id="product_id" value="{{$product_info->id}}">
+
+    <div class="pageTopTitle">
+        <a>社群运营</a> &gt; <a>付费问答</a> &gt; 付费问答专区
+        <a href="/helpCenter/problem?document_id=d_591529ff9c8ac_CQM5gqTn" target="_blank" class="helpDocumentLink">问答使用教程</a>
+    </div>
+
+    <div class="QA_DetailArea">
+        <div class="QACoverImg">
+            <img src={{$product_info->img_url ? $product_info->img_url : '../images/icon_yunying.png'}}>
+        </div>
+        <div class="QADescWrapper">
+            <div class="QATitle" title="付费问答专区">{{$product_info->title}}</div>
+            <div class="QASummary">{{$product_info->desc}}</div>
+            <div class="QAEavesdropPrice">偷听价格：{{$product_info->price / 100}}元</div>
+            <div class="QAShareRatio">偷听分成：   商家 {{ number_format(($product_info->price / 100 * $product_info->listen_for_business / 100),2)  }}元
+                答主 {{ number_format(($product_info->price / 100 * $product_info->listen_for_answer / 100),2)}}元
+                提问者 {{ number_format(($product_info->price / 100 * $product_info->listen_for_questioner / 100),2)}}元</div>
+        </div>
+
+        <div class="detailOperateArea">
+            <ul class="topDetailOperate">
+                <li class="operate QA_DetailUrl" data-clipboard-text="{{$product_info->page_url}}">复制链接</li>
+                <li class="verticalDivideLine" >&nbsp;|&nbsp;</li>
+                <li class="operate" data-type="editQA">编辑</li>
+                <li class="verticalDivideLine" >&nbsp;|&nbsp;</li>
+                <li class="operate" data-type="changeQAState" data-state="{{$product_info->state}}">@if($product_info->state)上架@else下架@endif</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="QA_TabSelectArea">
+        <ul class="contentTabWrapper">
+            <li id="responderTab" value="1" @if($page_type == 1) class="activeContentTab" @endif>全部答主</li>
+            <li id="questionTab" value="0" @if($page_type == 0) class="activeContentTab" @endif>全部问题</li>
+            <li id="settingTab" value="2" @if($page_type == 2) class="activeContentTab" @endif>功能配置</li>
+        </ul>
+    </div>
+
+    <div class="QA_ContentArea">
+        <div class="listOperateArea clearfix" style="@if($page_type == 2) display: none; @else display: block;  @endif">
+            <div class="questionListOperate" style="@if($page_type == 0) display: block; @else display: none;  @endif" >
+                <div class="questionListOperateLeft">
+                    {{--<div class="btnBlue btnMid handleRefundBtn" id="handleRefund">退款处理</div>--}}
+                    <div class="refundTip">（超过72小时未回答的问题将自动转为<span>待退款</span>状态，系统将在每天晚上22：00对<span>待退款</span>用户进行<span>自动退款</span>处理）</div>
+
+                </div>
+                <div class="questionListOperateRight">
+                    <span class="operate_askTime">提问时间：</span>
+                    <div id="dropdown-toggle" class="time_input dropdown-toggle operate_timeSelector" data-toggle="dropdown" >
+                        <span id="SelectData" class="selectTimeText">全部问题</span>
+                        <span class="caret selectTimeIcon"></span>
+                    </div>
+                    <div id="SelectRange" class="time_option dropdown-menu">
+                        <ul>
+                            <li data-type='all'>全部问题</li>
+                            <li data-type='current_month'>当月问题</li>
+                            <li data-type='last_seven'>最近7天</li>
+                            <li data-type='last_month'>最近30天</li>
+                        </ul>
+                        <p id="optional" class="optional">自选时间</p>
+                    </div>
+                    {{--<a href="javascript:void(0)" class="operate_lastSevenDays">最近7天</a>--}}
+                    {{--<a href="javascript:void(0)" class="operate_lastMonth">最近30天</a>--}}
+
+                    <input class="inputDefault operate_searchQuestion" placeholder="请输入提问者/回答者" id="searchQuestionInput">
+                    <img src="../images/icon_fenxiao_search.png" alt="icon" class="searchIcon">
+                    <div class="xeBtnDefault btnMid operate_searchBtn" id="searchQuestion">搜索</div>
+                </div>
+            </div>
+
+            <div class="responderListOperate" style="@if($page_type == 1) display: block; @else display: none;  @endif" >
+                <div class="btnBlue btnMid inviteResponderBtn" id="inviteResponder">邀请答主</div>
+                <div class="responderListRightOperate">
+                    <select class="operate_selectorIsShow" id="answererIsShow">
+                        <option value="">全部</option>
+                        <option value="0">已上线</option>
+                        <option value="1">已下线</option>
+                    </select>
+                    <input class="inputDefault operate_searchResponder" placeholder="请输入姓名/手机号" id="searchAnswererInput">
+                    <img src="../images/icon_fenxiao_search.png" alt="icon" class="searchIcon" >
+                    <div class="xeBtnDefault btnMid operate_searchBtn" id="searchAnswerer">搜索</div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="mainListContent">
+            @if($page_type == 0)
+                @include("admin.questionAndAnswer.questionList", $question_list)
+            @elseif($page_type == 1)
+                @include("admin.questionAndAnswer.responderList", $answerer_list)
+            @elseif($page_type == 2)
+                @include("admin.questionAndAnswer.settingPage", $settingData)
+            @endif
+        </div>
+
+        <div class="loadingS">
+            <div class="loadingSContent">
+                <svg viewBox="25 25 50 50" class="circular">
+                    <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+                </svg>
+                <p class="loadingText">加载中</p>
+            </div>
+        </div>
+
+    </div>
+
+    <audio style="display:none;" id='resourceTime' oncanplaythrough="getResourceDuration(this)"></audio>
+
+@stop
+
+
+@section('base_modal')
+
+    {{--<div class="inviteAnswererWindowBg" style="display: none;">--}}
+        {{--<div class="inviteAnswererWindow">--}}
+            {{--<div class="windowTopArea">--}}
+                {{--<div class="inviteAnswererWindowTitle">新增邀请链接成功</div>--}}
+                {{--<div class="closeIconWrapper">--}}
+                    {{--<img src="/images/icon_Pop-ups_close.svg">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="windowContentArea">--}}
+                {{--<div class="successIconWrapper">--}}
+                    {{--<img src="../images/version_charge_success.png">--}}
+                {{--</div>--}}
+                {{--<div class="windowWord1">新增成功，复制此链接发送给被邀请人</div>--}}
+                {{--<div class="windowWord2">{{$product_info->url}}</div>--}}
+                {{--<div class="horizontalDivideLine"></div>--}}
+                {{--<a class="copyLinkBtn btnMid btnBlue copyHref" href="javascript:;" data-clipboard-text="{{$product_info->url}}">复制链接</a>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+
+    <div class="scanQrCodeWindowBg" style="display: none;">
+        <div class="scanQrCodeWindow">
+            <div class="closeScanQrCodeWindow">
+                <img src="/images/icon_Pop-ups_close.svg">
+            </div>
+            <div class="closeScanQrCodeWindowContentArea">
+                <div class="closeScanQrCodeContent1">微信扫一扫分享链接 或 <br>复制邀请链接邀请好友成为答主</div>
+                <div id="qr_code" class="closeScanQrCodeContent2">
+
+                </div>
+                <div class="closeScanQrCodeContent3 copyHref" href="javascript:;"
+                     data-clipboard-text="{{$product_info->url}}">复制邀请链接</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scanQuestionWindowBg" style="display: none;">
+        <div class="scanQuestionWindow">
+            <div class="windowTopArea">
+                <div class="scanQuestionWindowTitle">问题详情</div>
+                <div class="closeQuestionDetailWindow">
+                    <img src="/images/icon_Pop-ups_close.svg">
+                </div>
+            </div>
+            <div class="scanQuestionWindowContentArea">
+                <div class="questionWindowContent" id="scanQueWindowContent" style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;"></div>
+                <div class="questionWindowImageWrapper" id="scanQueImgWrapper"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="uploadFileWindowBg" style="display: none;">
+        <div class="uploadFileWindow">
+            <div class="windowTopArea">
+                <div class="uploadFileWindowTitle">语音回答问题</div>
+                <div class="closeUploadFileWindow">
+                    <img src="/images/icon_Pop-ups_close.svg">
+                </div>
+            </div>
+            <div class="uploadFileWindowContentArea">
+                <div class="uploadFileBtn">
+                    <div class="btnMid xeBtnDefault" id="selectAudioFile">上传音频</div>
+                    <span>目前仅支持MP3格式的音频文件</span>
+
+                    <input class="uploadAudioFileInput hide" id="uploadAudioFile" type="file" accept="audio/mp3" >
+                    <input type="hidden" id="uploadAudioUrl" type="text">
+                </div>
+
+                <div class="uploadBox uploadBoxAudio1" style="display: none">
+                    <div class="uploadProgress">
+                        <div class="uploadPTitle uploadAudio1Name">
+
+                        </div>
+                        <div class="uploadPSize uploadAudio1Size">
+                            (<span></span>M)
+                        </div>
+                        <div class="uploadPLine uploadPLineAudio1" style="display: none">
+                            <div class="uploadPLineActive uploadPLineActiveAudio1">
+                            </div>
+                        </div>
+                        <div class="uploadPersent uploadPersentAudio1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="is_enable_eavesdrop">
+                    <input type="checkbox" checked="checked" class="isEnableEavesdropInput" id="is_enable_eavesdrop" >
+                    <div class="isEnableEavesdropText">是否允许偷听</div>
+                    <span> 勾选表示允许偷听</span>
+                </div>
+
+                <div class="simi_tip">（该问题已设为私密提问，回答后仅提问者可见）</div>{{--<span class="simi_tip" style="margin-left: -10px;margin-top: 20px">（该问题已设为私密提问，回答后仅提问者可见）</span>--}}
+
+            </div>
+            <div class="uploadAudioBtnArea">
+                <div class="btnMid xeBtnDefault cancelUploadAudioBtn" id="cancelUploadAudio">取消</div>
+                <div class="btnMid btnBlue confirmUploadAudioBtn" id="confirmUploadAudio">确定</div>
+            </div>
+        </div>
+    </div>
+
+    {{--退款人员列表窗口--}}
+    {{--<div class="refundListWindowBg" style="display: none;">--}}
+        {{--<div class="refundListWindow">--}}
+            {{--<div class="windowTopArea">--}}
+                {{--<div class="refundListWindowTitle">待退款用户</div>--}}
+                {{--<div class="closeIconWrapper">--}}
+                    {{--<img src="/images/icon_Pop-ups_close.svg">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="windowSearchArea">--}}
+                {{--<input class="inputDefault windowSearchInput" id="searchRefundUserInput" placeholder="输入昵称搜索用户">--}}
+                {{--<img src="../images/icon_fenxiao_search.png" alt="searchIcon" class="searchRefundIcon">--}}
+                {{--<div class="xeBtnDefault btnMid searchUserBtn" id="searchRefundUser">搜索</div>--}}
+            {{--</div>--}}
+            {{--<table class="table tableHeader">--}}
+                {{--<thead>--}}
+                {{--<tr>--}}
+                    {{--<th class="thCheckBox">--}}
+                        {{--<input type="checkbox" id="selectAllRefundList">--}}
+                    {{--</th>--}}
+                    {{--<th style="text-align: left;width: 200px;">头像/昵称</th>--}}
+                    {{--<th style="width: 65px;padding: 0;">商品类型</th>--}}
+                    {{--<th>商品名称</th>--}}
+                    {{--<th>金额(元)</th>--}}
+                {{--</tr>--}}
+                {{--</thead>--}}
+            {{--</table>--}}
+            {{--<div class="windowContentWrapper">--}}
+                {{--<div class="windowContentArea">--}}
+                    {{----}}
+                {{--</div>--}}
+                {{--<div class="loadingS" id="loadingRefund">--}}
+                    {{--<div class="loadingSContent" style="top: 120px;">--}}
+                        {{--<svg viewBox="25 25 50 50" class="circular">--}}
+                            {{--<circle cx="50" cy="50" r="20" fill="none" class="path"></circle>--}}
+                        {{--</svg>--}}
+                        {{--<p class="loadingText">加载中</p>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--<div class="windowBottomArea">--}}
+                {{--<div class="horizontalDivideLine"></div>--}}
+                {{--<div class="windowDescInfo">--}}
+                {{--</div>--}}
+                {{--<div class="btnRight">--}}
+                    {{--<div class="xeBtnDefault btnMid windowCancelBtn" id="cancelRefund">取消</div>--}}
+                    {{--<div class="btnMid windowConfirmBtn" id="confirmRefund">退款</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+
+    {{--确认退款窗口--}}
+    {{--<div class="confirmRefundWindowBg" style="display: none;">--}}
+        {{--<div class="confirmRefundWindow">--}}
+            {{--<div class="closeConfirmRefundWindow">--}}
+                {{--<img src="/images/icon_Pop-ups_close.svg">--}}
+            {{--</div>--}}
+            {{--<div class="confirmRefundWindowIcon">--}}
+                {{--<img src="/images/alert/blue_info_prompt.svg">--}}
+            {{--</div>--}}
+            {{--<div>--}}
+                {{--<p class="confirmRefundWindowText">确定给1位用户退款10.00元</p>--}}
+                {{--<p class="confirmRefundWindowTip">退款操作不可逆</p>--}}
+            {{--</div>--}}
+            {{--<div class="confirmRefundWindowBtnArea">--}}
+                {{--<div class="xeBtnDefault btnMid confirmRefundWindowBtn_1">取消</div>--}}
+                {{--<div class="btnBlue btnMid confirmRefundWindowBtn_2">确认</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
+
+@stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

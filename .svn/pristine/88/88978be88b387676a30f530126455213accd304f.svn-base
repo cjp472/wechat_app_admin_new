@@ -1,0 +1,38 @@
+
+/*****新建优惠券计划******/
+.new_ticket.newPlan{
+    width:140px;
+}
+
+div.dateBox{
+    position: relative;
+    width: 169px;
+    margin: 0 10px;
+}
+
+input.planTimeInput{
+    width: 100%;
+}
+
+#SelectTime > div{
+    float: left;
+    line-height: 36px;
+}
+
+.dateUpIcon{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: -2px;
+    right: 7px;
+}
+
+.operate{
+    color: #eeeeee;
+}
+.operate span{
+    color: #2A75ED;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+}

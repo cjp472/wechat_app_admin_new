@@ -1,0 +1,2 @@
+$(document).ready(function(){init();authHandle()});function init(){showContentTitle();if(is_huidu==1){appendContentHeader("账户一览","/accountview",false)}appendContentHeader("账号管理","/accountmanage",false);appendContentHeader("运营模式设置","/h5setting",true)}function authHandle(){$("#bindNow").click(function(){$("#bindModal").modal("show")});$("#toBindWx").click(function(){$("#bindModal").modal("hide");window.location.href="/h5setting?change=1"});$("#toCollection").click(function(){$("#bindModal").modal("hide")})}
+//# sourceMappingURL=../../map/js/admin/h5SettingCollection.js.map

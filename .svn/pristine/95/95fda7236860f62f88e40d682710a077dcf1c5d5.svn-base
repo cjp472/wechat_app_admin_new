@@ -1,0 +1,125 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'knowledgeShop';
+$pageData['barTitle'] = '知识店铺';
+$tabData = [];
+$tabData['tabTitle'] = 'functionManage';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--弹窗组件--}}
+    <link type="text/css" rel="stylesheet" href="../css/external/jquery-alert.css?{{env('timestamp')}}">
+    <link type="text/css" rel="stylesheet" href="../css/admin/manageFunction.css?{{env('timestamp')}}"/>
+@endsection
+
+@section('page_js')
+    {{--弹窗--}}
+    <script type="text/javascript" src="../js/external/jquery-alert.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript" src="../js/admin/manageFunction.js?{{env('timestamp')}}"></script>
+@endsection
+
+@section('base_mainContent')
+
+    @include("admin.knowledgeShop.baseTab", $tabData)
+
+    <input class="resource_category_data hide" data-resource_category="{{$data->resource_category}}">
+    <input class="edit_state_data hide" data-edit_state="{{$data->edit_state}}">
+    <input class="msg_alert_data" type="hidden" data-msg_alert="{{$data->is_alert_message}}">
+    <div class="content">
+        <div class="function_item category_nav" id="category_navigation">
+            <div class="function_content">
+                <div class="function_title">首页分类导航</div>
+                <div class="function_desc">可以将内容放在对应名称分类里面，用户可以直接快速通过分类找到自己想要的内容。</div>
+                <a class="function_help_doc" href="https://admin.xiaoe-tech.com/help_document?id=d_58f0bdbc6d480_cG4yTPMw" target="_blank">查看【首页分类导航】教程</a>
+            </div>
+            <div class="function_operate">
+                <span class="function_edit">编辑</span>
+                <div class="vertical_gap_line"></div>
+                <div class="function_switch_on nav_switch_btn" id="category_navigation_switch">
+                    <div class="function_switch_desc_on nav_switch_desc" id="function_switch_desc">显示</div>
+                    <div class="switch_button_icon_on nav_switch_icon" id="switch_button_icon"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="function_item resource_subscribe" data-subscribe="{{$data->hide_sub_count}}">
+            <div class="function_content">
+                <div class="function_title">订阅量展示</div>
+                <div class="function_desc">关闭后您的手机端店铺页面将不会展示商品的订阅量。</div>
+            </div>
+            <div class="function_operate">
+                <div class="vertical_gap_line"></div>
+                <div class="function_switch_on sub_switch_btn" id="subscribe_switch">
+                    <div class="function_switch_desc_on sub_switch_desc" >开启</div>
+                    <div class="switch_button_icon_on sub_switch_icon" ></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="function_item subscribe_per_num" data-per_num="{{$data->is_show_resourcecount}}">
+            <div class="function_content">
+                <div class="function_title">更新期数展示</div>
+                <div class="function_desc">关闭后您的手机端店铺页面将不会展示商品的更新期数。</div>
+            </div>
+            <div class="function_operate">
+                <div class="vertical_gap_line"></div>
+                <div class="function_switch_on sub_per_btn" id="subscribe_per_num">
+                    <div class="function_switch_desc_on sub_per_desc" >开启</div>
+                    <div class="switch_button_icon_on sub_per_icon" ></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="function_item category_nav">
+            <div class="function_content">
+                <div class="function_title">消息提醒</div>
+                <div class="function_desc">打开消息提醒开关，能够帮助您更好地将消息触达到用户。您推送给用户的消息将不仅在小纸条内显示，同时会在用户访问页面内弹窗提醒。</div>
+                <a class="function_help_doc" href="https://admin.xiaoe-tech.com/help_document?id=d_58f0bdbc6d480_cG4yTPMw" target="_blank">查看【消息提醒】说明</a>
+            </div>
+            <div class="function_operate">
+                <div class="vertical_gap_line"></div>
+                <div class="function_switch_on msg_remind_switch_btn" id="msg_alert_switch">
+                    <div class="function_switch_desc_on msg_remind_switch_desc" id="function_switch_desc">开</div>
+                    <div class="switch_button_icon_on msg_remind_switch_icon" id="switch_button_icon"></div>
+                </div>
+            </div>
+        </div>
+
+
+        {{--<div class="function_item" id="give_friends">--}}
+            {{--<div class="function_content">--}}
+                {{--<div class="function_title">赠送好友</div>--}}
+                {{--<div class="function_desc">开启赠送好友功能后，用户可以购买多个内容作为礼品卡赠送给好友使用。</div>--}}
+                {{--<div class="function_help_doc">查看【赠送好友】教程</div>--}}
+            {{--</div>--}}
+            {{--<div class="function_operate">--}}
+                {{--<div class="function_switch" id="give_friends_switch">--}}
+                    {{--<img class="switch_button_icon" src="/images/default_image.png">--}}
+                {{--</div>--}}
+            {{--</div>--}}
+
+        {{--</div>--}}
+    </div>
+
+@stop
+
+@section('base_modal')
+
+
+@stop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

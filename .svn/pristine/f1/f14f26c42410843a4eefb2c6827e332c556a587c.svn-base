@@ -1,0 +1,104 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'communityOperate';
+$pageData['barTitle'] = '社群运营';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section("page_css")
+
+    <link type="text/css" rel="stylesheet" href="../css/admin/communityOperate/manageDynamic.css?{{env('timestamp')}}">
+
+@stop
+
+@section('ahead_js')
+    {{--文本编辑器--}}
+    <script type="text/javascript" src="../ueditor/ueditor.config.js" ></script>
+    <script type="text/javascript" src="../ueditor/ueditor.all.min.js" ></script>
+@stop
+
+@section("page_js")
+    {{--腾讯云上传js--}}
+    <script type="text/javascript" src="../sdk/cos-js-sdk-v4.js"></script>
+    <script type="text/javascript" src="../js/admin/utils/v4QcloudUpload.js"></script>
+    {{--获取文件MD5--}}
+    <script type="text/javascript" src="../js/external/browser-md5-file.js"></script>
+    {{--上传工具类--}}
+    <script type="text/javascript" src="../js/admin/utils/upload.js?{{env('timestamp')}}"></script>
+    {{--表单检查工具类--}}
+    <script type="text/javascript" src="../js/admin/utils/formCheck.js?{{env('timestamp')}}"></script>
+
+    <script type="text/javascript" src="../js/admin/communityOperate/manageDynamic.js?{{env('timestamp')}}"></script>
+
+@stop
+
+@section("base_mainContent")
+
+    <input id="admin_data" type="hidden" data-type="{{$type}}"
+           @if($type)
+                data-community_id="{{$dynamic_info->community_id}}"
+           @else
+                data-community_id="{{$community_id}}"
+           @endif
+    >
+
+    <div class="pageTopTitle">
+        <a href="/community_operate">社群运营</a>
+        &gt;
+        <a href="/smallCommunity/communityList">小社群</a>
+        &gt;
+        <a  @if($type)
+                href="/smallCommunity/dynamicList?community_id={{$dynamic_info->community_id}}"
+            @else
+                href="/smallCommunity/dynamicList?community_id={{$community_id}}"
+            @endif
+        >社群详情
+        </a>
+        &gt;
+        发布动态
+    </div>
+
+    <div class="baseItemWrapper baseItemTitle">
+        <div class="baseTitleLeft">
+            标题名称<span class="starIcon">*</span>
+        </div>
+        <div class="baseContentRight">
+            <input class="inputDefault inputDynamicTitle" id="dynamicTitle" placeholder="请输入标题名称"
+                @if($type) value="{{$dynamic_info->title}}" @endif >
+        </div>
+    </div>
+    <div class="baseItemWrapper baseItemContent">
+        <div class="baseTitleLeft">
+            动态内容<span class="starIcon">*</span>
+        </div>
+        <div class="baseContentRight">
+            @if($type)
+                <input id="rubbish" type="hidden" value="{{$dynamic_info->org_content}}" />
+            @endif
+            <div class="resDescribe">
+                <script id="container" type="text/plain"></script>
+                <script type="text/javascript">
+                    var ue = UE.getEditor('container', ueditor_config);
+                    @if($type)                          {{--判断是否需要初始化--}}
+                        ue.ready(function () {
+                            ue.setContent($("#rubbish").val());
+                        });
+                    @endif
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="baseItemTip">
+        （管理台发布的动态将以群主身份发送）
+    </div>
+    <div class="horizontalDivideLine"></div>
+
+    <div class="btnBlue btnMid releaseDynamicBtn" id="releaseDynamic">@if($type)保存编辑@else发布动态@endif</div>
+
+@stop
+
+@section('base_modal')
+    {{--编辑后离开页面的提示--}}
+    @include('admin.actionTips.leaveTips')
+
+@stop

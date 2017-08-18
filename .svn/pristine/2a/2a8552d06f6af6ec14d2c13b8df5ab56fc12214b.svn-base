@@ -1,0 +1,201 @@
+<?php
+
+namespace App\Http\Controllers\ResManage;
+
+use App\Http\Controllers\Tools\AppUtils;
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use DB;
+use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Tools\StringConstants;
+
+class AvailResourceController extends Controller
+{
+    private $app_id = null;
+    public function __construct()
+    {
+        $this->app_id = AppUtils::getAppID();
+    }
+
+    // 获取自定义资源页面
+    public function availResourcePage(){
+        $product_id = Input::get('id','');
+//        var_dump($product_id);
+//        exit;
+
+        $memberContentList = DB::table('db_ex_business.t_member_avail_resource')
+            ->select('resource_type','title','img_url_compressed','id')
+            ->where('app_id',$this->app_id)
+            ->where('product_id',$product_id)
+            ->whereNull('deleted_at')
+            ->paginate(10);
+//        dump($memberContentList);
+//        exit;
+        return view('admin.resManage.userDefined',[
+            "memberContentList"=>$memberContentList,
+            "product_id"=>$product_id
+        ]);
+    }
+
+    // 获取可用的资源
+    public function getResource(Request $request){
+
+        $id = $request->input('id','');
+        if (!$id) return response()->json(['code'=>-1,'msg'=>'参数错误','data'=>[]]);
+        $content = $request->input('content','');
+
+        // 获取该会员包含的所有单品
+        $resource_id = DB::table('t_pro_res_relation')->where('app_id',$this->app_id)->where('product_id',$id)
+            ->where('resource_type','<',5)->where('relation_state',0)->where('is_try',0)->pluck('resource_type','resource_id');
+        // 获取该会员已自定义选择的单品
+        $avail_resource = DB::table('t_member_avail_resource')->where('app_id',$this->app_id)->where('product_id',$id)
+            ->whereNull('deleted_at')->pluck('resource_type','resource_id');
+
+        foreach ($resource_id as $k => $v){
+            if (array_key_exists($k,$avail_resource) && $resource_id[$k] === $avail_resource[$k]){
+                unset($resource_id[$k]);
+            }
+        }
+
+        $resource_id_arr = implode("','",array_keys($resource_id) );
+        $resource_id_str = " id in ('$resource_id_arr') ";
+        $sql = "
+            SELECT
+            *
+        FROM
+            (
+                        SELECT
+                            id,img_url,img_url_compressed,created_at,title,2 AS goods_type
+                        FROM
+                            t_audio
+                        WHERE
+                            app_id = ? AND {$resource_id_str} AND title like ?
+                        AND audio_state = 0
+                UNION ALL
+                    (
+                        SELECT
+                            id,img_url,img_url_compressed,created_at,title,3 AS goods_type
+                        FROM
+                            t_video
+                        WHERE
+                            app_id = ? AND {$resource_id_str} AND title like ?
+                        AND video_state = 0
+                    )
+                UNION ALL
+                    (
+                        SELECT
+                            id,img_url,img_url_compressed,created_at,title,1 AS goods_type
+                        FROM
+                            t_image_text
+                        WHERE
+                            app_id = ? AND {$resource_id_str} AND title like ?
+                        AND display_state = 0
+                    )
+                UNION ALL
+                    (
+                        SELECT
+                            id,img_url,img_url_compressed,created_at,title,4 AS goods_type
+                        FROM
+                            t_alive
+                        WHERE
+                            app_id = ? AND {$resource_id_str} AND title like ?
+                        AND state = 0
+                    )
+            ) v1
+        ORDER BY
+            created_at DESC  
+        ";
+
+        $data = DB::select($sql,[$this->app_id,"%{$content}%",$this->app_id,"%{$content}%",$this->app_id,"%{$content}%",$this->app_id,"%{$content}%"]);
+//        var_dump($data);
+//        exit;
+        return view('admin.resManage.userDefinedList',[
+            "data"=>$data
+        ]);
+    }
+
+    // 添加资源到自定义列表
+    public function addResource(Request $request){
+        $option = Input::get('option',[]);
+//        dump($option);
+//        exit;
+
+            $result = true;
+            foreach ($option as $key=>$value){
+                $resource_id = $value[0];
+//        $resource_id = 'i_595c924eb92cd_w0eXuyfV';
+                $product_id = $value[1];
+//        $product_id = 'p_595f072157f45_PUt7bnoq';
+                $resource_type = $value[2];
+//            DB::table('t_pro_res_relation')->where('app_id',$this->app_id)->where('product_id',$product_id)
+//                ->where('resource_id',$resource_id)
+//                ->where('resource_type','<',5)->where('relation_state',0)->where('is_try',0)->value('resource_type');
+                switch ($resource_type)
+                {
+                    case 1 :
+                        $sql = "select id,title,img_url,img_url_compressed,created_at,1 as good_type from t_image_text where app_id = ? and display_state = 0 and id=?";
+
+                        break;
+
+                    case 2 :
+                        $sql = "select id,title,img_url,img_url_compressed,created_at,2 as good_type from t_audio where app_id = ? and audio_state = 0 and id=?";
+                        break;
+                    case 3 :
+                        $sql = "select id,title,img_url,img_url_compressed,created_at,3 as good_type from t_video where app_id = ? and video_state = 0 and id = ?";
+                        break;
+                    case 4 :
+                        $sql = "select id,title,img_url,img_url_compressed,created_at,4 as good_type from t_alive where app_id = ? and state = 0 and id = ?";
+                        break;
+                    default :
+                        $sql = '';
+
+                }
+                if($sql){
+                    $res = DB::select($sql, [$this->app_id, $resource_id]);
+                }
+                $id = DB::table('t_member_avail_resource')->insertGetId(
+                    ['app_id' => $this->app_id, 'payment_type' => 3,'resource_type'=>$res[0]->good_type,
+                        'resource_id'=>$resource_id,'product_id'=>$product_id,'title'=>$res[0]->title,
+                        'img_url'=>$res[0]->img_url,'img_url_compressed'=>$res[0]->img_url_compressed,
+                        'created_at'=>date('Y-m-d H:i:s')]
+                );
+                $result = $result and $id;
+            }
+
+            if($result){
+                return response()->json(['code'=>0,'msg'=>'添加成功','data'=>[]]);
+            }else {
+                return response()->json(['code'=>-1,'msg'=>'添加失败','data'=>[]]);
+            }
+
+
+
+    }
+
+
+    // 删除自定义列表的资源
+    public function delResource(){
+        $id = Input::get('id','');
+//        $id = 61;
+//        dump($id);
+//        exit;
+        $delete = DB::table('db_ex_business.t_member_avail_resource')
+            ->where('id',$id)
+            ->update(['deleted_at'=>date('Y-m-d H:i:s')]);
+        if($delete){
+            $code = 0;
+            $msg = '删除成功';
+        }else{
+            $code = 1;
+            $msg = '删除失败';
+        }
+        $data = [];
+        return response()->json(['code'=>$code,'msg'=>$msg,'data'=>$data]);
+    }
+
+
+
+
+}

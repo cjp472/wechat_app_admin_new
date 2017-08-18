@@ -1,0 +1,798 @@
+/*幕布*/
+.darkScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+}
+.contentHeader a.help{
+    color: #337ab7;
+    margin-right: 20px;
+    font-size: 14px;
+}
+/*发送通知弹框*/
+.massageBox {
+    position: fixed;
+    width: 640px;
+    height: 522px;
+    left: 50%;
+    top: 50%;
+    padding: 20px;
+    z-index: 101;
+    margin-left: -320px;
+    margin-top: -261px;
+    border-radius: 10px;
+    background: white;
+    color: #353535;
+}
+
+.massageBoxClose {
+    width: 18px;
+    height: 18px;
+    float: right;
+    cursor: pointer;
+}
+
+.massageBoxClose img {
+    width: 100%;
+    height: 100%;
+}
+
+.massageBoxTitle {
+    width: 100%;
+    height: 20px;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 33px;
+
+}
+
+.massageBoxContent {
+    width: 100%;
+    margin-top: 20px;
+    padding: 0 80px 0 80px;
+}
+
+.sendRangeTitle {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.noticeContentTitle {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.massageBoxBtnGroup {
+    width: 234px;
+    height: 36px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+.massageBoxBtnConfirm {
+    margin-left: 24px;
+}
+
+/*活动成员个人信息弹出框*/
+.memberInfoBox{
+    position: fixed;
+    width: 400px;
+    height: 600px;
+    top:50px;
+    right: -400px;
+    z-index: 101;
+    background: white;
+    border: 1px solid #dcdcdc;
+    font-size: 14px;
+    transition: 0.5s all ease;
+}
+
+.infoBoxHeader{
+    position: relative;
+    width: 100%;
+    height: 60px;
+    background: #fafbfc;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.memberInfoBoxClose{
+   float: right;
+   width: 12px;
+    height: 12px;
+    cursor: pointer;
+}
+
+.MemberInfoBoxClose img{
+    width:100%;
+    height: 100%;
+}
+
+.memberInfoContent{
+    float: left;
+    width:100%;
+    height: 580px;
+    padding: 20px;
+    box-sizing: content-box;
+}
+.memberInfoP1{
+    float: left;
+    width: 100px;
+    height: 120px;
+}
+.memberInfoP2{
+    float: left;
+    height: 120px;
+    width: 237px;
+    overflow: hidden;
+}
+
+
+.memberLogo{
+    float: left;
+    width: 60px;
+    height: 60px;
+    background: #fafbfc;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.memberLogo img{
+    width:100%;
+    height: 100%;
+}
+.memberName{
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    margin-bottom:10px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    overflow: hidden;
+}
+
+.memberRealName,.memberPhone{
+    width: 100%;
+    height: 20px;
+    color: #888888;
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis
+}
+
+.memberInfoP3{
+    width:100%;
+    float: left;
+    height: auto;
+}
+
+.memberInfoP3Title{
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+}
+
+.memberInfoP3Line{
+    width:100%;
+    height: 1px;
+    background: #f2f2f2;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.memberInfoP3Part{
+    width:100%;
+    height: auto;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.memberInfoP3Content{
+    width:100%;
+    height: 270px;
+    overflow-y: scroll;
+
+}
+.memberInfoP3T{
+    float: left;
+    width: 102px;
+    line-height: 20px;
+    color: #888888;
+}
+
+.memberInfoP3C{
+    float: left;
+    width: 237px;
+    line-height: 20px;
+    word-wrap: break-word;
+}
+
+.memberPass{
+    position: absolute;
+    bottom: 30px;
+    left: 86px;
+}
+
+.memberRefuse{
+    position: absolute;
+    bottom: 30px;
+    right: 54px;
+}
+.activeSearchPart {
+    float: right;
+}
+
+.aeSearchBtn {
+    margin-left: 10px;
+}
+
+.activeOperate {
+    width: 100%;
+    height: 70px;
+    padding: 20px;
+}
+
+.activeOperate2 {
+    float: right;
+}
+
+.messageBtn, .excelBtn {
+    float: left;
+    margin-left: 10px;
+}
+
+
+.activityName{
+    width: 100%;
+    height: 60px;
+    padding: 20px;
+    font-size: 16px;
+    line-height: 22px;
+    color: #353535;
+}
+.aeTable {
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.aeTable input {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.aeTable thead, .aeTable tr th {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding: 0;
+    cursor: auto;
+    background-color: #F6F8FA;
+}
+
+.aeTable tr th:nth-of-type(2){
+    text-align: left;
+    text-indent: 20px;
+}
+
+.aeTable tr {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px solid #f2f2f2;
+    text-align: center;
+    cursor: pointer;
+}
+
+tbody >tr > td{
+    overflow: hidden;
+    height: 60px;
+}
+tbody >tr > td:nth-of-type(1),thead >tr > th:nth-of-type(1){
+    width: 5%;
+}
+tbody >tr > td:nth-of-type(2),thead >tr > th:nth-of-type(2){
+    width: 20%;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-align: left;
+    box-sizing: border-box;
+}
+tbody >tr > td:nth-of-type(3),thead >tr > th:nth-of-type(3){
+    width: 15%;
+}
+tbody >tr > td:nth-of-type(4),thead >tr > th:nth-of-type(4){
+    width: 10%;
+}
+tbody >tr > td:nth-of-type(5),thead >tr > th:nth-of-type(5){
+    width: 15%;
+}
+tbody >tr > td:nth-of-type(6),thead >tr > th:nth-of-type(6){
+    width: 10%;
+}
+tbody >tr > td:nth-of-type(7),thead >tr > th:nth-of-type(7){
+   width: 10%;
+}
+.aeTable thead tr {
+    height: 40px;
+    line-height: 40px;
+}
+.aeTable tr:hover {
+   background: #fafbfc;
+}
+
+.aeTable img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    margin-right: 6px;
+}
+
+.aeTable .tdOperate {
+    color: #2a75ed;
+    cursor: auto;
+}
+
+.aeTable .tdFirst{
+    cursor: auto;
+}
+.tdOperate span:nth-of-type(1) {
+    position: relative;
+    right: 5px;
+    cursor: pointer;
+}
+
+.tdOperate span:nth-of-type(2) {
+    position: relative;
+    left: 5px;
+    cursor: pointer;
+}
+
+.tdOperate span:nth-of-type(1)[class="ejectUser"]{
+    right: 0px;
+}
+.batchRefuse{
+    margin-left: 20px;
+}
+.shortMessage{
+    margin-left: 20px;
+}
+
+.memberRefuseBox{
+    position: fixed;
+    z-index: 105;
+    width: 640px;
+    height: 556px;
+    top: 50%;
+    left: 50%;
+    margin-left: -320px;
+    margin-top: -278px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.RefuseBoxClose{
+    float: right;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+}
+
+.RefuseBoxClose img{
+    width: 100%;
+    height: 100%;
+}
+
+.refuseIcon{
+   width: 50px;
+    height: 50px;
+    margin: 30px auto 0 auto;
+}
+.refuseIcon img{
+    width: 100%;
+    height: 100%;
+}
+
+.refuseTitle{
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 20px;
+    margin-top: 20px;
+    color: #353535;
+}
+
+.refuseTip{
+    width: 100%;
+    height: 20px;
+    font-size: 14px;
+    text-align: center;
+    color: #888888;
+    margin-top: 10px;
+    line-height: 20px;
+}
+
+.refuseContent{
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+    padding: 0 60px 0 60px;
+}
+
+.refuseMTitle{
+    width:100%;
+    height: 20px;
+    line-height: 20px;
+    color: #888888;
+    font-size: 14px;
+}
+
+.refuseMContent{
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #353535;
+    margin-top: 10px;
+}
+
+.refuseReansonTitle{
+    width:100%;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 20px;
+    color: #888888;
+}
+
+#refuseReasonInput{
+   width: 100%;
+    height: 160px;
+    border: 1px solid #dcdcdc;
+    margin-top: 10px;
+}
+
+.rCancel{
+    float: left;
+    margin-left: 125px;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+.rRefuse{
+    float: left;
+    margin-top: 30px;
+}
+.tdMemberName,.tdRealName{
+    overflow: hidden;
+    height: 60px;
+    line-height: 60px;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.tdMemberName{
+    width: 125px;
+}
+.tdRealName{
+    width: 150px;
+}
+
+/*******************tab-start ********************/
+
+ul.baseManageTab {
+    height: 50px;
+    margin: 0 20px;
+    width: inherit;
+}
+
+.baseManageTab li {
+    float: left;
+    height: 100%;
+    text-align: center;
+    margin: 0 10px;
+}
+
+.baseManageTab a {
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    width: 80px;
+    font-size: 14px;
+}
+
+
+/*顶部tab栏 转态*/
+
+.baseActiveTab {
+    border-bottom: 2px solid #2a75ed;
+}
+
+/*******************tab- end ********************/
+
+/*********************** 签到管理 - start *************************/
+
+.operateArea {
+    width: 100%;
+    height: 76px;
+    line-height: 36px;
+    padding: 20px 20px;
+}
+.operateAreaLeft {
+    float: left;
+}
+.operateAreaRight {
+    float: right;
+}
+.operateAreaRight div, .operateAreaRight input {
+    float: left;
+}
+
+.qrCodeAttend {
+    margin-right: 30px;
+    color: #2a75ed;
+    cursor: pointer;
+}
+.phoneNumSearch {
+    width: 240px;
+    margin-right: 10px;
+}
+
+
+tbody >tr > td.avatarNicknameWrapper {
+    width: 230px;
+    display: inline-block;
+    float: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.avatarNicknameWrapper img {
+    width: 40px;
+    height: 40px;
+    margin: 10px 6px 10px 20px;
+    border-radius: 20px;
+    float: left;
+}
+.avatarNicknameWrapper span {
+    height: 60px;
+    line-height: 60px;
+    display: block;
+    text-align: left;
+}
+.attendanceListTable >thead >tr >th, .attendanceListTable >tbody >tr >td {
+    text-align: center;
+}
+.attendanceListTable >thead >tr >th {
+    height: 40px;
+    background-color: #F6F8FA;
+}
+tr.attendanceInfoWrapper {
+    border-bottom: 1px solid #f2f2f2;
+}
+tr.attendanceInfoWrapper:hover {
+    background: #f6faff;
+    border-bottom: solid 1px #deeeff;
+}
+.changeSignState {
+    color: #2a75ed;
+    cursor: pointer;
+}
+
+
+/*********************** 签到管理 - end *************************/
+
+/*********** 加载动画 - start ***********/
+.contentAreaWrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+.loadingS {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 1000;
+    background: hsla(0, 0%, 100%, .9);
+}
+
+.loadingSContent {
+    position: absolute;
+    width: 100px;
+    height: 90px;
+    top: 230px;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    background: hsla(0,0%,100%,.9);
+}
+
+.loadingS .loadingText {
+    text-align: center;
+    color: #20a0ff;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.loadingS .circular {
+    width: 42px;
+    height: 42px;
+    -webkit-animation: loading-rotate 2s linear infinite;
+    -moz-animation: loading-rotate 2s linear infinite;
+    animation: loading-rotate 2s linear infinite;
+}
+
+.loadingS .path {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #20a0ff;
+    stroke-linecap: round;
+    -webkit-animation: loading-dash 1.5s ease-in-out infinite;
+    -moz-animation: loading-dash 1.5s ease-in-out infinite;
+    animation: loading-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@-moz-keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@-webkit-keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@-webkit-keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@-moz-keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+/*********** 加载动画 - end ***********/
+
+
+/***************************************** 下载二维码 - start ***************************************/
+.show_qrCode_window {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+}
+
+.qrCode_window {
+    width: 400px;
+    height: 338px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -169px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.window_top_area {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px 10px 0 0;
+}
+
+.close_icon_wrapper {
+    width: 12px;
+    height: 12px;
+    margin: 20px;
+    float: right;
+    cursor: pointer;
+}
+
+.close_icon {
+    width: 12px;
+    height: 12px;
+    float: left;
+}
+.qrCodeWrapper {
+    width: 110px;
+    height: 110px;
+    margin: 0 0 30px 145px;
+}
+.qrCodeWrapper img {
+    width: 100%;
+    height: 100%;
+}
+
+.qrCode_window_word_1 {
+    height: 22px;
+    line-height: 22px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #353535;
+    text-align: center;
+}
+.qrCode_window_word_2 {
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: #888888;
+    text-align: center;
+}
+.downloadQRCode {
+    margin-left: 150px;
+}
+
+/*********************************************** 下载二维码 - end ******************************************/
+
+.alert_real_name, .alert_phone {
+    font-size: 14px;
+    color: #888888;
+}
+.alert_real_name {
+    margin-right: 20px;
+}

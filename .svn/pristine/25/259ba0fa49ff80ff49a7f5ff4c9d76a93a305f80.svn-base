@@ -1,0 +1,188 @@
+{{--单品列表模板--}}
+@foreach($single_list_member as $key => $value)
+    <div class="member_list_item" data-resource_id="{{$value->id}}" data-resource_type="{{$value->resource_type}}"
+         data-res_title="{{$value->title}}" data-is_try="{{$value->is_try}}"
+         data-show_time="{{$value->start_at}}" data-img_url="{{$value->img_url}}" data-payment_type="{{$value->payment_type}}"
+    >
+        <img class="member_type_icon"
+        @if($value->resource_type == 1)
+            src="/images/admin/resManage/res_type_article.png" title="图文"
+         @elseif($value->resource_type == 2)
+            src="/images/admin/resManage/res_type_audio.png" title="音频"
+         @elseif($value->resource_type == 3)
+            src="/images/admin/resManage/res_type_video.png" title="视频"
+         @elseif($value->resource_type == 4)
+            src="/images/admin/resManage/res_type_live.png" title="直播"
+         @endif
+        >
+        <img class="member_cover_img"
+        @if (!empty($value->img_url_compressed))
+            src="{{$value->img_url_compressed}}"
+        @else
+            src="{{$value->img_url}}"
+        @endif
+        >
+        <div class="member_item_desc">
+            <div class="resource_name" title="{{$value->title}}">
+                <span class="resource_title">{{$value->title}}</span>
+                @if( $value->resource_type == 3 || ($value->resource_type == 4 && $value->alive_type == 1) )
+                    @if($value->is_transcode == 0)
+                        <span class="resource_top_state">转码中</span>
+                    @elseif($value->is_transcode == 2)
+                        <span class="resource_top_state">转码失败</span>
+                    @endif
+                @endif
+                @if(\App\Http\Controllers\Tools\AppUtils::IsPageVisual("try_audio", "version_type") && $value->payment_type != 2 && $value->is_try == 1)
+                    @if($value->resource_type == 2)
+                        <span class="audio_try_listen">试听</span>
+                    @elseif(($value->resource_type == 1 || $value->resource_type == 3 || $value->resource_type == 4))
+                        <span class="audio_try_listen">试看</span>
+                    @endif
+                @endif
+
+                @if($value->payment_type == 1)
+                    <span class="resource_price">免费</span>
+                @elseif($value->payment_type == 2)
+                    <span class="resource_price">¥{{$value->piece_price / 100.00}}</span>
+                @endif
+
+            </div>
+            <div class="show_resource_time">上架时间：{{$value->start_at}}</div>
+        </div>
+
+        @if($value->resource_type == 2)
+            <div class="play_number_wrapper">
+                <div class="play_number">访问量：{{$value->view_count}}
+                    <img class="arrow_down_icon" src="/images/arrow_down.png">
+                </div>
+                <ul class="resource_details">
+                    <li class="detail_item">评论数 : {{$value->comment_counts}}</li>
+                    <li class="detail_item">播放量 : {{$value->playcount}}</li>
+                    <li class="detail_item">完播量 : {{$value->finishcount}}</li>
+                    <li class="detail_item">完播率 : {{$value->finishpercent}}%</li>
+                    <li class="detail_item">分享量 : {{$value->share_count}}</li>
+                    <li class="detail_item">试听数 : {{$value->try_sign_count}}</li>
+                    @if(\App\Http\Controllers\Tools\AppUtils::IsPageVisual("daily_sign", "version_type"))
+                        <li class="detail_item">日签点击量 : {{$value->click_sign_count}}</li>
+                    @endif
+                </ul>
+            </div>
+        @else
+            <div class="play_number">访问量：{{$value->view_count}}</div>
+        @endif
+        {{--打赏统计--}}
+        @if($value->resource_type == 4)
+            <div class="play_number_wrapper">
+                <div class="play_number">打赏金额：{{$value->reward_sum}}
+                    <img class="arrow_down_icon" src="/images/arrow_down.png">
+                </div>
+                @if($value->reward_sum!=0)
+                    <ul class="resource_details">
+                        @foreach($value->lecturers as $lecturer)
+                            <li class="detail_item">{{$lecturer->name}} : {{$lecturer->reward}}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        @else <div class="play_number">{{"--"}}</div>
+        @endif
+
+        @if($value->state == 1)
+            <div class="show_resource_state">已下架</div>
+        @endif
+
+
+        <div class="hover_tool_box">
+            <ul>
+                @if($value->resource_type == 4)
+                    <li class="operate" data-type="aliveGuestSet">嘉宾设置</li>
+                    <li class="divide_line">&nbsp;|&nbsp;</li>
+                @endif
+                <li class="copyHref" data-clipboard-text="{{$value->pageUrl}}">复制链接</li>
+                <li class="divide_line">&nbsp;|&nbsp;</li>
+
+                <li class="operate" data-type="look_comments">查看评论</li>
+                <li class="divide_line">&nbsp;|&nbsp;</li>
+
+                <li class="more_operate">更多
+                    <ul class="more_operate_wrapper">
+                        <li class="operate" data-type="edit">编辑</li>
+                        @if(\App\Http\Controllers\Tools\AppUtils::IsPageVisual("try_audio","version_type"))
+                            @if($value->resource_type == 2)
+                                @if($value->is_try == 1)
+                                    <li class="operate" data-type="cancel_try">取消试听</li>
+                                @else
+                                    <li class="operate" data-type="set_try">设为试听</li>
+                                @endif
+                            @elseif(($value->resource_type == 1 || $value->resource_type == 3 || $value->resource_type == 4))
+                                @if($value->is_try == 1)
+                                    <li class="operate" data-type="cancel_try">取消试看</li>
+                                @else
+                                    <li class="operate" data-type="set_try">设为试看</li>
+                                @endif
+                            @endif
+                        @endif
+
+                        @if($value->resource_type == 4 && ($value->alive_type == 0 || $value->alive_type == 1))
+                            <li class="operate" data-type="export_audio">导出音频</li>
+                        @endif
+
+                        @if($value->payment_type == 1 || $value->payment_type == 2)
+                            <li class="operate" data-type="cancel_single_sale">取消单卖</li>
+                        @elseif($value->payment_type == 3)
+                            <li class="operate" data-type="set_single_sale">设为单卖</li>
+                        @endif
+
+                        @if($value->resource_type == 1)
+                            @if($value->can_select == 0)
+                                <li class="operate"  data-type="enable_copy">允许复制</li>
+                            @else
+                                <li class="operate" data-type="forbid_copy">禁止复制</li>
+                            @endif
+                        @endif
+
+                        @if($value->state == 0)
+                            <li class="operate" data-type="hide_resource">下架</li>
+                        @else
+                            <li class="operate" data-type="show_resource">上架</li>
+                        @endif
+                        <li class="operate" data-type="delete">移除</li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+@endforeach
+
+@if(empty($single_list_member) || count($single_list_member) == 0)
+
+    <div class="singleListNoData">单品列表暂无数据！</div>
+
+@endif
+
+@if(!empty($single_list_member))
+    <div class="list-page">
+        {{ $single_list_member->render() }}
+    </div>
+@endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

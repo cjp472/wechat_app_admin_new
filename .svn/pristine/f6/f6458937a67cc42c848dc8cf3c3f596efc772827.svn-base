@@ -1,0 +1,313 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'money_admin';
+$pageData['barTitle'] = '财务管理';
+$tabData = [];
+$tabData['tabTitle'] = 'orderList';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    <link rel="stylesheet" type="text/css" href="../css/external/xcConfirm.css?{{env('timestamp')}}"/>
+    {{--时间选择器--}}
+    <link type=text/css rel="stylesheet" href="../css/external/selectTime.css?{{env('timestamp')}}">
+    <link type=text/css rel="stylesheet" href="../css/admin/payAdmin.css?{{env('timestamp')}}">
+@stop
+
+@section('page_js')
+    <script src="../js/external/xcConfirm.js?{{env('timestamp')}}"></script>
+    {{--时间选择器--}}
+    <script type="text/javascript" src="../js/external/dateRange.js?{{env('timestamp')}}"></script>
+    <script type="text/javascript" src="../js/admin/orderList.js?{{env('timestamp')}}"></script>
+@stop
+
+
+@section('base_mainContent')
+
+    @include("admin.financialManage.baseTab", $tabData)
+    {{--{{dump($ListInfo)}}--}}
+    {{--{{exit}}--}}
+
+    <div class="payContainer">
+        {{--
+        <div style="width: 100% ; height: 100px" >
+            <div class="revenueInformation">
+                <div style="text-align:center;width: 49% ;float: left ;height:100px;line-height:70px;">
+                    <ul class="ul-revenue" style="list-style-type: none;">
+                        <li style="font-size: 30px;width: 100%;height: 30px">￥{{$count_sum_today}}</li>
+                        <li style="width: 100%;height: 30px">今日收入(元)</li>
+                    </ul>
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;width: 1px;height: 75%;background: #ECECEC;float: left">
+
+                </div>
+                <div style="text-align:center;width: 49% ;float: left ;height:100px;line-height:70px;">
+                    <ul class="ul-revenue" style="list-style-type: none;">
+                        <li style="font-size: 30px;width: 100%;height: 30px">￥{{$count_sum}}</li>
+                        <li style="width: 100%;height: 25px">总收入(元)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        --}}
+        <div class="searchArea">
+            <div class="exportExcel">
+                <!-- <button class="btn_export" onclick="exportOrderRecords()" id="export_btn" data-target="#ExportModal">导出订单记录</button> -->
+                <div class="addBtn btnSmall xeBtnDefault btnBlue">
+                    导出订单记录
+                    <ul class="addDown downshow">
+                        <li id="applyExport">导出订单</li>
+                        <li id="showExcelList">
+                            <a href="/excel/list">导出记录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <form class="formSubmitPart" action="/order_list" method="GET">
+                <div id="SelectTime" class="pull-left time_group">
+                    <div id="dropdown-toggle" class="time_input dropdown-toggle" data-toggle="dropdown">
+                        <span id="SelectData">全部订单</span>
+                        <span class="caret "></span>
+                    </div>
+                    <div id="SelectRange" class="time_option dropdown-menu">
+                        <ul>
+                            <li data-type='all'>全部订单</li>
+                            <li data-type='nowMonth'>当月订单</li>
+                        </ul>
+                        <p id="optional" class="optional">自选时间</p>
+                    </div>
+                </div>
+                <input type="hidden" id="startTime" name="start_time"/>
+                <input type="hidden" id="endTime" name="end_time"/>
+
+                <select name="order_type" id="order_type">
+                    <option value="0" selected>订单类型</option>
+                    <option value="1">普通订单</option>
+                    <option value="2">买赠订单</option>
+                    <option value="3">续费订单</option>
+                </select>
+                <select name="distribute" id="distribute_type">
+                    <option value="0" selected>分销情况</option>
+                    <option value="1">参与分销</option>
+                    <option value="2">不参与分销</option>
+                </select>
+                <select name="select_type" id="select_type">
+                    <option value="name">昵称</option>
+                    <option value="content">商品名称</option>
+                </select>
+                <input type="text" name="select_content" class="inputDefault searchOrderInput" aria-label="..." id="select_content"
+                      placeholder="请输入搜索内容" @if(array_key_exists('select_content',$search_array))value="{{$search_array['select_content']}}"@endif>
+                <button class="xeBtnDefault btnMid searchOrderBtn" type="submit" id="pay_search_btn">搜索</button>
+            </form>
+        </div>
+
+        <table class="table table-hover" style="margin-top: 10px;border-left: none; border-right: none">
+            <thead>
+            <tr>
+                {{--<th class="th_left">订单号</th>--}}
+                <th class="th_left" style="width:18%">头像/昵称</th>
+                <th style="width: 9%">订单类型</th>
+                <th style="width: 9% ">商品类型</th>
+                <th style="width: 19%">商品名称</th>
+                <th style="width: 10%">订单金额</th>
+                <th style="width: 9%">参与分销</th>
+                <th style="width: 9%">订单状态</th>
+                <th style="width: 20%" class="td_right">订单时间</th>
+            </tr>
+            </thead>
+            <tbody class="pay_tbody">
+            @foreach($ListInfo as $key=>$v)
+
+                <tr>
+                    <td class="th_left">
+                        <div  onclick="jumpDetail('{{$v->user_id}}')">
+                            <img src="{{$v->wx_avatar}}" style="cursor: pointer">
+                            <span>{{$v->wx_nickname}}</span>
+                        </div>
+                    </td >
+                    <td> {{$v->type}} </td>
+                    <td> {{$v->attr}} </td>
+                    <td class="msg"><a
+                                href="/order_list?order_id={{$v->order_id}}"> {{$v->purchase_name}}</a>
+                    </td>{{--订单内容--}}
+                    <td class="distributeContent fontRed">{{--订单金额--}}
+                        ￥{{number_format($v->price,2)}}
+                        @if($v->extra_info->has_coupon || $v->extra_info->has_invite || $v->extra_info->has_distribute || $v->extra_info->has_platform)
+                            <span class="caret"></span>
+                            <div class="distributionBox">
+                                <p>订单金额详情</p>
+                                @if($v->extra_info->has_coupon)
+                                <div class="BoxPartTitle">使用优惠券</div>
+                                <div class="alertBoxPart">{{$v->extra_info->coupon_name}}：￥{{$v->extra_info->coupon_price}}</div>
+                                @endif
+                                @if($v->extra_info->has_invite)
+                                    <div class="BoxPartTitle">邀请卡</div>
+                                    <table class="alertTable" style="width:91%;">
+                                        <tr>
+                                            <td>邀请人：{{$v->extra_info->invite_user}}</td>
+                                            <td>
+                                                佣金比例：
+                                                @if($v->extra_info->distribute_percent)
+                                                {{$v->extra_info->distribute_percent*100}}
+                                                @else
+                                                0
+                                                @endif
+                                                %
+                                            </td>
+                                            <td>佣金：￥{{$v->extra_info->distribute_price or 0}}</td>
+                                        </tr>
+                                    </table>
+                                @endif
+                                @if($v->extra_info->has_distribute)
+                                    <div class="BoxPartTitle">推广员</div>
+                                    <table class="alertTable" style="width:100%;font-size:14px;">
+                                            <tr>
+                                                <td>推广员：{{$v->extra_info->distribute_user}}</td>
+                                                <td>
+                                                    佣金比例：
+                                                    @if($v->extra_info->distribute_percent)
+                                                    {{$v->extra_info->distribute_percent*100}}
+                                                    @else
+                                                    0
+                                                    @endif
+                                                    %
+                                                </td>
+                                                <td>佣金：￥{{$v->extra_info->distribute_price or 0}}</td>
+                                            </tr>
+                                        @if( $v->extra_info->has_superior_distribute )
+                                            <tr>
+                                                <td>上级推广员:{{$v->extra_info->superior_distribute_user_id}}</td>
+                                                <td>
+                                                    邀请奖励比例:
+                                                    @if($v->extra_info->superior_distribute_percent)
+                                                    {{$v->extra_info->superior_distribute_percent*100}}
+                                                    @else
+                                                    0
+                                                    @endif
+                                                    %
+                                                </td>
+                                                <td>
+                                                    邀请奖励:￥{{$v->extra_info->superior_distribute_price or 0}}</td>
+                                            </tr>
+                                        @endif
+
+                                    </table>
+                                @endif
+                                @if($v->extra_info->has_platform)
+                                    <div class="BoxPartTitle">平台分销</div>
+                                    <table class="alertTable" style="width:91%;">
+                                        <tr>
+                                            <td>推广员：{{$v->extra_info->platform_user}}</td>
+                                            <td>
+                                                佣金比例：
+                                                @if($v->extra_info->platform_percent)
+                                                {{$v->extra_info->platform_percent*100}}
+                                                @else
+                                                0
+                                                @endif
+                                                %
+                                            </td>
+                                            <td>佣金：￥{{$v->extra_info->platform_price or 0}}</td>
+                                        </tr>
+                                    </table>
+                                @endif
+
+                            </div>
+                        @endif
+                        {{--@if(property_exists($v,'distribute_info'))--}}
+                            {{--<div class="distributionBox">--}}
+                                {{--<p>分销推广</p>--}}
+                                {{--<table class="alertTable" style="width:100%;">--}}
+                                    {{--@if( array_key_exists('name', $v->distribute_info) )--}}
+                                        {{--<tr>--}}
+                                            {{--<td>推广员：{{$v->distribute_info['name']}}</td>--}}
+                                            {{--<td>佣金比例：{{$v->distribute_info['distribute_percent'] or 0}}%--}}
+                                            {{--</td>--}}
+                                            {{--<td>佣金：￥{{$v->distribute_info['distribute_price'] or 0}}</td>--}}
+                                        {{--</tr>--}}
+                                    {{--@endif--}}
+                                    {{--@if( array_key_exists('super_name', $v->distribute_info) )--}}
+                                        {{--<tr>--}}
+                                            {{--<td>上级推广员：{{$v->distribute_info['super_name']}}</td>--}}
+                                            {{--<td>--}}
+                                                {{--邀请奖励比例：{{$v->distribute_info['superior_distribute_percent'] or 0}}--}}
+                                                {{--%--}}
+                                            {{--</td>--}}
+                                            {{--<td>--}}
+                                                {{--邀请奖励：￥{{$v->distribute_info['superior_distribute_price'] or 0}}</td>--}}
+                                        {{--</tr>--}}
+                                    {{--@endif--}}
+                                {{--</table>--}}
+                            {{--</div>--}}
+                        {{--@endif--}}
+                    </td>
+                    <td>
+                        @if($v->distribute)
+                            参与
+                        @else
+                            不参与
+                        @endif
+                    </td>
+                    <td>{{$v->status}}</td>{{--订单时间--}}
+                    <td class="td_right">{{$v->created_at}}</td>{{--订单时间--}}
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+        @if(count($ListInfo)==0)
+            <div class="contentNoneTip">没有相应的数据</div>
+        @endif
+
+        <div class="list-page">
+            @if(empty($search_array))
+                {!! $ListInfo->render() !!}
+            @else
+                {!! $ListInfo->appends($search_array)->render() !!}
+            @endif
+        </div>
+    </div>
+@stop
+
+@section('base_modal')
+    {{--发消息--}}
+    <div class="modal fade downloadPop" id="ExportModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="downloadPop_office">
+
+            <div class="pageTopTitle">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <div><span class="modal-title" style="font-size: 18px" id="myModalLabel">导出订单</span></div>
+            </div>
+
+            <div class="modal-body">
+
+                <div>
+                    <span class="outPutTime">订单生成时间</span>
+                    <select class="form-control" id="export_time">
+                        @foreach($export_times as $times)
+                            <option value="{{$times->yearMonth}}">{{$times->yearMonth}}</option>
+                        @endforeach
+                    </select>
+                    <div>
+                        <span>office使用版本</span>
+                        <input class="with-gap popS" id="Office_false" name="selectOffice" type="radio"
+                               value="0">
+                        <label for="Office_false">非office2003</label>
+                        <input class="with-gap popS" id="Office_true" name="selectOffice" type="radio"
+                               value="1" checked>
+                        <label for="Office_true">office2003</label>
+                        <div class="declaration">如果下载文件出现乱码，请选择另一个office版本选项进行下载</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="xeBtnDefault btnMid" data-dismiss="modal">关闭</button>
+                <button type="button" class="btnBlue btnMid" id="applyOrderToExcel">确定</button>
+            </div>
+        </div>
+    </div>
+@stop
+
+

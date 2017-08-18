@@ -1,0 +1,297 @@
+
+.userContent img {
+	max-width: 1200px;
+}
+.content {
+    min-height: 600px;
+    padding: 20px 40px 50px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+
+.dynamicDetail{
+
+}
+.dynamicAuth>div{
+	float: left;
+}
+.userImg{
+	margin-right: 10px;
+}
+.userImg img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+}
+.userName{
+	font-size: 14px;
+	color: #353535;
+}
+.dynamicTime{
+	font-size: 12px;
+	color: #888;
+}
+.dynamicAuth {
+	position: relative;
+}
+
+.dynamicAuth>div.detailShowWrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.detailShowIconWrapper {
+	width: 32px;
+	height: 18px;
+	padding: 4.5px 8px;
+}
+.detailShowIconWrapper img {
+	width: 16px;
+	height: 12px;
+	float: left;
+}
+.detailShowWrapper ul {
+	display: none;
+	margin: 15px -25px 0 0;
+	position: absolute;
+	top: 0px;
+	left: -50px;
+	width: 80px;
+	z-index: 100;
+	padding: 0px;
+	border-radius: 2px;
+	background-color: #fff;
+	border: solid 1px #deeeff;
+	color: #2a75ed;
+}
+.detailShowWrapper:hover ul {
+	display: block;
+}
+.detailShowWrapper ul li {
+	width: 78px;
+	float: left;
+	list-style: none;
+	line-height: 34px;
+	font-size: 12px;
+	text-align: center;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+}
+.detailShowWrapper ul li:hover {
+	background-color: #F6FAFF;
+}
+.dynamicAuth .detailBtn {
+	cursor: pointer;
+	float: right;
+	width: 16px;
+	height: 16px;
+	border: solid #b2b2b2;
+	border-width: 0 0 2px 2px;
+	margin-right: 6px;
+	transform: rotate(-45deg);
+}
+/* 精选与隐藏 */
+span.tips{
+    display: inline-block;
+	letter-spacing: -0.2px;
+	margin-left: 10px;
+    line-height: 18px;
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 12px;
+    color: #fff;
+}
+span.tips.hidded{
+    background-color: #E64340;
+}
+span.tips.quality{
+    background-color: #2A75ED;
+}
+/* 动态的主要内容 */
+.dynamicContent{
+	margin: 10px 0 0 60px;
+	color: #353535;
+}
+.imgCont{
+	margin-top: 20px;
+}
+.imgCont img{
+	width: 120px;
+	height: 120px;
+	margin-right: 20px;
+}
+.dynamicContent .operate{
+	cursor: default;
+	margin: 20px 0;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eee;
+}
+.dynamicContent .operate>div{
+	display: inline-block;
+}
+.firstIcon{
+	margin-right: 20px;
+}
+.operatIcon{
+	color: #b2b2b2;
+}
+
+.praiseIcon {
+	width: 16px;
+	height: 16px;
+	margin: 2px 5px 0 0;
+	float: left;
+	cursor: pointer;
+}
+.commentIcon {
+	width: 16px;
+	height: 16px;
+	margin: 2px 5px 0 0;
+	float: left;
+}
+
+
+.operateNum{
+	color: #353535;
+	float: left;
+}
+.myComment{
+	width: 100%;
+	height: 80px;
+	margin-bottom: 10px;
+}
+
+
+/* 用户评论 */
+.userComment{
+	margin-top: 30px;
+}
+.commentTop{
+	width: 100%;
+	background-color: #f6f8fa;
+	line-height: 40px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #353535;
+	padding-left: 20px;
+}
+.commentItem {
+	margin-top: 20px;
+	overflow: hidden;
+	width: 100%;
+}
+
+.commentItem>div {
+	float: left;
+}
+.commentItem p {
+	margin-bottom: 5px;
+}
+.commBtn:first-child{
+	margin-right: 10px;
+}
+.commBtn{
+	font-size: 12px;
+	color: #2a75ed;
+	cursor: pointer;
+}
+
+.commentReply{
+	margin-left: 60px;
+}
+.commentReply img{
+	margin-top: -3px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+.commentReply .inputDefault{
+	margin-left: 7px;
+}
+.commentReply .btnMid{
+	margin-left: 7px;
+}
+
+.noCommentListData {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	margin-top: 50px;
+	color: #353535;
+	font-size: 16px;
+	text-align: center;
+}
+.contentImgWrapper {
+	display: inline-block;
+}
+.contentImg {
+	width: 120px;
+	height: 120px;
+	float: left;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+
+/*********************** 文件 - start *************************/
+.uploadBox {
+	float: left;
+	width: 100%;
+	padding: 20px 0 20px;
+	border-top: 1px dashed #dcdcdc;
+	margin: 10px 0 0;
+}
+.pdfFileIconWrapper {
+	width: 40px;
+	height: 40px;
+	float: left;
+}
+.pdfFileIcon {
+	width: 100%;
+	height: 100%;
+}
+.uploadProgress {
+	float: left;
+	width: 520px;
+	height: 40px;
+	border-radius: 2px;
+	background-color: #fafbfc;
+	padding: 0 50px 0 10px;
+}
+.uploadPTitle {
+	display: block;
+	float: left;
+	height: 40px;
+	line-height: 40px;
+	max-width: 500px;
+	color: #353535;
+	text-align: center;
+	overflow: hidden;
+	word-wrap: break-word;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.uploadPercent {
+	float: left;
+	height: 40px;
+	line-height: 40px;
+	margin-left: 20px;
+	color: #2a75ed;
+	cursor: pointer;
+}
+
+/*********************** 文件 - end *************************/
+
+
+
+
+
+
+
+
+
+
+
+
+

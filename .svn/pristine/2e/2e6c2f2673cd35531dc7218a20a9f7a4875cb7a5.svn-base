@@ -1,0 +1,93 @@
+/**
+ * Created by fuhaiwen on 2017/1/17.
+ */
+var amountOk = true;
+var clickTime = "";
+$(document).ready(function() {
+    setTopUrlCookie('payadmin_listop', '财务管理');
+    keyEnter($('#pay_search_btn'));
+    $("tbody tr").mouseover(function() {
+        $(this).css({
+            'background-color': '#f5f5f5'
+        });
+    }).mouseout(function() {
+        $(this).css({
+            'background-color': '#fff'
+        });
+    });
+
+});
+//确认提现,发送ajax请求
+function confirm_cash() {
+    // 防止重复点击
+    var nowTime = new Date().getTime();
+    console.log(nowTime);
+    if (clickTime != '' && (nowTime - clickTime < 10000)) {
+        baseUtils.show.redTip('操作过于频繁，10秒后再试');
+        return false;
+    } else {
+        clickTime = nowTime;
+        console.log(clickTime);
+        //验证提现金额是否正确有效:最低200元,最高不超过2万
+        var bind_account_wx_id = $("#wx_nickname").data("bind_acount_wx_id");
+        var withdraw_amount = parseFloat($("#cash_amount").val()) * 100;
+        var account_balance = parseInt($("#account_amount").text().replace(/,/g, '') * 100);
+        judgeCashAmount();
+        if (amountOk) {
+            if (bind_account_wx_id) {
+                //发送ajax请求
+                $.post('/confirm_withdraw', {
+                    'bind_account_wx_id': bind_account_wx_id,
+                    'withdraw_amount': withdraw_amount,
+                    'account_balance': account_balance
+                }, function(data) {
+                    if (data.code === 0) {
+                        window.location.href = "/withdraw_page";
+                    } else {
+                        baseUtils.show.redTip(data.msg);
+                    }
+                });
+            } else {
+                baseUtils.show.redTip("请先扫码绑定提现微信号");
+                window.location.href = "/bind_wx_account_page";
+            }
+        }
+    }
+}
+
+function judgeCashAmount() {
+    //$withdraw_amount = $("#withdraw_amount").val()*100;//单位为分；
+    $withdraw_amount_str = $("#cash_amount").val(); //单位为分；
+    if ($withdraw_amount_str === "") {
+        baseUtils.show.redTip('请输入提现金额!');
+        amountOk = false;
+    } else {
+        var reg = /^((0)|([1-9]{1}\d*))(\.\d{1,2})?$/;
+        if (reg.test($withdraw_amount_str)) {
+            $withdraw_amount = parseFloat($withdraw_amount_str);
+            $account_amount = parseFloat($("#account_amount").text().replace(/,/g, ''));
+
+            // alert("withdraw_amount:"+$withdraw_amount+"--account_amount:"+$account_amount);
+            if ($withdraw_amount == 0 || $withdraw_amount == 0.0 || $withdraw_amount == 0.00) {
+                // util.showError('#withdraw_amount-err', '提现金额不能为0！', '#withdraw_amount', true);
+                baseUtils.show.redTip('金额不能为0!');
+
+                amountOk = false;
+                return false;
+            }
+            if ($withdraw_amount < 200 || $withdraw_amount > 20000) {
+                //TODO:测试环境,金额不做限制。
+                baseUtils.show.redTip('单笔提现金额需大于200元且不高于2万!');
+                amountOk = false;
+            } else if ($withdraw_amount > $account_amount) {
+                baseUtils.show.redTip('账户余额不足!');
+                amountOk = false;
+                return false;
+            }
+        } else {
+            baseUtils.show.redTip('请输入正确的提现金额！');
+            amountOk = false;
+            return false;
+        }
+    }
+}

@@ -1,0 +1,111 @@
+/**
+ * Created by Administrator on 2017/5/2.
+ */
+
+$(document).ready(function () {
+
+    Business.init();
+})
+
+var Business = (function () {
+
+    var Business = {};
+
+    Business.submitLimit = false;   //提交限制
+    Business.communityId = -1;
+    Business.type = -1;             //  1 - 编辑 ； 0 - 新建
+    Business.dynamicId = -1;
+
+    Business.init = function () {
+
+        //点击侧边栏离开时的弹框
+        changeSaveFlag(true);
+
+        Business.type = $("#admin_data").data("type");
+        Business.communityId = $("#admin_data").data("community_id");
+        if (Business.type == 1) {
+            Business.dynamicId = GetQueryString("id");
+        }
+
+        $("#releaseDynamic").click(function () {
+
+            //  防止重复提交
+            if (Business.submitLimit == true) {
+                baseUtils.show.redTip("正在提交中，请稍后再试");
+                return false;
+            }
+
+            /**
+             * 需要的参数 ： community_id - title - org_content - content
+             */
+            var params = {};
+
+            var dynamicTitle = $("#dynamicTitle").val();
+            if (dynamicTitle == '' || dynamicTitle == undefined) {
+                baseUtils.show.redTip("请输入动态标题");
+
+                return false;
+            }
+            params['title'] = dynamicTitle;
+
+            //  获取动态 html内容，返回: <p>hello</p>
+            var ue = UE.getEditor('container');
+            var org_content = ue.getContent();    //  原始html内容
+            var descrb = ue.getPlainTxt();        //  纯文本
+
+            if (org_content == '' || org_content == undefined) {
+                baseUtils.show.redTip("请输入动态内容");
+
+                return false;
+            }
+            params['org_content'] = org_content;
+            params['content'] = descrb;
+
+            params['community_id'] = Business.communityId;
+
+            var postUrl = "";
+            if (Business.type == 1) {   //  编辑
+                params['id'] = Business.dynamicId;
+                postUrl = "/smallCommunity/updateDynamic";
+            } else {    //  新建
+                postUrl = "/smallCommunity/uploadDynamic";
+            }
+
+            Business.submitLimit = true;
+
+            $.ajax(postUrl, {
+                type: "POST",
+                dataType: "json",
+                data: {
+                    params: params
+                },
+                success: function (result) {
+                    if (result.code == 0) {
+                        if (Business.type == 1) {
+                            baseUtils.show.blueTip("保存编辑成功");
+                        } else {
+                            baseUtils.show.blueTip("发布动态成功");
+                        }
+                        setTimeout(function () {
+                            window.location.href="/smallCommunity/dynamicList?community_id=" + Business.communityId;
+                        }, 700);
+                    } else {
+                        baseUtils.show.redTip("发布出现问题，请稍后再试");
+                        Business.submitLimit = false;
+                    }
+                },
+                error: function (xhr, status, err) {
+                    Business.submitLimit = false;
+                    console.log(err);
+                    baseUtils.show.redTip("网络错误，请稍后再试！");
+                }
+            });
+
+        });
+
+    };
+
+    return Business;
+
+})();
+

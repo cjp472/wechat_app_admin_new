@@ -1,0 +1,31 @@
+
+/*内容区*/
+.content{
+    width:560px;
+    height: 450px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin: -225px 0 0 -280px;
+    background-color: white;
+    box-shadow: 0 10px 30px 0 rgba(38, 40, 42, 0.1), 0 6px 12px 0 rgba(32, 36, 42, 0.2);
+}
+/*协议详细*/
+.agreeModal{
+    display: none;
+    width: 791px;
+    height: 450px;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    margin: -225px 0 0 -395px;
+    background-color:#fff;
+    z-index: 4;
+}
+.agreeModal h5{
+    font-size: 14px;
+}
+
+input{
+    line-height: 40px;
+}

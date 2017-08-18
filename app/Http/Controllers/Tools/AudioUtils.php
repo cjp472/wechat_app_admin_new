@@ -1,0 +1,277 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: breeze
+ * Date: 17/07/2017
+ * Time: 21:19
+ */
+
+namespace App\Http\Controllers\Tools;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class AudioUtils
+{
+	/**
+	 * 音频资源压缩
+	 *
+	 * @param Request $request
+	 * @param         $app_id
+	 * @param         $id
+	 * @param         $audio_url
+	 * @param         $audio_length
+	 */
+	public static function audioCompress (Request $request, $app_id, $id, $audio_url, $audio_length)
+	{
+		$audioObj = self::getAudioObj('t_audio', $app_id, $id, $audio_url, $audio_length);
+		self::pushAudioList($request, $audioObj);
+	}
+
+	/**
+	 * 获取需要压缩的音频对象
+	 *
+	 * @param $table_name
+	 * @param $app_id
+	 * @param $id
+	 * @param $audio_url
+	 * @param $audio_length
+	 *
+	 * @return \stdClass
+	 */
+	public static function getAudioObj ($table_name, $app_id, $id, $audio_url, $audio_length)
+	{
+		$audioObj               = new \stdClass();
+		$audioObj->table_name   = $table_name;
+		$audioObj->app_id       = $app_id;
+		$audioObj->id           = $id;
+		$audioObj->audio_url    = $audio_url;
+		$audioObj->audio_length = $audio_length;
+
+		return $audioObj;
+	}
+
+	/***
+	 * 音频对象放入request的音频列表里
+	 *
+	 * @param Request $request
+	 * @param         $audioObj
+	 *
+	 * @internal param $imageObj
+	 */
+	public static function pushAudioList (Request $request, $audioObj)
+	{
+		if (!empty($request)) {
+			if (empty($request->audio_list)) {
+				$request->audio_list = [];
+			}
+			$request->audio_list[] = $audioObj;
+		}
+	}
+
+	/***********************************************************************
+	 *************************处理音频资源压缩接口及工具******************************
+	 ***********************************************************************/
+
+	/**
+	 * 获取需要批量处理的音频资源
+	 *
+	 * @param null $start_time
+	 *
+	 * @return
+	 */
+	public static function getDealAudioList ($start_time = null)
+	{
+		//获取所需处理音频列表;非删除、原音频不为空、压缩音频字段未压缩、10分钟前的
+		$end_time = Utils::getTime(-600);
+		if (empty($start_time)) $start_time = Utils::getTime();
+		$audio_list = DB::select("
+SELECT * from t_audio
+where audio_url is not NULL and audio_url != '' and
+      (audio_url = audio_compress_url or audio_compress_url is NULL or audio_compress_url = ''
+       or audio_compress_url = m3u8_url)
+and created_at > '$start_time' and created_at < '$end_time' and audio_state != 2
+");
+
+		return $audio_list;
+	}
+
+	/**
+	 * 对单个音频进行处理
+	 *
+	 * @param $table_name
+	 * @param $app_id
+	 * @param $id
+	 * @param $audio_url
+	 * @param $audio_length
+	 */
+	public static function SingleAudioCompress ($table_name, $app_id, $id, $audio_url, $audio_length)
+	{
+		Utils::logFrom("start " . $app_id . " " . $id, "SingleAudioCompress.log");
+
+		//下载源音频
+		try {
+			$src_audio = Utils::downloadFileFromNet($audio_url);
+		} catch (\Exception $ex) {
+			Utils::logFrom("not exist " . $app_id . " " . $id . " " . $audio_url, "SingleAudioCompress.log");
+
+			return;
+		}
+
+		$bitrate = 64000;
+		try {
+			//逐个校正音频属性
+			//todo::要求必须 include "../vendor/getid3/getid3.php";
+			$getId3     = new \getID3();
+			$getId3Info = $getId3->analyze($src_audio);
+			//如果音频长度不一致则准备更新
+			if (array_key_exists('playtime_seconds', $getId3Info) && $getId3Info['playtime_seconds'] > 0
+				&& ($getId3Info['playtime_seconds'] - $audio_length > 5 || $getId3Info['playtime_seconds'] - $audio_length < -5)
+			) {
+				$audio_length = round($getId3Info['playtime_seconds']);
+				$updateLength = DB::table($table_name)
+					->where('app_id', '=', $app_id)
+					->where('id', '=', $id)
+					->update([
+						'audio_length' => $audio_length,
+					]);
+				$bitrate      = $getId3Info['bitrate'];
+				Utils::logFrom("length " . $app_id . " " . $id . " " . $updateLength, "SingleAudioCompress.log");
+			}
+		} catch (\Exception $ex) {
+			Utils::logFrom("getId3 " . $app_id . " " . $id . " " . $ex->getMessage(), "SingleAudioCompress.log");
+		}
+
+		if ($bitrate > 64000) {
+			$bitrate = 64000;
+		}
+
+		//逐个压缩mp3更新
+		$success_compress = 0;
+		$mp3_audio        = Utils::audioCompressing($src_audio, $bitrate);
+		try {
+			$audio_compress_size = filesize($mp3_audio) / 1024 / 1024;
+			//验证音频压缩后的属性
+			$getId3_comp     = new \getID3();
+			$getId3Info_comp = $getId3_comp->analyze($mp3_audio);
+			//如果音频长度不一致则准备更新
+			if (array_key_exists('playtime_seconds', $getId3Info_comp)
+				&& $getId3Info_comp['playtime_seconds'] > 0
+				&& $getId3Info_comp['playtime_seconds'] - $audio_length < 5
+				&& $getId3Info_comp['playtime_seconds'] - $audio_length > -5) {
+				$success_compress = 1;
+			} else {
+				Utils::logFrom("compress mp3 length not right " . $app_id . " " . $id . " ", "SingleAudioCompress.log");
+			}
+		} catch (\Exception $ex) {
+			Utils::logFrom("file error " . $app_id . " " . $id, "SingleAudioCompress.log");
+
+			return;
+		}
+
+		if ($success_compress) {
+			//上传Mp3
+			$audio_compress_url = Utils::uploadMp3Audio($mp3_audio, $app_id);
+			if (!empty($audio_compress_url)) {
+				//更新数据库
+				$updateResult1 = DB::table($table_name)
+					->where('app_id', '=', $app_id)
+					->where('id', '=', $id)
+					->update([
+						'audio_compress_url'  => $audio_compress_url,
+						'audio_compress_size' => $audio_compress_size,
+					]);
+
+				Utils::logFrom(" mp3 " . $app_id . " " . $id . " " . $updateResult1, "SingleAudioCompress.log");
+			}
+		}
+
+		//压缩上传m3u8文件
+		$prefix   = explode('.', basename($src_audio))[0]; //文件前缀  md5
+		$m3u8_url = AudioUtils::uploadM3u8Audio($src_audio, $app_id, $prefix, $audio_length);
+		if (!empty($m3u8_url)) {
+			//更新数据库
+			$updateResult2 = DB::table($table_name)
+				->where('app_id', '=', $app_id)
+				->where('id', '=', $id)
+				->update(['m3u8_url' => $m3u8_url]);
+
+			Utils::logFrom("m3u8 " . $table_name . " " . $app_id . " " . $id . " " . $updateResult2, "SingleAudioCompress.log");
+		}
+		//删除本地文件
+		if (is_file($src_audio)) Utils::unlinkStoragePath($src_audio);
+		if (is_file($mp3_audio)) Utils::unlinkStoragePath($mp3_audio);
+		if (isset($audio_compress_url) && is_file($audio_compress_url)) Utils::unlinkStoragePath($audio_compress_url);
+
+		Utils::logFrom($table_name . " " . $app_id . " " . $id . " END", "SingleAudioCompress.log");
+	}
+
+	/**
+	 * 上传M3u8文件
+	 * 1.压缩M3u8生成 ts文件列表 和 M3u8文件清单
+	 * 2.上传ts文件列表
+	 * 3.替换M3u8清单文件中ts
+	 * 4.上传M3u8清单文件
+	 *
+	 * @param $src_audio
+	 * @param $app_id
+	 * @param $prefix
+	 * @param $audio_length
+	 *
+	 * @return string
+	 */
+	public static function uploadM3u8Audio ($src_audio, $app_id, $prefix, $audio_length)
+	{
+		//压缩M3u8生成 ts文件列表 和 M3u8文件清单
+		$m3u8_path = Utils::audioM3u8Compressing($src_audio, $prefix);
+		if (!is_file($m3u8_path)) {
+			Utils::logFrom("m3u8 file not exist " . $app_id, "SingleAudioCompress.log");
+
+			return "";
+		}
+		//根据M3u8文件获取ts所属目录
+		$ts_path = substr($m3u8_path, 0, strpos($m3u8_path, '/' . basename($m3u8_path)));
+		//遍历上传ts文件
+		$ts_list = glob($ts_path . '/*.ts');
+		foreach ($ts_list as $item) {
+			Utils::uploadMp3Audio($item, $app_id, $prefix);
+		}
+		//替换m3u8文件中ts链接
+		$dst_path  = '/' . $app_id . env('AUDIO_COMPRESS_PATH') . "" . $prefix;
+		$fileRoot  = 'http://' . GlobalString::V4_COS_BUCKET_NAME . '-' . GlobalString::V4_COS_APP_ID . '.file.myqcloud.com';
+		$urlHeader = $fileRoot . $dst_path;
+		$listOld   = file_get_contents($m3u8_path);
+		$listNew   = "";
+		$arrs      = explode("\n", $listOld);        //转为数组批量替换,最后一个为空不要
+		for ($i = 0; $i < count($arrs) - 1; $i++) {
+			if (!strstr($arrs[ $i ], "#")) {
+				$arrs[ $i ] = $urlHeader . "/" . $arrs[ $i ];
+			}
+			$listNew = $listNew . $arrs[ $i ] . "\n";
+		}
+		$fp = fopen($m3u8_path, "w");
+		fwrite($fp, $listNew);
+		fclose($fp);
+
+		//验证M3u8长度是否正确
+		$audioLength = 0;
+		foreach ($arrs as $arr) {
+			if (strstr($arr, "#EXTINF:")) {
+				$temp        = str_replace(',', '', str_replace('#EXTINF:', '', $arr));
+				$audioLength += (float)$temp;
+			}
+		}
+		if (empty($audio_length) || empty($audioLength)
+			|| $audioLength - $audio_length > 10 || $audioLength - $audio_length < -10) {
+			return '';
+		}
+
+		//上传M3u8清单文件
+		$result = Utils::uploadMp3Audio($m3u8_path, $app_id, $prefix);
+
+		//删除m3u8文件夹
+		Utils::delDirAndFile($ts_path, true);
+
+		return $result;
+	}
+}

@@ -1,0 +1,65 @@
+<template>
+    <div class="app-sidebar-part" :style="{ marginTop: topSize + 'px' }">
+        <div v-for="(item,index) in index_sort" v-show="show_index_sort == item">
+            <banner_sidebar v-if="item==1" :banner_part="index_data[index]"></banner_sidebar>
+            <category_sidebar v-if="item==2" :category_part="index_data[index]"></category_sidebar>
+            <community_sidebar v-if="item==3" :community_part="index_data[index]"></community_sidebar>
+            <member_sidebar v-if="item==4" :member_part="index_data[index]"></member_sidebar>
+            <question_sidebar v-if="item==5" :question_part="index_data[index]"></question_sidebar>
+            <alive_sidebar v-if="item==6" :alive_part="index_data[index]"></alive_sidebar>
+            <recommend_sidebar v-if="item==7" :recommend_part="index_data[index]"></recommend_sidebar>
+            <activity_sidebar v-if="item==8" :activity_part="index_data[index]"></activity_sidebar>
+        </div>
+    </div>
+</template>
+
+<script>
+    import EventBus from '../../libs/eventbus';
+    import banner_sidebar from './banner_part/banner_sidebar.vue';
+    import category_sidebar from './category_part/category_sidebar.vue';
+    import community_sidebar from './community_part/community_sidebar.vue';
+    import member_sidebar from './member_part/member_sidebar.vue';
+    import question_sidebar from './question_part/question_sidebar.vue';
+    import alive_sidebar from './alive_part/alive_sidebar.vue';
+    import recommend_sidebar from './recommend_part/recommend_sidebar.vue';
+    import activity_sidebar from './activity_part/activity_sidebar.vue';
+    export default {
+        props: ['index_sort','index_data'],
+        data: function () {
+            return {
+                topSize: 65,
+                show_index_sort: this.index_sort[0]
+            }
+        },
+        created: function () {
+            EventBus.$on('sidebar_part_position',this.updateTopSize);
+        },
+        methods:{
+            updateTopSize: function (obj) {
+                this.topSize = obj.num;
+                this.show_index_sort = obj.index_sort;
+            }
+        },
+        components:{
+            banner_sidebar,
+            category_sidebar,
+            community_sidebar,
+            member_sidebar,
+            question_sidebar,
+            alive_sidebar,
+            recommend_sidebar,
+            activity_sidebar
+        }
+    }
+</script>
+
+<style>
+    .app-sidebar-part {
+        padding: 10px;
+        min-height: 28px;
+        width: 100%;
+        background: #fafbfc;
+        border-radius: 4px;
+        border: 1px solid #e3e3e3;
+    }
+</style>

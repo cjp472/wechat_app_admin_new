@@ -1,0 +1,254 @@
+/**
+ * Created by Stuphin on 2016/10/28.
+ */
+
+var is_group = false;   // 是否团购
+var group_id;            // 团购配置id
+var chosenUserId;        //团购的购买用户
+
+$(document).ready(function () {
+    datetimepickerconfig("#start_at");
+    datetimepickerconfig("#stop_at");
+    setTopUrlInfo('invitecode_listop');
+
+    //两个select 对应
+    $("#typeSelect").change(function () {
+        var type = $(this).val();
+        $.get("/getres", {"type": type}, function (data) {
+            console.log(data);
+            var res = data.res;
+            $("#targetSelect").children("option").remove();
+            if (type == 0 || type == 5)//专栏用name字段
+            {
+                for (var i = 0; i < res.length; i++) {
+                    $("#targetSelect").append("<option value=" +
+                        res[i].id + " price=" + res[i].price + " img_url=" + res[i].img_url + ">" + res[i].name + "</option>");
+                }
+            }
+            else {
+                for (var i = 0; i < res.length; i++) {
+                    $("#targetSelect").append("<option value=" +
+                        res[i].id + " price=" + res[i].piece_price + " img_url=" + res[i].img_url + ">" + res[i].title + "</option>");
+                }
+            }
+        });
+    });
+
+    //判断是否具备团购功能
+    if ($('#purchaser').length > 0) {
+        //团购select 操作
+        $("#is_group").change(function () {
+            if ($(this).find('option:selected').attr('value') == 1) {
+                $("#group_select").removeClass('hide');
+                is_group = true;
+            } else {
+                $("#group_select").addClass('hide');
+                is_group = false;
+            }
+        });
+
+        //搜索
+        $("#searchButton").click(function () {
+            //判空
+            var search = $("#search").val();
+            if (search.length == 0) {
+                baseUtils.show.redTip("请输入搜索内容");
+                return false;
+            }
+            //搜素
+            $.get("/zbsearch", {"search": search}, function (data) {
+                $(".modal-body").find("table").remove();
+                if (data.data.length > 0) {
+                    //表头
+                    $(".modal-body").eq(0).append("" +
+                        "<table class='table table-hover' id='zbTable'>" +
+                        "<thead><tr><th>选择</th><th>头像</th><th>昵称</th><th>性别</th><th>电话</th></tr></thead>" +
+                        "<tbody></tbody>"
+                        + "</table>");
+                    //表体
+                    for (var i = 0; i < data.data.length; i++) {
+                        $("#zbTable").children("tbody").append("" +
+                            "<tr>" +
+                            "<td><input type='radio' name='eachZb' value=" + data.data[i].user_id + " ></td>" +
+                            "<td><img src=" + data.data[i].wx_avatar + " /></td>" +
+                            "<td>" + data.data[i].wx_nickname + "</td>" +
+                            "<td>" + data.data[i].wx_gender + "</td>" +
+                            "<td>" + data.data[i].phone + "</td>" +
+                            "</tr>");
+                    }
+                }
+            });
+        });
+
+        //点击确定后
+        $(".btn-blue").click(function () {
+            //获取选择值
+            chosenUserId = $("input[type='radio']:checked").val();
+            if (chosenUserId == undefined) {
+                baseUtils.show.redTip("亲，请选择讲师哦~");
+                return false;
+            }
+            var chosenUserName = $("input[type='radio']:checked").parent().nextAll().eq(1).html();
+            $('#purchaser').val(chosenUserName);
+            $("#zbModal").modal("hide");
+        });
+    }
+
+    //提交
+    $("#finish").click(function () {
+        var params = {};
+        //批次名称
+        params['name'] = $("#name").val().trim();
+        if (params['name'] == 0) {
+            window.wxc.xcConfirm('亲！请输入批次名称哦~', 'error');
+            return false;
+        }
+
+        //邀请码数量
+        params['count'] = $("#count").val().trim();
+        if (params['count'] == 0 || isNaN(params['count'])) {
+            window.wxc.xcConfirm('亲！请输入邀请码数量哦~', 'error');
+            return false;
+        } else if (params['count'] > 1000) {
+            window.wxc.xcConfirm('亲！一次限定1000个哦~', 'error');
+            return false;
+        }
+
+        //生效时间
+        params['start_at'] = $("#start_at").val();
+        if (params['start_at'] == 0) {
+            window.wxc.xcConfirm('亲！请输入生效时间哦~', 'error');
+            return false;
+        }
+
+        //失效时间
+        params['stop_at'] = $("#stop_at").val();
+        if (params['stop_at'] == 0) {
+            window.wxc.xcConfirm('亲！请输入失效时间哦~', 'error');
+            return false;
+        }
+
+        //邀请码标题
+        params['card_title'] = $("#card_title").val().trim();
+        if (params['card_title'].length == 0) {
+            window.wxc.xcConfirm('亲！请输入使用规则哦~', 'error');
+            return false;
+        }
+
+        //使用规则
+        params['card_desc'] = $("#card_desc").val();
+        if (params['card_desc'].length == 0) {
+            window.wxc.xcConfirm('亲！请输入使用规则哦~', 'error');
+            return false;
+        }
+
+        //是否属于团购
+        if (is_group) {
+            params['group_config_id'] = $('#group_select').find('option:selected').attr('value');
+            if (chosenUserId == undefined) {
+                window.wxc.xcConfirm('亲！请选择购买用户哦', 'error');
+                return false;
+            } else {
+                params['buy_user_id'] = chosenUserId;
+            }
+        }
+
+        //申请人
+        params['applier'] = $("#applier").val().trim();
+        if (params['applier'] == 0) {
+            window.wxc.xcConfirm('亲！请输入申请人哦~', 'error');
+            return false;
+        }
+
+        //申请原因
+        params['reason'] = $("#reason").val().trim();
+        if (params['reason'] == 0) {
+            window.wxc.xcConfirm('亲！请输入申请原因哦~', 'error');
+            return false;
+        }
+
+        //资源名称+价格+封面
+        params['target_name'] = $("#targetSelect").find("option:selected").text().trim();
+        if (params['target_name'].length == 0) {
+            window.wxc.xcConfirm('亲！请输入对应内容哦~', 'error');
+            return false;
+        }
+        params['price'] = $("#targetSelect").find("option:selected").attr("price").trim();
+        params['img_url'] = $("#targetSelect").find("option:selected").attr("img_url").trim();
+
+
+        //资源类型大选择
+        var type = $("#typeSelect").val();
+        if (type == 0) //专栏
+        {
+            params['payment_type'] = 3;
+            params['resource_type'] = '';
+            params['resource_id'] = '';
+            params['product_id'] = $("#targetSelect").val();
+        }
+        else if (type == 1) //音频
+        {
+            params['payment_type'] = 2;
+            params['resource_type'] = 2;
+            params['resource_id'] = $("#targetSelect").val();
+            params['product_id'] = '';
+        }
+        else if (type == 2) //视频
+        {
+            params['payment_type'] = 2;
+            params['resource_type'] = 3;
+            params['resource_id'] = $("#targetSelect").val();
+            params['product_id'] = '';
+        }
+        else if (type == 3) //图文
+        {
+            params['payment_type'] = 2;
+            params['resource_type'] = 1;
+            params['resource_id'] = $("#targetSelect").val();
+            params['product_id'] = '';
+        }
+        else if (type == 4) //直播
+        {
+            params['payment_type'] = 2;
+            params['resource_type'] = 4;
+            params['resource_id'] = $("#targetSelect").val();
+            params['product_id'] = '';
+        }
+        else if (type == 5) //会员
+        {
+            params['payment_type'] = 3;
+            params['resource_type'] = '';
+            params['resource_id'] = '';
+            params['product_id'] = $("#targetSelect").val();
+        }
+        else if (type == 7) //社群
+        {
+            params['payment_type'] = 2;
+            params['resource_type'] = 7;
+            params['resource_id'] = $("#targetSelect").val();
+            params['product_id'] = '';
+        }
+        //响应等待时间提示
+        baseUtils.show.blueTip("邀请码生成中...");
+        showLoading();
+
+        $.post('/doaddinvite', {'params': params}, function (data) {
+            console.log(params);
+            console.log(data);
+            // return false;
+            var ret = data.ret;
+            if (ret == 0) {
+                hideLoading();
+                window.wxc.xcConfirm('生成成功', 'success', {
+                    onOk: function () {
+                        window.location.href = '/invitecode';
+                    }
+                });
+            }
+            else {
+                hideLoading();//alert(ret);
+                window.wxc.xcConfirm('生成失败', 'error');
+            }
+        });
+    });
+});

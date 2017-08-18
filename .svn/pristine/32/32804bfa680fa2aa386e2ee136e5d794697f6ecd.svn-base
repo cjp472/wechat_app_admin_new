@@ -1,0 +1,145 @@
+/*编辑器默认*/
+table.sortEnabled tr.firstRow th,table.sortEnabled tr.firstRow td{padding-right:20px;background-repeat:no-repeat;background-position:center right;}.selectTdClass{background-color:#edf5fa!important}table.noBorderTable td,table.noBorderTable th,table.noBorderTable caption{border:1px dashed #ddd!important}table{margin-bottom:10px;border-collapse:collapse;display:table}caption{border:1px dashed #DDD;border-bottom:0;padding:3px;text-align:center}th{border-top:1px solid #BBB;background-color:#f7f7f7}table tr.firstRow th{border-top-width:2px}.ue-table-interlace-color-single{background-color:#fcfcfc}.ue-table-interlace-color-double{background-color:#f7faff}td p{margin:0;padding:0}.pagebreak{display:block;clear:both!important;cursor:default!important;width:100%!important;margin:0}ol,ul{margin:0;pading:0;width:95%}li{clear:both}ol.custom_cn{list-style:none}ol.custom_cn li{background-position:0 3px;background-repeat:no-repeat}li.list-cn-paddingleft-1{padding-left:25px}li.list-cn-paddingleft-2{padding-left:40px}li.list-cn-paddingleft-3{padding-left:55px}ol.custom_cn1{list-style:none}ol.custom_cn1 li{background-position:0 3px;background-repeat:no-repeat}li.list-cn1-paddingleft-1{padding-left:30px}li.list-cn1-paddingleft-2{padding-left:40px}li.list-cn1-paddingleft-3{padding-left:55px}ol.custom_cn2{list-style:none}ol.custom_cn2 li{background-position:0 3px;background-repeat:no-repeat}li.list-cn2-paddingleft-1{padding-left:40px}li.list-cn2-paddingleft-2{padding-left:55px}li.list-cn2-paddingleft-3{padding-left:68px}ol.custom_num{list-style:none}ol.custom_num li{background-position:0 3px;background-repeat:no-repeat}li.list-num-paddingleft-1{padding-left:25px}ol.custom_num1{list-style:none}ol.custom_num1 li{background-position:0 3px;background-repeat:no-repeat}li.list-num1-paddingleft-1{padding-left:25px}ol.custom_num2{list-style:none}ol.custom_num2 li{background-position:0 3px;background-repeat:no-repeat}li.list-num2-paddingleft-1{padding-left:35px}li.list-num2-paddingleft-2{padding-left:40px}li.list-dash{}ul.custom_dash{list-style:none}ul.custom_dash li{background-position:0 3px;background-repeat:no-repeat}li.list-dash-paddingleft{padding-left:35px}li.list-dot{}ul.custom_dot{list-style:none}ul.custom_dot li{background-position:0 3px;background-repeat:no-repeat}li.list-dot-paddingleft{padding-left:20px}.list-paddingleft-1{padding-left:0}.list-paddingleft-2{padding-left:30px}.list-paddingleft-3{padding-left:60px}
+.preview_content table,.preview_content tbody{
+    width:100%!important;
+}
+#preview_content img{
+    max-width: 100%;
+}
+
+.preview_con{
+    display: flex;
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+    z-index: 9999999;
+    top:0;
+    left:0;
+    visibility: hidden;
+    -webkit-transition-property: opacity,visibility;
+    transition-duration:0.5s;
+    opacity:0;
+}
+.preview_con.active{
+    visibility: visible;
+    opacity:1;
+}
+
+.preview_box{
+    width:350px;
+    overflow: hidden;
+    border-radius: 40px;
+    background-image:url("/images/admin/communityOperate/pic_mockup.png");
+    background-repeat:no-repeat;
+    background-size: cover;
+    height:730px;
+    position:relative;
+    margin:100px auto;
+    top:-200px;
+    transition-property:top,visibility,opacity;
+    transition-duration:0.5s;
+    visibility: hidden;
+    opacity:0;
+}
+.preview_box.active{
+    opacity:1;
+    visibility:visible;
+    top:0;
+}
+#preview_content{
+    width: 310px;
+    background: #fff;
+    height: 514px;
+    margin: 126px 0 0 21px;
+    overflow: auto;
+    padding:0 5px;
+}
+/*** final ***/
+
+.base_right {
+    min-width: 1000px;
+}
+
+.baseItemWrapper {
+    width: 100%;
+}
+
+.baseTitleLeft {
+    width: 168px;
+    height: 36px;
+    line-height: 36px;
+    padding-left: 40px;
+    float: left;
+    font-size: 14px;
+    color: #353535;
+}
+.starIcon {
+    color: #e64340;
+    margin-left: 3px;
+}
+.baseContentRight {
+    float: left;
+
+}
+.inputDynamicTitle {
+    width: 640px;
+}
+.redBorder {
+    border: 1px solid #F00;
+}
+.baseItemTitle {
+    margin-top: 30px;
+    height: 36px;
+}
+
+.baseItemContent {
+    width: 100%;
+    height: 398px;
+    margin: 30px 0 0 0;
+}
+.baseItemFileUpload {
+    width: 100%;
+    height: 86px;
+    margin: 20px 0 0 0;
+}
+.resDescribe {
+    width: 700px;
+}
+
+.uploadFileBtnWrapper {
+    height: 36px;
+    width: 100%;
+}
+.uploadFileBtn {
+    float: left;
+}
+input.selectPdfFileInput[type=file] {
+    display: none;
+}
+.uploadFileTip {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    margin: 0 20px 0;
+    color: #888;
+}
+
+.baseItemTip {
+    margin: 30px 0 0 165px;
+    width: 100%;
+    font-size: 12px;
+    color: #888888;
+}
+
+.horizontalDivideLine {
+    height: 1px;
+    margin: 20px 40px 0 40px;
+    background-color: #f2f2f2;
+}
+
+.releaseDynamicBtn {
+    margin: 30px 0 120px 168px;
+}

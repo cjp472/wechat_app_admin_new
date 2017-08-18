@@ -1,0 +1,55 @@
+.exportRedPacket
+{
+    float: left;
+    width: 93px;
+    height: 34px;
+    border-radius: 4px;
+    background-color: #3a7bd5;
+    margin:0 0 0 0 ;
+    font:normal normal normal 14px/30px 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+    color: #ffffff;
+    border: none;
+    text-align: center;
+}
+
+/*头部*/
+.header
+{
+    width: 100%;
+}
+/*搜索框*/
+.searchArea
+{
+    width: 100%;
+    height: 34px;
+    margin: 10px 0 20px 0 ;
+}
+.searchButtonArea
+{
+    float: right;
+}
+.searchInputArea
+{
+    float: right;
+}
+.searchSelectArea
+{
+    float:right;
+    margin-right: 10px;
+}
+
+/*table区*/
+.content
+{
+    width: 100%;
+}
+td:nth-child(4)
+{
+    max-width: 300px !important;
+    word-break:break-all !important;
+    word-wrap:break-word !important;
+    line-height: 30px!important;
+}
+
+

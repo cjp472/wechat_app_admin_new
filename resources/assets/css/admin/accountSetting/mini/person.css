@@ -1,0 +1,137 @@
+.content{
+    padding: 20px 20px 30px;
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+}
+/*头部样式*/
+.nav-tabs{
+    position: relative;
+}
+.nav-tabs > li > a {
+    border-radius: 0;
+    margin-right: -1px;
+    border: 1px solid #dcdcdc;
+    color: #353535;
+    background:#f4f4f4;
+}
+.nav-tabs .modelHelp{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+
+
+.miniPersonSwitch {
+    margin-top: 25px;
+    position: relative;
+    width: 100%;
+    height: 147px;
+    box-sizing: border-box;
+    padding: 20px;
+    background: #f6f8fa;
+    border: 1px solid #eceff1;
+}
+
+
+.miniPersonSwitch .title {
+    width: 100%;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.miniPersonSwitch .intro {
+    margin-top: 10px;
+    width: 870px;
+    font-size: 12px;
+    line-height: 24px;
+    height: 48px;
+}
+
+.miniPersonSwitch .helpBtn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #2a75ed;
+}
+
+.miniPersonSwitch .helpBtn span {
+    cursor: pointer;
+}
+
+.Switch {
+    position: absolute;
+    width: 80px;
+    height: 40px;
+    top: 39px;
+    right: 20px;
+    border-radius: 20px;
+    padding: 0 9px 0 9px;
+    color: white;
+    transition: 0.2s all ease;
+    font-size: 14px;
+    line-height: 40px;
+    cursor: pointer;
+}
+.SwitchCircle {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    top: 2px;
+    right: 2px;
+    background: white;
+    border-radius: 18px;
+    transition: all 0.5s ease;
+}
+
+.Switch.opening {
+    background: #2fce6f;
+    text-align: left;
+}
+.Switch.opening .SwitchCircle{
+    transform: translateX(0);
+}
+.Switch.closing {
+    background: #c2c2c2;
+    text-align: right;
+}
+.Switch.closing .SwitchCircle{
+    transform: translateX(-40px);
+}
+
+.mainContainer {
+    padding: 30px 20px;
+}
+.mainContainer>div{
+    float: left;
+    width: 50%;
+}
+.mainContainer .topText{
+    margin-bottom: 30px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #243042;
+}
+
+.mainContainer .bottomText {
+    margin-top: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #888888;
+}
+.bottomBtnContent{
+    width: 150px;
+    text-align: center;
+    margin-top: 35px;
+}
+.imgContent .firstImg{
+    margin-right: 40px;
+}
+
+.noCodeContent{
+    width: 150px;
+    height: 150px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: solid 1px #f0f0f0;
+}

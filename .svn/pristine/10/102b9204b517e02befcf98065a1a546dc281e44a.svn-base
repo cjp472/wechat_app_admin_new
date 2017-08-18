@@ -1,0 +1,63 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: breeze
+ * Date: 17/07/2017
+ * Time: 21:19
+ */
+
+namespace App\Http\Controllers\Tools;
+
+
+use Illuminate\Http\Request;
+
+class AudioUtils
+{
+    /**
+     * 获取需要压缩的音频对象
+     * @param $table_name
+     * @param $app_id
+     * @param $id
+     * @param $audio_url
+     * @param $audio_length
+     * @return \stdClass
+     */
+    public static function getAudioObj($table_name, $app_id, $id, $audio_url, $audio_length) {
+        $audioObj = new \stdClass();
+        $audioObj->table_name = $table_name;
+        $audioObj->app_id = $app_id;
+        $audioObj->id = $id;
+        $audioObj->audio_url = $audio_url;
+        $audioObj->audio_length = $audio_length;
+
+        return $audioObj;
+    }
+
+    /***
+     * 音频对象放入request的音频列表里
+     * @param Request $request
+     * @param $audioObj
+     * @internal param $imageObj
+     */
+    public static function pushAudioList(Request $request, $audioObj) {
+        if (!empty($request)) {
+            if (empty($request->audio_list)) {
+                $request->audio_list = [];
+            }
+            $request->audio_list[] = $audioObj;
+        }
+    }
+
+    /**
+     * 音频资源压缩
+     * @param Request $request
+     * @param $app_id
+     * @param $id
+     * @param $audio_url
+     * @param $audio_length
+     */
+    public static function audioCompress(Request $request, $app_id, $id, $audio_url, $audio_length) {
+        $audioObj = self::getAudioObj('t_audio', $app_id, $id, $audio_url, $audio_length);
+        self::pushAudioList($request, $audioObj);
+    }
+}

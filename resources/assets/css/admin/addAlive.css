@@ -1,0 +1,466 @@
+/******************************************标题*****************************************/
+.header
+{
+    width: 100%;
+    height: 50px;
+    margin-top: -40px;
+}
+.header h3
+{
+    width: 100%;
+    height: 50px;
+    font: normal normal normal 14px/50px 'Microsoft YaHei';
+    color: #3e3e3e;
+    padding-left: 20px;
+    border-bottom: 1px solid #ececec!important;
+}
+
+
+/*******************************************内容*****************************************/
+.content
+{
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+/*****************************************每一行输入***********************************/
+.aliveInputArea
+{
+    width: 100%;
+    min-height: 60px;
+    margin: 10px 0 40px 10px ;
+    overflow: hidden;
+}
+/*标签*/
+.aliveLabel
+{
+    float: left;
+    width: 150px;
+    height: 34px;
+    padding-left: 10px;
+    font: normal normal normal 14px/34px 'Microsoft YaHei';
+}
+/*右侧输入*/
+.aliveInput
+{
+    float: left;
+}
+/*底下的提示*/
+.aliveTip
+{
+    clear: both;
+    width: 100%;
+    padding-top: 10px;
+    font-size: 12px;
+    color: #b8b8b8;
+    padding-left: 150px;
+}
+.alivetips{
+    line-height: 34px;
+}
+.alivetips a{
+    font-size: 12px;
+    color: #2a75ed;
+}
+.alivetips a:hover{
+    color: #2E64CB;
+}
+
+
+/***************************************宣传封面的封装***************************************/
+.homePicUpload
+{
+    position: absolute;
+    width: 200px;
+    height: 64px;
+    opacity: 0;
+    z-index: 100;
+}
+.homePicClose
+{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 189px;
+    top:-4px;
+    z-index: 200;
+    cursor: pointer;
+}
+.homePicAdd
+{
+    position: absolute;
+    width: 200px;
+    height: 64px;
+}
+.homePicShow
+{
+    position: absolute;
+    width: 200px;
+    height: 64px;
+}
+
+
+/*************************************************封面的封装***********************************/
+.picUpload
+{
+    position: absolute;
+    width: 130px;
+    height: 100px;
+    opacity: 0;
+    z-index: 100;
+}
+.picClose
+{
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    left: 120px;
+    top:-5px;
+    z-index: 200;
+    cursor: pointer;
+}
+.picAdd
+{
+    position: absolute;
+    width: 130px;
+    height: 100px;
+}
+.picShow
+{
+    position: absolute;
+    width: 130px;
+    height: 100px;
+}
+
+
+/**************************************选择产品收费类型******************************/
+.typeSelect
+{
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    border: 1px solid #e8e8e8;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+/*蓝色边框*/
+.blue
+{
+    border:1px solid #2e64cb!important;
+}
+/*产品内容展示*/
+.productShow
+{
+    width: 100%;
+}
+
+
+/******************************************直播时间：~至~*********************************/
+.zhi
+{
+    display: inline-block;
+    width: 25px;
+    height: 34px;
+    text-align: center;
+    line-height: 34px;
+}
+
+
+/*********************************直播类型选择********************************/
+.aliveTypeArea
+{
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+}
+.aliveTypeSelect
+{
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    border: 1px solid #e8e8e8;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.aliveBlue
+{
+    border:1px solid #2e64cb!important;
+}
+/*input file视频*/
+#alive_video_url
+{
+    position: relative;
+    width: 82px;
+    height: 34px;
+    top:-2px;
+}
+/*展示视频信息*/
+#videoShow
+{
+    position: absolute;
+    width: 800px;
+    height: 20px;
+    left: 0;
+    top:75px;
+}
+#videoName
+{
+    float: left;
+    height: 20px;
+    margin-right: 10px;
+}
+/*删除视频*/
+.deleteVideo
+{
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    color: blue;
+}
+
+
+/******************************直播人员管理*******************************/
+/*第一行*/
+.firstLine
+{
+    width: 100%;
+    height: 34px;
+}
+/*第一行的提示*/
+.firstLineLeft
+{
+    float: left;
+    width: 180px;
+    height: 34px;
+    line-height: 34px;
+    color: #a3abba;
+    text-align: center;
+}
+.firstLineRight
+{
+    float: left;
+    width: 180px;
+    height: 34px;
+    line-height: 34px;
+    color: #a3abba;
+    text-align: center;
+    margin-left: 30px;
+}
+/*每一行*/
+.eachLine
+{
+    clear:both;
+    width: 100%;
+    height: 34px;
+    padding-left: 150px;
+    margin:20px 0;
+}
+/*左侧添加人员*/
+.user_name
+{
+    width: 180px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    float: left;
+    border: 1px solid  #e1e6f0;
+    border-radius: 2px;
+    cursor: pointer;
+    color:#a3abba;
+    overflow: hidden;
+}
+/*右侧角色名的区域*/
+.roleNameArea
+{
+    float: left;
+    width: 180px;
+    margin-left: 30px;
+}
+/*角色输入时水平居中*/
+.center
+{
+    text-align: center;
+    border: 1px solid #e1e6f0;
+    box-shadow: none;
+    font-size: 14px;
+    color:#a3abba;
+}
+/*清空*/
+.clear
+{
+    float: left;
+    color: #a3abba;
+    margin-left: 20px;
+    height: 34px;
+    line-height: 34px;
+    cursor: pointer;
+}
+.user_id
+{
+
+}
+
+
+/****************************************新增一行***************************************/
+.addLine
+{
+    width: 390px;
+    height: 36px;
+    background-color: #fafbfc;
+    border: solid 1px #e5e7eb;
+    line-height: 34px;
+    text-align: center;
+    margin-left: 150px;
+    cursor: pointer;
+}
+/*新增的竖线*/
+.shuxian
+{
+    float: left;
+    color: #a3abba;
+    margin-left: 20px;
+    height: 34px;
+    line-height: 34px;
+}
+/*新增里面的删除*/
+.delete
+{
+    float: left;
+    color: #a3abba;
+    margin-left: 20px;
+    height: 34px;
+    line-height: 34px;
+    cursor: pointer;
+}
+
+
+/*尾部*/
+.footer
+{
+    width: 100%;
+}
+#finish
+{
+    width: 160px;
+    height: 42px;
+    border-radius: 4px;
+    background-color: #3a7bd5;
+    border: none;
+    font: normal normal normal 16px/40px 'Microsoft YaHei';
+    color: white;
+    text-align: center;
+    letter-spacing: 2px;
+    display: block;
+    margin: 30px 0 10px 160px;
+}
+
+
+
+/*Modal框*/
+#searchArea
+{
+    width: 100%;
+    height: 34px;
+}
+#search
+{
+    float: right;
+}
+#searchButton
+{
+    float: right;
+}
+#zbTable
+{
+    width: 650px;
+    height: 250px;
+    margin: 10px 0 0 0;
+}
+
+/*专栏单买相关*/
+.package_side_pay
+{
+    margin-top: 20px;
+}
+.single_pay
+{
+
+}
+.checkbox-img
+{
+    width: 14px;
+    height: 14px;
+    background: url(/images/radio_checkbox.png) -78px 0;
+    display: inline-block;
+}
+
+.single_price_div
+{
+    width: 200px;
+    float: right;
+    height: 36px;
+    margin-top: -8px;
+}
+.single_long
+{
+    width: 180px;
+}
+
+/***************************** 添加分类导航 -start-  *****************************************/
+.upload_item_div {
+    position: relative;
+    margin: 55px 0;
+}
+
+.upload_item_title {
+    width: 160px;
+    height: 20px;
+    line-height: 20px;
+    padding-left: 20px;
+    float: left;
+}
+
+.checkBoxWrapper{
+    width: 80px;
+    height: 20px;
+    margin-right: 16px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+input.radio_category {
+    visibility: hidden;
+    vertical-align: top;
+    width: 16px;
+    height: 0px;
+    margin-left: -10000px;
+}
+.radio_category + label.checkboxLabel{
+    display: inline-block;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 4px;
+    left: 0;
+    background: url("/images/check_box_3_states.svg") left center;
+}
+.radio_category:checked + label.checkboxLabel{
+    background: url("/images/check_box_3_states.svg") -24px center;
+}
+.checkboxText{
+    position: absolute;
+    left: 16px;
+    top: 1px;
+}
+
+/***************************** 添加分类导航 -end-  *****************************************/

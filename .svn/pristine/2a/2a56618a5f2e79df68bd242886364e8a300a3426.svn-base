@@ -1,0 +1,145 @@
+
+
+li {
+    list-style: none;
+}
+
+.mainHeader {
+    height: auto;
+    width: 100%;
+}
+.headerContent {
+    height: 76px;
+    padding: 20px 20px;
+    line-height: 36px;
+}
+.exerciseBookName {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    color: #353535;
+}
+.exerciseBookTeacherName {
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    color: #353535;
+    padding-left: 20px;
+}
+.submitSearchPart {
+    height: 36px;
+    float: right;
+}
+.searchContentInput {
+    width: 200px;
+    float: left;
+    margin-right: 20px;
+}
+.submitSearchBtn {
+    float: left;
+}
+
+.mainContent {
+    width: 100%;
+    padding: 0 20px 50px;
+    height: auto;
+}
+.tableHeader {
+    width: 100%;
+    height: 50px;
+    background: #cccccc;
+}
+.tableHeader > div {
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    float: left;
+}
+.tableHeader > div:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+.tableHeader > div:nth-child(4) {
+    width: 10%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(6) {
+    text-align: center;
+}
+
+.tableContent {
+    width: 100%;
+    padding: 0;
+}
+.singleExerciseItem {
+    width: 100%;
+    height: 70px;
+    padding: 20px 0;
+    line-height: 30px;
+    border-bottom: 1px solid #cccccc;
+}
+.singleExerciseItem > div {
+    width: 20%;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.singleExerciseItem > div:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+.singleExerciseItem > div:nth-child(4) {
+    width: 10%;
+    text-align: center;
+}
+.singleExerciseItem > div:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+
+/*********************** 操作部分 -start *************************/
+.singleExerciseItem .exerciseOperateArea {
+    text-align: center;
+}
+.operateList {
+    height: 30px;
+    width: 130px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+.operateList > li {
+    float: left;
+}
+.operateList > li.operate {
+    color: blue;
+    cursor: pointer;
+}
+.operateList > li.verticalGapLine {
+    color: #cccccc;
+}
+
+/*********************** 操作部分 -end*************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

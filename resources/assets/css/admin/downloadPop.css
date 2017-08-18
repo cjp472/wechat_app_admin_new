@@ -1,0 +1,66 @@
+/***从base中剥离的弹框样式**/
+
+
+/**下载邀请码、导出业绩统计、导出推广记录、导出活动名单、开通记录、订单**/
+
+
+/* 导出订单弹出框样式*/
+.downloadPop div.pageTopTitle{
+    width: 630px;
+    height: 52px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: none;
+    background-color: #fafbfc
+}
+span.outPutTime{
+    width:84px;
+    display:inline-block;
+}
+.downloadPop div.pageTopTitle .close{
+    margin:12px;
+}
+.downloadPop .form-control{
+    width: 40%;
+    margin: 0 0 17px 30px;
+}
+.downloadPop label{
+    /*padding-right: 30px;*/
+    margin-left:16px;
+}
+.downloadPop_office{
+    width: 630px;
+    height: 292px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    position: fixed;
+    z-index:1050;
+    top: 25%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 10px;
+}
+.downloadPop div.modal-body{
+    height: 147px;
+    width:580px;
+    margin: 0 auto;
+    padding:30px 0 40px 0;
+}
+.downloadPop div.modal-footer{
+    padding:30px 180px 30px 180px;
+    width:580px;
+    margin:0 auto;
+}
+.modal-footer .btnBlue{
+    margin-left:15px;
+}
+.downloadPop div.declaration{
+    width: 580px;
+    height: 20px;
+    padding-left:117px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    text-align: left;
+    color: #b2b2b2;
+    margin:0 auto;
+}

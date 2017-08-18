@@ -1,0 +1,231 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'exerciseSystem';
+$pageData['barTitle'] = '作业本';
+
+//dump($exercise_book_list);
+dump($exercise_book_role_list);
+
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--弹窗--}}
+    <link type=text/css rel="stylesheet" href="../css/external/jquery-alert.css" />
+    <link type=text/css rel="stylesheet" href="../css/admin/exercise/exerciseBookList.css?{{env('timestamp')}}"/>
+@stop
+
+@section('page_js')
+    {{--弹窗--}}
+    <script type="text/javascript" src="../js/external/jquery-alert.js?"></script>
+    <script type="text/javascript" src="../js/admin/exercise/exerciseBookList.js?{{env('timestamp')}}"></script>
+@stop
+
+@section('base_mainContent')
+
+    <header class="mainHeader">
+        <a class="btnMid btnBlue createExerciseBookBtn" href="/exercise/create_exercise_book">新建作业本</a>
+        <a class="exerciseHelpDoc" href="https://admin.xiaoe-tech.com/help_document" target="_blank">作业系统功能教程</a>
+        <form class="submitSearchPart" action="/exercise/exercise_book_list" method="GET">
+            <input class="inputDefault searchContentInput" name="search_content" type="search"
+                   placeholder="请输入作业本名称" value="{{trim($search_content)}}">
+            <button class="btnMid xeBtnDefault submitSearchBtn" type="submit">搜索</button>
+        </form>
+    </header>
+
+    <main class="mainContent">
+        <div class="tableHeader">
+            <div>名称</div>
+            <div>关联课程</div>
+            <div>老师/助教</div>
+            <div>关联社群</div>
+            <div>作业数</div>
+            <div>操作</div>
+        </div>
+        <div class="tableContent">
+            @foreach($exercise_book_list as $key => $value)
+                <?php
+                    $relevantRes = "";
+                    switch ($value->resource_type) {
+                        case 1:
+                            $relevantRes= "图文：".$value->resource_name;
+                            break;
+                        case 2:
+                            $relevantRes= "音频：".$value->resource_name;
+                            break;
+                        case 3:
+                            $relevantRes= "视频：".$value->resource_name;
+                            break;
+                        case 4:
+                            $relevantRes= "直播：".$value->resource_name;
+                            break;
+                        case 5:
+                            $relevantRes= "专栏：".$value->resource_name;
+                            break;
+                        default:
+                            $relevantRes= "--";
+                            break;
+                    }
+                ?>
+                <div class="exerciseBookItem">
+                    <div title="{{$value->title}}">{{$value->title}}</div>
+                    <div title="{{$relevantRes}}">{{$relevantRes}}</div>
+                    <div>
+                        <?php
+                        if (empty($exercise_book_role_list[$key])) {
+                            echo "--";
+                        } else {
+                            $roleName = "";
+                            foreach ($exercise_book_role_list[$key] as $k => $v) {
+                                if ($v->role_type == 0) {/*老师*/
+                                    $roleName .= $v->wx_nickname."/";
+                                }
+                            }
+                            foreach ($exercise_book_role_list[$key] as $k => $v) {
+                                if ($v->role_type == 1) {/*助教*/
+                                    $roleName .= $v->wx_nickname.",";
+                                }
+                            }
+                            echo $roleName;
+                        }
+                        ?>
+                    </div>
+                    <div title="{{$value->community_name?$value->community_name:"--"}}">{{$value->community_name?$value->community_name:"--"}}</div>
+                    <div>{{$value->exercise_num}}</div>
+                    <div class="exerciseBookOperateArea"
+                         data-resource_id="{{$value->resource_id}}"
+                         data-resource_type="{{$value->resource_type}}"
+                         data-exercise_book_id="{{$value->exercise_book_id}}"
+                    >
+                        <ul class="operateList">
+                            <li class="operate" data-type="role_manage">人员管理</li>
+                            <li class="verticalGapLine">&nbsp;|&nbsp;</li>
+                            <li class="operate" data-type="exercise_list">作业列表</li>
+                            <li class="verticalGapLine">&nbsp;|&nbsp;</li>
+                            <li class="operate" data-type="edit_exercise_book">编辑</li>
+                        </ul>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <div class="list-page">
+            @if(empty($search_content))
+                <?php echo $exercise_book_list->render(); ?>
+            @else
+                <?php echo $exercise_book_list->appends(['search_content' => $search_content])->render(); ?>
+            @endif
+        </div>
+    </main>
+
+@stop
+
+
+@section("base_modal")
+
+    <div class="roleManageWindow" id="roleManageWindow">
+        <div class="windowHeader">
+            <span class="headerText1">人员管理</span>
+            <span class="headerText2">1个作业本仅能设置1位老师（布置/点评作业）和多位助教（点评作业）</span>
+            <div class="windowCloseIcon" id="windowCloseIcon1">
+                <img src="/images/icon_Pop-ups_close.svg">
+            </div>
+        </div>
+        <div class="windowContentRegion1">
+            <div class="windowContentWrapper1">
+                <div class="windowContent1 clearfix" id="windowContent1">
+                    {{--已添加用户信息--}}
+                    <div class="singleUserInfo1">
+                        <img class="singleGuestAvatar1" src="/images/bg_page-home.jpg">
+                        <div class="singleGuestName1" title="allen">allen</div>
+                        <div class="roleTypeRadioWrapper">
+                            <div class="roleTypeRadio">
+                                <span class="circleRadio radioActive" data-role_type="0"></span><span>老师</span>
+                            </div>
+                            <div class="roleTypeRadio">
+                                <span class="circleRadio" data-role_type="1"></span><span>助教</span>
+                            </div>
+                        </div>
+                        <div class="deleteSingleUser">删除</div>
+                    </div>
+                    <div class="singleUserInfo1">
+                        <img class="singleGuestAvatar1" src="/images/bg_page-home.jpg">
+                        <div class="singleGuestName1" title="allen">allen谁问我</div>
+                        <div class="roleTypeRadioWrapper">
+                            <div class="roleTypeRadio">
+                                <span class="circleRadio" data-role_type="1"></span><span>老师</span>
+                            </div>
+                            <div class="roleTypeRadio">
+                                <span class="circleRadio radioActive" data-role_type="0"></span><span>助教</span>
+                            </div>
+                        </div>
+                        <div class="deleteSingleUser">删除</div>
+                    </div>
+                </div>
+            </div>
+            @include("admin.functionManage.localLoading", ["id" => "roleManageLoading"])
+        </div>
+        <div class="windowFooter">
+            <div class="windowFooterTip">
+                保存后，老师可以在店铺[我的-我的作业]布置课程作业
+            </div>
+            <div class="footerBtnWrapper">
+                <div class="btnBlue btnMid addExerciseBookRoleBtn" id="addExerciseBookRole">
+                    添加人员
+                    <ul class="windowHoverBox" id="windowHoverBox">
+                        <li data-type="add_teacher">添加老师</li>
+                        <li data-type="add_assistant">添加助教</li>
+                    </ul>
+                </div>
+                <div class="xeBtnDefault btnMid confirmSaveRoleBtn" id="confirmSaveRole">保存</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="searchUserWindow" id="searchUserWindow">
+        <div class="windowHeader">
+            <span class="headerText1">搜索用户</span>
+            <span class="headerText2"></span>
+            <div class="windowCloseIcon" id="windowCloseIcon2">
+                <img src="/images/icon_Pop-ups_close.svg">
+            </div>
+        </div>
+        <div class="windowSearchArea">
+            <input class="inputDefault windowSearchInput" id="windowSearchInput" placeholder="请输入用户昵称">
+            <img src="/images/search.png">
+            <div class="xeBtnDefault btnMid windowSearchBtn" id="windowSearchBtn">搜索</div>
+        </div>
+        <div class="windowContentRegion2">
+            <div class="windowContentWrapper2">
+                <div class="windowContent2 clearfix" id="windowContent2">
+                    {{--可添加用户信息--}}
+                </div>
+            </div>
+            @include("admin.functionManage.localLoading", ["id" => "searchUserLoading"])
+        </div>
+        <div class="windowFooter2 clearfix">
+            <div class="qrCodeHoverBoxWrapper hide">    {{--暂时隐藏--}}
+                <div class="xeBtnDefault btnMid addUserBtn" id="inviteWeiXinFriend">邀请微信好友</div>
+                <div class="qrCodeHoverBox">
+                    <img class="_closeHoverBox" src="/images/icon_Pop-ups_close.svg" >
+                    <div class="_hoverBoxText">微信扫描二维码<br>邀请微信好友为嘉宾</div>
+                    <div class="_qrCodeImgWrapper" id="_qrCodeImgWrapper">
+
+                    </div>
+                </div>
+            </div>
+            <div class="btnBlue btnMid confirmAddUserBtn" id="confirmSaveAddedUser">确定</div>
+        </div>
+    </div>
+
+@endsection
+
+
+
+
+
+
+
+
+
+
+

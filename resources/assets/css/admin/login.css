@@ -1,0 +1,196 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+body
+{
+    overflow: hidden;
+    background-color: #f2f4f8;
+}
+/****************************************logo区***********************************/
+.logoArea
+{
+    position: absolute;
+    width: 100%;
+    top:10%;
+    text-align: center;
+}
+.logo
+{
+    width: 104px;
+    height: 30px;
+    cursor: pointer;
+}
+.tips{
+    margin-top: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+/**************************************内容区************************************/
+.content
+{
+    width: 320px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top:55%;
+    margin-top: -200px;
+    margin-left: -160px;
+}
+/**************************************标题:微信+账号******************************/
+.loginTitle
+{
+    width: 280px;
+    height: 34px;
+    list-style: none;
+    margin: 0 auto;
+}
+.loginTitle li
+{
+    float: left;
+    width: 139px;
+    height: 100%;
+}
+/*竖线*/
+.line
+{
+    float: left;
+    width: 2px;
+    height: 18px;
+    background-color: #d8d8d8;
+    margin-top: 8px;
+}
+/*微信登录和账号登录的图标*/
+.loginTitle img
+{
+    display: block;
+    float: left;
+    margin: 8px 5px 0 20px;
+    cursor: pointer;
+}
+.loginTitle a
+{
+    display: inline-block;
+    color: #353535;
+    height: 100%;
+    text-decoration: none;
+    font:normal normal normal 18px/34px 'Microsoft YaHei';
+    text-align: center;
+}
+/*微信二维码*/
+.qrCodeArea
+{
+    width: 280px;
+    margin: 10px auto;
+}
+/*二维码的内部框架大小*/
+iframe
+{
+    width: 100%;
+}
+
+/****************************************账号登陆***********************************/
+/*输入框*/
+.loginInput
+{
+    box-sizing: border-box;
+    width: 320px;
+    height: 34px;
+    line-height: 34px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #d0d0d0;
+    padding-left: 10px;
+    font:normal normal normal 14px/34px 'Microsoft YaHei';
+    color: #000!important;
+}
+/*复选框*/
+.loginCheckbox
+{
+    cursor: pointer;
+    float: left;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #c3c3c3;
+    margin: 13px 6px 0 0;
+}
+/*记住密码*/
+.rememberMeHTML
+{
+    display:block;
+    float: left;
+    font: normal normal normal 12px/1.5em 'Microsoft YaHei';
+    color: #576b95;
+    margin-top: 9px;
+}
+/*登录按钮*/
+#submit
+{
+    width: 320px;
+    height: 42px;
+    border-radius: 2px;
+    background-color: #2A75ED;
+    text-align: center;
+    font: normal normal normal 20px/42px 'Microsoft YaHei';
+    color: white;
+    cursor: pointer;
+    border: none;
+    letter-spacing: -0.3px;
+    margin-top:30px;
+}
+/*横线*/
+.horLine
+{
+    width: 320px;
+    height: 1px;
+    background-color: #d8d8d8;
+    margin-top: 30px;
+}
+/*提示*/
+.tip
+{
+    width: 100%;
+    font:normal normal normal 12px/1.5em 'Microsoft YaHei';
+    color: #888888;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/*自动填充去除chrome黄色背景样式*/
+input:-webkit-autofill
+{
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    width: 320px;
+    height: 34px;
+    border-radius: 2px;
+    background-color: #ffffff!important;
+    border: solid 1px #d0d0d0;
+    padding-left: 10px;
+    font:normal normal normal 14px/34px 'Microsoft YaHei';
+    color: #000!important;
+}
+/*placeholder设置*/
+input::-webkit-input-placeholder
+{
+    font:normal normal normal 14px/1.5em 'Microsoft YaHei';
+}
+
+
+
+/*底部*/
+.footerArea
+{
+    position: absolute;
+    width: 100%;
+    bottom: 30px;
+    text-align: center;
+    font:normal normal normal 14px/1.5em 'Microsoft YaHei';
+    letter-spacing: -0.2px;
+    color: #b2b2b2;
+}
+

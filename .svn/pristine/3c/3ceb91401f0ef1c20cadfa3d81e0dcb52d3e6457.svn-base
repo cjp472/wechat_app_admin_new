@@ -1,0 +1,323 @@
+<?php
+
+namespace App\Http\Controllers\Marketing;
+
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Tools\AppUtils;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+
+class InviteController extends Controller
+{
+	protected $app_id;
+
+	public function __construct ()
+	{
+		$this->app_id = AppUtils::getAppID();
+	}
+
+	public function baseSwitch (Request $request)
+	{
+		// 查询数据库状态
+		$has_switch = DB::connection('mysql_config')->table('t_app_module')->where('app_id', $this->app_id)->value('has_invite');
+		$switch     = 1;
+		if ($has_switch > 0) $switch = 0;
+
+		// 更新数据库开关状态
+		$update = DB::connection('mysql_config')->table('t_app_module')->where('app_id', $this->app_id)->update(['has_invite' => $switch]);
+		if ($update > 0) {
+			return response()->json(['code' => 0, 'msg' => '更新成功']);
+		} else {
+			return response()->json(['code' => -1, 'msg' => '更新失败']);
+		}
+	}
+
+	//index
+	public function index (Request $request)
+	{
+		$name = $request->input('name', '');
+
+		$switch = DB::connection('mysql_config')->table('t_app_module')->where('app_id', $this->app_id)->value('has_invite');
+
+		$sql = "
+        SELECT id, img_url_compressed, name, price, created_at, goods_type, ifnull(sum, 0) as sum, invite_poster,distribute_percent,is_show_userinfo,is_member
+        FROM (
+            SELECT t1.id , t1.img_url_compressed, t1.name, t1.price, t1.created_at, t1.goods_type, t2.sum, t1.invite_poster,t1.is_show_userinfo,t1.distribute_percent,t1.is_member
+            FROM (
+                SELECT app_id, id, img_url_compressed, name, price, created_at, 0 as goods_type, invite_poster,is_show_userinfo,distribute_percent,is_member
+                FROM t_pay_products
+                WHERE app_id = '{$this->app_id}' AND state IN (0, 1) AND name like '%{$name}%'
+            ) t1 LEFT JOIN (
+                SELECT app_id, order_id, payment_type, product_id, sum(count) AS sum 
+                FROM t_orders
+                WHERE app_id = '{$this->app_id}' AND order_state = 1
+                GROUP BY product_id
+            ) t2 on t1.app_id = t2.app_id AND t1.id = t2.product_id
+            
+            UNION ALL
+            
+            SELECT t1.id , t1.img_url_compressed, t1.title as name, t1.piece_price as price, t1.created_at, t1.goods_type, t2.sum, t1.invite_poster,t1.is_show_userinfo,t1.distribute_percent, t1.is_member
+            FROM (
+                SELECT app_id, id, img_url_compressed, title, piece_price, created_at, 2 as goods_type, invite_poster,is_show_userinfo,distribute_percent, -1 as is_member
+                FROM t_audio
+                WHERE app_id = '{$this->app_id}' AND audio_state IN (0, 1) and payment_type = 2 AND title like '%{$name}%'
+            ) t1 LEFT JOIN (
+                SELECT app_id, resource_id, sum(count) AS sum 
+                FROM t_orders
+                WHERE app_id = '{$this->app_id}' AND order_state = 1 and resource_type = 2
+                GROUP BY resource_id
+            ) t2 on t1.app_id = t2.app_id and t1.id = t2.resource_id
+            
+            UNION ALL
+            
+            SELECT t1.id , t1.img_url_compressed, t1.title as name, t1.piece_price as price, t1.created_at, t1.goods_type, t2.sum,t1.invite_poster, t1.is_show_userinfo ,t1.distribute_percent,t1.is_member
+            FROM (
+              SELECT app_id, id, img_url_compressed, title, piece_price, created_at, 3 as goods_type,invite_poster, is_show_userinfo,distribute_percent, -1 as is_member
+              FROM t_video
+              WHERE app_id = '{$this->app_id}' AND video_state IN (0, 1) and payment_type = 2 AND title like '%{$name}%'
+            ) t1 LEFT JOIN (
+              SELECT app_id, resource_id, sum(count) AS sum 
+              FROM t_orders
+              WHERE app_id = '{$this->app_id}' AND order_state = 1 and resource_type = 3
+              GROUP BY resource_id
+            ) t2 on t1.app_id = t2.app_id and t1.id = t2.resource_id
+            
+            UNION ALL
+            
+            SELECT t1.id , t1.img_url_compressed, t1.title as name, t1.piece_price as price, t1.created_at, t1.goods_type, t2.sum, t1.invite_poster,t1.is_show_userinfo,t1.distribute_percent,t1.is_member
+            FROM (
+              SELECT app_id, id, img_url_compressed, title, piece_price, created_at, 1 as goods_type,invite_poster,is_show_userinfo, distribute_percent, -1 as is_member
+              FROM t_image_text
+              WHERE app_id = '{$this->app_id}' AND display_state IN (0, 1) and payment_type = 2 AND title like '%{$name}%'
+            ) t1 LEFT JOIN (
+              SELECT app_id, resource_id, sum(count) AS sum FROM t_orders
+              WHERE app_id = '{$this->app_id}' AND order_state = 1 and resource_type = 1
+              GROUP BY resource_id
+            ) t2 on t1.app_id = t2.app_id and t1.id = t2.resource_id
+            
+            UNION ALL
+            
+            SELECT t1.id , t1.img_url_compressed, t1.title as name, t1.piece_price as price, t1.created_at, t1.goods_type, t2.sum,t1.invite_poster,t1.is_show_userinfo, t1.distribute_percent,t1.is_member
+            FROM (
+              SELECT app_id, id, img_url_compressed, title, piece_price, created_at, 4 as goods_type, invite_poster,is_show_userinfo,distribute_percent, -1 as is_member
+              FROM t_alive
+              WHERE app_id = '{$this->app_id}' AND state IN (0, 1) and payment_type = 2 AND title like '%{$name}%'
+            ) t1 LEFT JOIN (
+              SELECT app_id, resource_id, sum(count) AS sum
+              FROM t_orders
+              WHERE app_id = '{$this->app_id}' AND order_state = 1 AND resource_type = 4
+              GROUP BY resource_id
+            ) t2 on t1.app_id = t2.app_id and t1.id = t2.resource_id
+        ) tt1 order by created_at desc";
+
+		$ListInfo = DB::connection('mysql')->select($sql);
+
+		if ($ListInfo) {
+			// 手动分页
+			$page    = $request->input('page', '');
+			$total   = count($ListInfo);
+			$perPage = 10;
+			// 判断当前页数
+			if ($page) {
+				$current_page = $page;
+				$current_page = $current_page <= 0 ? 1 : $current_page;
+			} else {
+				$current_page = 1;
+			}
+			//手动切割结果集
+			$item = array_slice($ListInfo, ($current_page - 1) * $perPage, $perPage);
+			//        echo '<pre>';
+			$paginator = new LengthAwarePaginator($item, $total, $perPage, $current_page, [
+				'path'     => Paginator::resolveCurrentPath(), //生成路径
+				'pageName' => 'page',
+			]);
+
+			foreach ($paginator as $v) {
+				if ($v->distribute_percent == 0) {
+					$v->is_invite          = 0;
+					$v->distribute_percent = '';
+					$v->distribute_price   = '';
+				} else {
+					$v->is_invite        = 1;
+					$v->distribute_price = $v->price * $v->distribute_percent * 0.01;
+					$v->distribute_price = floor($v->distribute_price);
+				}
+
+				if ($v->is_member == 1) {
+					$v->goods_type = 5;
+				}
+			}
+		} else {
+			$paginator = [];
+		}
+
+		//        dump($paginator);
+		return view('admin.marketing.invitation', [
+			'paginator' => $paginator,
+			'name'      => $name,
+			'switch'    => $switch,
+		]);
+	}
+
+	// 邀请卡设置
+	public function set (Request $request)
+	{
+		$id                 = $request->input('id', '');
+		$goods_type         = $request->input('goods_type', '');
+		$distribute_percent = $request->input('distribute_percent', '');
+		$invite_poster      = $request->input('invite_poster', '');
+		//        是否显示用户信息
+		$is_show_userinfo = $request->input('is_show_userinfo', 0);
+
+		if ($id && ($goods_type >= 0)) {
+			// 查询该商品信息是否存在
+			//            dd($goods_type);
+			switch ($goods_type) {
+				case 0:
+					$table_name = "t_pay_products";
+					break;
+				case 1:
+					$table_name = "t_image_text";
+					break;
+				case 2:
+					$table_name = "t_audio";
+					break;
+				case 3:
+					$table_name = "t_video";
+					break;
+				case 4:
+					$table_name = "t_alive";
+					break;
+				case 5:
+					$table_name = "t_pay_products";
+					break;
+				default:
+					$table_name = "";
+			}
+
+			//            dd($table_name);
+			if ($table_name) {
+
+				$exist = DB::connection('mysql')->table($table_name)
+					->where('app_id', $this->app_id)
+					->where('id', $id)
+					->get();
+
+				if ($exist) {
+					if ($distribute_percent >= 0) {
+						$update = DB::connection('mysql')->table($table_name)
+							->where('app_id', $this->app_id)
+							->where('id', $id)
+							->update([
+								'distribute_percent' => $distribute_percent,
+								'invite_poster'      => $invite_poster,
+								'is_show_userinfo'   => $is_show_userinfo,
+								'updated_at'         => date('Y-m-d H:i:s', time()),
+							]);
+
+						if ($update) {
+							return response()->json(['code' => 0, 'msg' => '更新成功']);
+						} else {
+							return response()->json(['code' => -2, 'msg' => '更新失败']);
+						}
+
+					} else {
+						return response()->json(['code' => -1, 'msg' => '参数有误']);
+					}
+				} else {
+					return response()->json(['code' => -1, 'msg' => '商品信息不存在']);
+				}
+			} else {
+				return response()->json(['code' => -1, 'msg' => '商品类型不存在']);
+			}
+		} else {
+			return response()->json(['code' => -1, 'msg' => '参数有误']);
+		}
+
+	}
+
+	//邀请好友免费听
+	public function shareUseList (Request $request, $listType)
+	{
+		$search = $request->input('search', '');
+		$data   = DB::connection('mysql')->table('t_pay_products')
+			->select('id', 'img_url', 'app_id', 'name', 'share_listen_count', 'is_share_listen')
+			->where('app_id', $this->app_id)
+			->where(function($query) use ($listType) {
+				if ($listType === 'member') {
+					return $query->where('is_member', 1);
+				} else {
+					return $query->where('is_member', 0);
+				}
+			})
+			->where('name', 'like', "%{$search}%")
+			->orderby('order_weight', 'desc')
+			->orderby('created_at', 'desc')
+			->paginate(10);
+
+		$product_id_arr = [];
+		foreach ($data as $v) {
+			$product_id_arr[] = $v->id;
+		}
+
+		$product_id_str = implode("','", $product_id_arr);
+		$product_id_str = " ('$product_id_str') ";
+
+		//        count(v1.id) as has_received,count(v2.order_id)as has_purchased,
+
+		//        count(v1.received_at)  AS has_received,
+		//              ifnull(sum(v2.count),0)   AS has_purchased,
+		$sql = "
+            SELECT
+               count(v1.received_at)  AS has_received,
+               count(DISTINCT v2.order_id)   AS has_purchased,
+               v1.*
+            FROM (
+              SELECT app_id,payment_type,product_id,receive_user_id,received_at
+              FROM t_share_relation
+              WHERE app_id = ? AND product_id IN $product_id_str and received_at is not null
+            )v1 LEFT JOIN (
+            SELECT app_id, order_id, user_id, product_id,count FROM t_orders WHERE app_id = ? AND order_state = 1 AND payment_type IN (3, 6) AND product_id IN $product_id_str
+            )v2 ON v1.app_id = v2.app_id AND v1.product_id = v2.product_id AND v1.receive_user_id = v2.user_id GROUP by v1.product_id
+        ";
+
+		$info = DB::select($sql, [$this->app_id, $this->app_id]);
+		foreach ($data as $v) {
+			$v->has_received  = 0;
+			$v->has_purchased = 0;
+			foreach ($info as $v1) {
+				if ($v->id === $v1->product_id) {
+					$v->has_received  = $v1->has_received;
+					$v->has_purchased = $v1->has_purchased;
+				}
+			}
+		}
+
+		return view('admin.marketing.shareUse', compact('data', 'listType', 'search'));
+	}
+
+	public function setShareNum (Request $request)
+	{
+		$app_id = AppUtils::getAppID();
+		$id     = $request->input('id', '');
+		$num    = $request->input('listen_count', '0');
+		$num    = (int)$num;
+		if ($num < 1) {
+			return response()->json(['code' => -1, 'msg' => '领取上限不能小于1']);
+		}
+		$share_knock  = $request->input('share_knock', 0);
+		$updateResult = \DB::table('t_pay_products')
+			->where('id', $id)
+			->where('app_id', $app_id)
+			->update(['is_share_listen' => $share_knock, 'share_listen_count' => $num, 'updated_at' => date('Y-m-d H:i:s')]);
+		if ($updateResult > 0) {
+			return response()->json(['code' => 0, 'msg' => '设置成功']);
+		} else {
+			return response()->json(['code' => -1, 'msg' => '设置失败']);
+		}
+
+	}
+
+}

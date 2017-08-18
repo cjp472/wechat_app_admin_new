@@ -1,0 +1,337 @@
+.revenueInformation{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100% ;
+    height: 100px;
+    border-width: 1px;
+    border-style: none;
+    border-top: 1px solid #ECECEC;
+    border-bottom:1px solid #ECECEC
+}
+.ul-revenue{
+    margin:auto;
+    width: 100%;
+    height: 100px;
+}
+.purchaseTable{
+    width: 100%;
+}
+.purchaseTable th{
+    font:normal bold normal 14px/1.5em 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+    color: #353535;
+    height: 50px;
+    border-top:1px solid #ececec!important;
+    border-bottom:1px solid #ececec!important;
+    text-align: center;
+}
+/*第一栏比较宽，而且全部靠左*/
+.purchaseTable th:nth-child(1)
+{
+    max-width: 50px;
+    text-align: left;
+}
+/*体*/
+.pay_tbody tr
+{
+    border-bottom:1px solid #ececec!important;
+    text-align: center;
+    height: 70px;
+    font:normal normal normal 14px/1.5em 'Microsoft YaHei';
+    letter-spacing: -0.2px;
+    color: #3e3e3e;
+}
+/*所有的第一个td左对齐*/
+td:nth-child(1)
+{
+    max-width: 50px;
+    text-align: left;
+}
+/*头像及昵称*/
+.purchaseTable img
+{
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+    margin: 10px 11px 10px 0;
+    cursor: pointer;
+}
+.imgRight
+{
+    font:normal normal normal 14px/1.5em 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+    /*color: #576b95;*/
+}
+/*购买人数*/
+.sumPayUser{
+    float: left;
+    width: 25%;
+    height: 100%;
+    line-height: 34px;
+}
+/*搜索*/
+.searchArea
+{
+    float: right;
+    width: 100%;
+    height:34px;
+    margin: 10px 0 20px 0;
+}
+.searchSelectArea
+{
+    float: right;
+    margin-right:10px;
+    margin-left: 10px;
+}
+/*计费说明*/
+.paydoc{
+    height: 25px;
+    position: absolute;
+    right: 5%;
+    top: 115px;
+    color: #2e64cb;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.payTitle
+{
+    width: 100%;
+    height: 40px;
+}
+.payTitle ul
+{
+    list-style: none;
+    width: 50%;
+    height: 100%;
+    padding-left: 0;
+    float: left;
+}
+.payTitle li
+{
+    width: 80px;
+    height: 100%;
+    float: left;
+}
+.payTitle a
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    text-decoration: none;
+    color:#000;
+    font:normal normal normal 14px/40px 'Microsoft YaHei';
+}
+.borderBlue
+{
+    border-bottom: 2px solid #2a75ed;
+}
+.exportExcel
+{
+    float: right;
+    margin-top: 4px;
+}
+.account_amount
+{
+    width: 100%;
+    height: 20px;
+    margin-bottom: 25px;
+    margin-top: -20px;
+}
+.money
+{
+    font-size: 24px;
+    width: 100%;
+    height: 20px;
+    margin-bottom: auto;
+}
+.money_extra
+{
+    font-size: 10px;
+    width: 100%;
+    height: 20px;
+    margin-bottom: auto;
+}
+.contract
+{
+    float: right;
+    margin-top: 13px;
+    text-align:left;
+}
+.contract_tel
+{
+    float: left;
+    width: 100%;
+    height: 20px;
+    font-size: 13px;
+    margin-left: -35px;
+}
+.contract_time
+{
+    float: left;
+    width: 100%;
+    height: 20px;
+    font-size: 13px;
+    margin-left: -36px;
+}
+.end_time
+{
+    width: 150px;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+.start_time
+{
+    width: 150px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+.bindWx
+{
+    float: left;
+    width: 100%;
+}
+.get_smscode
+{
+    font-size: 15px;
+}
+.smscode_c
+{
+    height: 300px;
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.code_text{
+    display: inline-block;
+    line-height: 34px;
+    width: 130px;
+    vertical-align: top;
+}
+.code_desc{
+    line-height: 34px;
+    display: inline-block;
+    margin-right: 40px;
+    font-size: 13px;
+}
+.code_extra
+{
+    font-size: 12px;
+    margin-top: 10px;
+}
+.code_num
+{
+    width: 100%;
+    height: 65px;
+    /*margin-top: 30px;*/
+    float: left;
+}
+.code_input{
+    width: 30%;
+    margin-right: 10px;
+}
+.bind_confirm
+{
+    margin-top: -6px;
+}
+.code_xin
+{
+    color: #ff1e1e;
+    margin-right: 5px;
+}
+.sub_title
+{
+    float: left;
+    margin-left: 10px;
+}
+.sub_title_2
+{
+    float: left;
+    /*margin-left: 10px;*/
+}
+.get_code_class
+{
+    color: #337ab7;
+}
+.qrcode_class
+{
+    height: 100%;
+    width: 100%;
+    float: left;
+    margin-left: 120px;
+    margin-top: 40px;
+}
+.tubiao
+{
+    float: left;
+    margin-top: 10px;
+    margin-left: 3px;
+}
+.shuoming
+{
+    margin-left: 100px;
+    font-size: 10px;
+    cursor:pointer;
+}
+.amount_total
+{
+    font-size: 20px;
+}
+.bind_wx_account
+{
+    width: 15%;
+    font-size: 13px;
+    margin-left: 44px;
+}
+.extra_cash
+{
+    font-size: 13px;
+    color: darkgray;
+}
+.extra_detail
+{
+    width: 60%;
+    margin-left: 45px;
+    float: left;
+}
+.extra_1
+{
+    margin-bottom: 3px;
+    font-size: 13px;
+}
+.chang_wx_account
+{
+    margin-left: 155px;
+    font-size: 13px;
+}
+.wx_img_bind
+{
+    width: 30px;
+    height: 30px;
+    margin-top: 17px;
+    margin-left: 12px;
+    float: left;
+}
+.wx_nickname
+{
+    margin-top: 14px;
+    margin-left: 7px;
+    float: left;
+}
+.btn_confirm
+{
+    float: left;
+    margin-left: 150px;
+    margin-top: 15px;
+    width: 100px;
+    height: 33px;
+    border: none;
+    border-radius: 2px;
+    background-color: #2A75ED;
+    color: #fff;
+    text-align: center;
+    font: normal normal normal 14px/30px 'Microsoft YaHei';
+    /* margin: 20px 0 20px 20px; */
+    outline: none;
+    cursor: pointer;
+}

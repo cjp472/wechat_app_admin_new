@@ -1,0 +1,68 @@
+
+$(function(){
+    $manageContent.init();
+});
+
+var $manageContent = {
+
+    type: 0, // 0 表示发布动态，1 表示保存编辑
+
+    init: function(){
+        $manageContent.type = $("#return_type").val();
+        //点击侧边栏离开时的弹框
+        changeSaveFlag(true);
+        // 提交文案
+        $('#releaseDynamic').on('click', function(){
+
+            var resource_id = GetQueryString('resource_id'),
+                resource_type = GetQueryString('resource_type');
+
+            //  获取动态 html内容，返回: <p>hello</p>
+            var ue = UE.getEditor('container');
+            var org_content = ue.getContent();    //  原始html内容
+            // var descrb = ue.getPlainTxt();        //  纯文本
+
+            if (org_content == '' || org_content == undefined) {
+                baseUtils.show.redTip("请输入推广文案");
+                return false;
+            }
+
+            var params = {
+                'resource_id': resource_id,
+                'resource_type': resource_type,
+                'distribute_content' : org_content
+            };
+
+            $manageContent.submitContent(params);
+
+      });
+    },
+
+    // 提交文案的Ajax
+    submitContent: function(params){
+
+        submitUrl = '/chosen/commit_content';
+
+        $.ajax(submitUrl, {
+            type: "POST",
+            dataType: "json",
+            data: params,
+            success: function (result) {
+                if($manageContent.type == 1){
+                    baseUtils.show.blueTip("保存编辑成功");
+                }else{
+                    baseUtils.show.blueTip("推广文案添加成功");
+                }
+                setTimeout(function () {
+                    window.location.href="/chosen/homepage";
+                }, 700);
+            },
+            error: function (xhr, status, err) {
+                baseUtils.show.redTip("服务器出小差了，请稍后再试！");
+                console.log(err);
+            }
+        });
+
+    },
+
+};

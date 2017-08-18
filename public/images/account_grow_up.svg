@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_zhanghu_chenzhang</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M60,30.3703704 C60,13.4311111 46.5688889,0 29.6296296,0 C13.4311111,0 0,13.4311111 0,30.3703704 C0,46.5688889 13.4311111,60 29.6296296,60 C46.5688889,60 60,46.5688889 60,30.3703704 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="60" height="60" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="官网价格" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01-03_账户一览" transform="translate(-672.000000, -198.000000)">
+            <g id="icon_zhanghu_chenzhang" transform="translate(672.000000, 198.000000)">
+                <use id="Fill-" stroke="#2BADE0" mask="url(#mask-2)" stroke-width="8" xlink:href="#path-1"></use>
+                <path d="M14.5704603,32.1054285 C14.1890237,31.7106605 14.1434112,31.0319582 14.4674093,30.5911002 L15.0278252,29.8285531 C15.3523483,29.3869806 15.971834,29.3021815 16.4042657,29.6336156 L23.3744334,34.9758494 C23.8100973,35.3097608 24.5113531,35.2904705 24.9249375,34.9459212 L43.4559307,19.5081051 C43.8765865,19.1576647 44.5359346,19.1879674 44.9235378,19.570763 L45.2472713,19.8904811 C45.6371525,20.2755265 45.6282687,20.9074618 45.2405908,21.2889948 L24.8752568,41.3315254 C24.4816861,41.7188578 23.8548894,41.7143524 23.4719818,41.318062 L14.5704603,32.1054285 Z" id="Fill-" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,102 @@
+<template>
+    <div class="image-part">
+        <div v-show="!banner_item.image_url" class="tip-wrapper">
+            <img src="/images/admin/shopDiy/icon-pic-sidebar@2x.png"/>
+            <div class="tip-text">添加图片，建议尺寸：750*280px</div>
+        </div>
+        <img v-show="banner_item.image_url" :src="banner_inside_item.image_url" />
+
+        <input @change="uploadImage" type="file" class="pic_input_banner" value="" accept="image/jpeg,image/png,image/gif,image/bmp"/>
+
+        <img v-show="banner_item.image_url" @click="clearFile" src="/images/admin/shopDiy/icon-close@2x.png" class="pic_close_banner"/>
+
+    </div>
+</template>
+
+
+<script>
+    import EventBus from '../../../libs/eventbus';
+//
+
+    export default {
+        props:['banner_inside_item','index'],
+        data:function () {
+              return {
+                  file:null,
+                  banner_item:this.banner_inside_item
+              }
+        },
+        created:function () {
+
+        },
+        methods:{
+            //上传图片
+            uploadImage: function (e) {
+                let targetDom = e.target;
+                let that = this;
+                if(targetDom.files && targetDom.files.length){
+                    let file = targetDom.files[0];
+                    let limitSize = 2;
+
+                    var imgName = file.name;
+                    //alert(imgName);
+                    var ext,idx;
+                    idx = imgName.lastIndexOf(".");
+                    if (idx != -1){
+                        ext = imgName.substr(idx+1).toUpperCase();
+                        ext = ext.toLowerCase( );
+                        //alert(file);
+                        //alert("后缀="+ext+"位置="+idx+"路径="+resourceLocalUrl);
+                        if (ext != 'jpg' && ext != 'png' && ext != 'jpeg' && ext != 'gif'){
+                            //document.all.submit_upload.disabled=true;
+                            baseUtils.show.blueTip("请上传图片类型的文件哦~");
+                            //alert("2.只能上传.jpg  .png  .jpeg  .gif类型的文件!");
+                            return;
+                        }
+                    } else {
+                        document.all.submit_upload.disabled=true;
+                        baseUtils.show.blueTip("请上传图片类型的文件哦~");
+                        //alert("只能上传.jpg  .png  .jpeg  .gif类型的文件!");
+                        return;
+                    }
+
+                    if(that.checkFileSize(file,limitSize)){
+                        this.file = file;
+                        $uploadFile.uploadPic(file,
+                            // 成功回调
+                            function (data) {
+//                            console.log(data.data.access_url)
+                                let img_url = data.data.access_url;
+                                that.banner_item.image_url = img_url;
+                            },
+                            function (data) {
+                                alert("上传失败!");
+                            }
+                        )
+                    }
+                    else{
+                        alert("上传图片大小限制为"+limitSize+"MB");
+                    }
+                }
+            },
+            //检查图片大小
+            checkFileSize: function(file, limitSize) {
+                let fileSize = (file.size / (1024 * 1024)).toFixed(3);
+                if(fileSize > limitSize) {
+                    return false;
+                }
+                return true;
+            },
+            //清除图片
+            clearFile: function () {
+                document.querySelectorAll('input[type="file"]')[this.index].value = '';
+                this.file = null;
+                this.banner_item.image_url = '';
+            },
+        }
+    }
+
+
+</script>
+
+

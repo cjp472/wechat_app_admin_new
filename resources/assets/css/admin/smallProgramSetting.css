@@ -1,0 +1,33 @@
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+}
+/********************************************共用标题区************************************/
+
+.content
+{
+    width: 100%;
+    height: 540px;
+    position: relative;
+}
+.imgArea
+{
+    width: 294px;
+    height: 320px;
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+}
+.content img
+{
+    width: 294px;
+    height: 284px;
+}
+.building
+{
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}

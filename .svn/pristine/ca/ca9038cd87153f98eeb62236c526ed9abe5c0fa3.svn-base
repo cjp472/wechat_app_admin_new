@@ -1,0 +1,185 @@
+
+
+
+
+div.content{
+    padding: 30px;
+}
+
+.hasAddItem{
+    margin-top: 20px;
+    border-top: solid 1px #f2f2f2;
+}
+
+/*初始化当前已选定列表样式*/
+.list_item {
+    position: relative;
+    height: 85px;
+    /*margin: 0 20px;*/
+    border-bottom: solid 1px #f2f2f2;
+}
+.list_item:hover {
+    background-color: #f6faff;
+    border-bottom: solid 1px #deeeff;
+}
+
+.type_icon {
+    width: 44px;
+    height: 85px;
+    padding: 31px 20px 30px 0;
+    float: left;
+}
+.cover_img {
+    width: 60px;
+    height: 45px;
+    margin: 20px 0;
+    float: left;
+}
+.item_desc {
+    margin: 20px 0 0 10px;
+    float: left;
+}
+.item_desc .titleMsg{
+    min-width: 400px;
+    height: 60px;
+    line-height: 47px;
+    color: #666;
+    padding-left: 10px;
+}
+.closeItem{
+    margin:31px;
+}
+
+/*弹窗添加商品样式 2017-6-26有补充*/
+.addBox{
+    width:640px;
+    height: 600px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    position: fixed;
+    z-index:1050;
+    top: 15%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 10px;
+}
+.searchHeader{
+    height: 56px;
+    padding-bottom: 20px;
+}
+.searchHeader input{
+    width: 240px;
+    height: 36px;
+    padding-left: 5px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #dcdcdc;
+}
+.searchHeader button{
+    width: 80px;
+    height: 36px;
+    border-radius: 2px;
+    background-color: #fafbfc;
+    border: solid 1px #e5e7eb;
+}
+.initList{
+    border-top: 1px solid #e5e5e5;
+}
+.clicked{
+    color: #2a75ed !important;
+    border-bottom:2px solid #2a75ed;
+}
+.listBox{
+    height: 349px;
+    overflow-y: scroll;
+}
+/*弹框中间选项样式*/
+.listItem{
+    list-style: none;
+    padding-left: 0;
+}
+.listItem li{
+    height:70px;
+    line-height: 69px;
+    border-bottom:1px solid #f2f2f2;
+}
+.listItem li div{
+    display: inline-block;
+    width:247px;
+}
+.listItem li div img{
+    width:40px;
+    height:30px;
+}
+.listItem li div span{
+    width:200px;
+    height: 69px;
+    margin-left:0px;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+.listItem span{
+    display:inline-block;
+    margin-left:50px;
+}
+.downloadPop div.modal-footer{
+    padding: 30px 180px 30px 180px;
+    width: 580px;
+    margin: 0 auto;
+}
+.downloadPop div.pageTopTitle {
+    width: 630px;
+    height: 52px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: none;
+    background-color: #fafbfc;
+}
+.downloadPop div.modal-body{
+    height: 475px;
+    width: 580px;
+    margin: 0 auto;
+    padding: 30px 0 40px 0;
+}
+.downloadPop label{
+    margin-left:16px;
+}
+.modal-footer .btnBlue {
+    margin-left:15px;
+}
+.downloadPop div.pageTopTitle .close{
+    margin:12px;
+}
+/*弹窗列表内容样式*/
+.listBox{
+    height: 349px;
+    overflow-y: scroll;
+}
+.listItem{
+    list-style: none;
+    padding-left: 0;
+}
+.listItem li{
+    height:70px;
+    line-height: 69px;
+    border-bottom:1px solid #f2f2f2;
+}
+.listItem li div{
+    display: inline-block;
+    width:247px;
+}
+.listItem li div img{
+    width:40px;
+    height:30px;
+}
+.listItem li div span{
+    width:200px;
+    height: 69px;
+    margin-left:0px;
+    overflow: hidden;
+    vertical-align: bottom;
+}
+.listItem span{
+    display:inline-block;
+    margin-left:50px;
+}

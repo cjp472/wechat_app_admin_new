@@ -1,0 +1,445 @@
+/*create page style - start*/
+.content{
+    padding:30px 100px 30px 100px;
+    width:100%;
+    height:100%;
+}
+.discountBox{
+  width: 320px;
+  height: 360px;
+  padding:40px;
+  background-color: #fafbfc;
+  border: solid 1px #e3e3e3;
+  text-align: center;
+  margin:50px;
+  float:left;
+}
+.discountStyle{
+  margin:20px auto 6px;
+  width: 100px;
+  height: 28px;
+  font-size: 20px;
+  color: #353535;
+
+}
+.tinyTip{
+  color: #a3abba;
+}
+.listContent{
+  width: 238px;
+  height: 20px;
+  margin:20px auto 75px;
+  color: #243042;
+}
+/*end*/
+
+/*优惠券index样式 -start*/
+/*thead*/
+.pageContent{
+    padding:20px;
+}
+
+.searchBox{
+    margin-top:-1px;
+    border-top:1px solid #dcdcdc;
+    padding:20px 0 20px 0;
+    width:100%;
+    height:76px;
+
+}
+.new_ticket{
+    float:left;
+}
+
+.searchSelectBox select{
+  margin:0 10px;
+  width: 86px;
+  height: 36px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #dcdcdc;
+  float:right;
+}
+.searchOutBox{
+  margin:0 10px;
+  float:right;
+}
+.searchInputBox{
+  width: 240px;
+  height: 36px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #dcdcdc;
+  float:right;
+  padding-left:10px;
+}
+.searchBtn{
+    float:right;
+}
+
+/*input.inputDefault{
+  width:156px;
+}*/
+.couponSelect{
+  padding:8px 8px;
+}
+
+.tab_type{
+  width: 80px;
+  height: 36px;
+  line-height:36px;
+  background-color: #fafbfc;
+  border: solid 1px #dcdcdc;
+  text-align:center;
+  /*display:inline-block;*/
+  float:left;
+  border-bottom:none;
+  border-right:none;
+}
+.tab_type:last-child{
+  border-right:1px solid #dcdcdc;
+}
+.tab_active{
+  height:37px;
+  z-index: 500;
+  background-color: #fff;
+  border-bottom: solid 1px #fff;
+
+}
+.tab_box{
+    overflow: hidden;
+}
+.table>thead>tr.th>th{
+    padding:3px;
+}
+#dropdown-toggle{
+  height:36px;
+  line-height: 36px;
+  border-radius: 0 !important;
+}
+/*tbody*/
+.coupontitle{
+  text-align:left;
+  clear:both;
+}
+.nameTip{
+  float:left;
+  font-size: 12px;
+  color: #ffffff;
+  width: 52px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 2px;
+  background-color: #76a3ea;
+}
+.descTip{
+  font-size: 12px;
+  text-align: center;
+  color: #888888;
+
+}
+.ta_calendar table td{
+  line-height: 2.2;
+}
+.operation{
+  list-style: none;
+  float:right;
+
+}
+.operation li{
+  float:left;
+  color:#eee;
+}
+/*end*/
+
+/*创建优惠券列表统一样式*/
+/*start*/
+.formContent{
+  padding:20px 30px;
+}
+.formContent table tr{
+  vertical-align:top;
+  height:64px;
+}
+.notice{
+  background:url(/images/admin/marketing/coupon/notice.svg) no-repeat;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+}
+input.func{
+  width: 80px;
+  height: 34px;
+  border-radius: 2px;
+  background-color: #fbfdff;
+  border: solid 1px #dcdcdc;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+.funcClick{
+  background: url(/images/admin/marketing/coupon/listcheck.png) no-repeat 66px 20px;
+  border:  solid 1px #2a75ed !important;
+}
+.msgTitle{
+  border-left:solid 2px #2a75ed;
+  height: 22px;
+  width:100px;
+  font-family: PingFangSC;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  color: #353535;
+  font-weight:bold;
+  padding-left:8px;
+  position:relative;
+  left:-8px;
+  margin-top:15px;
+}
+.radioBox{
+  margin-bottom:15px;
+}
+.plusArea{
+  width: 118px;
+  height: 34px;
+  line-height:29px;
+  border-radius: 5px;
+  background-color: #fff;
+  border: dashed 1px #2a75ed;
+  font-family: PingFangSC;
+  font-size: 14px;
+  text-align: center;
+  color: #2a75ed;
+}
+
+div.dateBox{
+  width:240px;
+  height:36px;
+}
+input.inputDefault{
+  width:240px;
+}
+.timeTip{
+  float:left;
+  font-size: 12px;
+  line-height: 36px;
+  padding:0 10px;
+}
+.theText{
+  padding:0 8px;
+}
+.redKey{
+    /*vertical-align: top;*/
+    position: relative;
+    left: 0;
+    top: 0;
+    font-size: 20px;
+    color: red;
+}
+.aboutThePop{/*帮助提示*/
+  display:inline-block;
+  position:relative;
+  cursor: help;
+  padding-left:21px;
+  color: #2a75ed;
+  background:url(/images/admin/marketing/coupon/notice.svg) no-repeat;
+  background-position: 1px 5px;
+}
+
+.aboutContent{
+  display: none;
+  height:132px;
+  width:400px;
+  position:absolute;
+  left: 144px;
+  bottom:-87px;
+  border: 1px solid #eee;
+  padding: 15px;
+  background-color: #fff;
+  color: #666;
+  box-shadow: 5px 5px 10px 0 rgba(0,0,0,.3);
+}
+.aboutThePop:hover .aboutContent{
+  display: block !important;
+}
+
+.remindBox{/*文本框下的提醒框*/
+  margin:10px 0 30px 0;
+  padding:0 3px;
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  background-color: #daf1ff;
+  border: solid 1px #a1daff;
+  font-size: 12px;
+  text-align: left;
+  color: #578ce2;
+}
+.remindTop{
+    width: 100%;
+    height: 34px;
+    line-height: 34px;
+    padding: 0 10px;
+    background-color: #fafbfc;
+}
+.remindTop a{
+  float:right;
+}
+.couponNum{
+  width:120px;
+  padding-left:10px;
+}
+
+input.inputStyle{
+  padding-left: 5px; 
+  width: 240px;
+  height: 36px;
+  border-radius: 2px;
+  border: solid 1px #eeeeee;
+  margin-right: 10px;
+  transition: all .3s;
+}
+input.inputStyle:focus{
+  border: solid 1px #2a75ed;
+}
+.submitBtm{
+  padding-top:30px;
+}
+.bottomLine{
+  width:100%;
+  border-top:1px solid #f2f2f2;
+}
+.aboutGet{
+  margin-bottom:30px;
+}
+/*弹窗添加商品样式*/
+.addBox{
+  width:640px;
+  height: 631px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  position: fixed;
+  z-index:1050;
+  top: 12%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border-radius: 10px;
+}
+.searchHeader{
+  height: 56px;
+  padding-bottom: 20px;
+}
+.searchHeader input{
+  width: 240px;
+  height: 36px;
+  padding-left: 5px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid 1px #dcdcdc;
+}
+.searchHeader button{
+  width: 80px;
+  height: 36px;
+  border-radius: 2px;
+  background-color: #fafbfc;
+  border: solid 1px #e5e7eb;
+}
+
+div.tab{
+  width: 580px;
+  height: 40px;
+  background-color: #fafbfc;
+  border-bottom: 1px solid #e5e5e5
+}
+div.tab a{
+  display: inline-block;
+  width:100px;
+  height:40px;
+  color: #353535;
+  font-size: 16px;
+  text-align: center;
+  line-height: 40px;
+
+}
+.clicked{
+  color: #2a75ed !important;
+  border-bottom:2px solid #2a75ed;
+}
+.listBox{
+  height: 349px;
+  overflow-y: scroll;
+}
+.listItem{
+  list-style: none;
+  padding-left: 0;
+}
+.listItem li{
+  height:70px;
+  line-height: 69px;
+  border-bottom:1px solid #f2f2f2;
+}
+.listItem li div{
+  display: inline-block;
+  width:247px;
+}
+.listItem li div img{
+  width:40px;
+  height:30px;
+}
+.listItem li div span{
+  width:200px;
+  height: 69px;
+  margin-left:0px;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.listItem span{
+  display:inline-block;
+  margin-left:50px;
+}
+/**页面商品生成list**/
+div.addedList div{
+  background-color: #f6faff;
+  color: #666;
+  margin-top:10px;
+  padding: 0 15px;
+  line-height: 40px;
+  width: 460px;
+  height: 40px;
+}
+div.addedList button{
+  margin-top:8px;
+}
+div.addedList img{
+  width:40px;
+  height:30px;
+  margin: 0 10px 0 50px;
+}
+div.addedList span.spanCon{
+  display: inline-block;
+  vertical-align: bottom;
+  overflow:hidden;
+  height:40px;
+  width:265px;
+
+}
+/*页标*/
+.contentNoneTip{
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    margin-top: 20px;
+    color: #888;
+    font-size: 14px;
+
+}
+
+.couponIndexStudy{
+  float:right;
+}
+.couponTabTitle a{
+  color:inherit;
+}
+.grayBackground{
+  background-color:#EBEBE4;
+}

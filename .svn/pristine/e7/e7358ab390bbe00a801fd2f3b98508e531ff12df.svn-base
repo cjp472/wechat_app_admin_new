@@ -1,0 +1,176 @@
+/*大的包裹*/
+.package_list
+{
+    width: 100%;
+    min-height: 200px;
+    padding: 20px 0 0 20px;
+    overflow: hidden;
+}
+/*上架和下架的标题*/
+.package_flag
+{
+    width: 100%;
+    height: 20px;
+    margin-bottom: 20px;
+}
+/*蓝块*/
+.package_flag_blue
+{
+    float: left;
+    width: 5px;
+    height: 13px;
+    background-color: #2696f1;
+    margin-right: 10px;
+    margin-top: 3px;
+}
+/*文字*/
+.package_flag_word
+{
+    float: left;
+    font-size: 14px;
+    color: #353535;
+}
+
+/*每个小的专栏*/
+.list_item
+{
+    float: left;
+    position: relative;
+    width: 327px;
+    height: 120px;
+    margin-right:5px ;
+    margin-bottom:40px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: solid 1px #f0f0f0;
+    min-width: 327px;
+    min-height: 120px;
+}
+
+
+.list_item:hover
+{
+    margin-top: 0px;
+    transform:translateY(1px);
+    -ms-transform:translateY(1px);
+    -moz-transform:translateY(1px);
+    -webkit-transform:translateY(1px);
+    -o-transform:translateY(1px);
+    box-shadow: 1px 1px 5px rgba(0,0,0,.2);
+}
+
+/*专栏图片*/
+.list_item img
+{
+    vertical-align: middle;
+    width: 38%;
+    height: 80px;
+    border-radius: 4px;
+}
+
+/*复制专栏链接*/
+.linkCopy{
+    position: absolute;
+    right: 6px;
+    top: 10px;
+    width: 19px;
+    height: 19px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.linkCopy img{
+    width: 100%;
+    height: 100%;
+}
+.item_div
+{
+    position: relative;
+    display: inline-block;
+    height: 80px;
+    vertical-align: middle;
+    width:60%;
+    min-width: 169px;
+}
+/*专栏标题*/
+.item_title
+{
+    margin-left: 10px;
+    font-size: 14px;
+    letter-spacing: -0.3px;
+    color: #3e3e3e;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+/*专栏期数*/
+.item_resource
+{
+    position: absolute;
+    left:10px;
+    top:40px;
+    font-size: 13px;
+    width: 100%;
+}
+
+/*编辑+下架*/
+.item_operate
+{
+    position: absolute;
+    top:65px;
+    font-size: 14px;
+    letter-spacing: -0.2px;
+    color: #888888;
+}
+.operate_item_left
+{
+    margin-left: 10px;
+    cursor: pointer;
+}
+.operate_item_left:hover
+{
+    color:#2e64cb;
+}
+
+.operate_item_right
+{
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.operate_item_right:hover
+{
+    color:#2e64cb;
+}
+
+
+/*新增专栏*/
+.item_click
+{
+    cursor: pointer;
+}
+.item_click img
+{
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.operate_create
+{
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #888888;
+}
+.finished {
+    position: absolute;
+    right: 20px;
+    color: #888888;
+}

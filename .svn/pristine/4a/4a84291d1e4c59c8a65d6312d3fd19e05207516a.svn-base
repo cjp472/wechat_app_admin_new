@@ -1,0 +1,406 @@
+.base_mainContent {
+    padding: 0;
+}
+
+.header {
+    width: 100%;
+    height: 62px;
+    line-height: 62px;
+    padding-left: 20px;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.header_level {
+    height: 62px;
+    float: left;
+    margin-right: 7px;
+    font-size: 16px;
+}
+
+.header_level.left {
+    cursor: pointer;
+}
+
+.upload_item_div {
+    margin-top: 35px;
+    padding-left: 50px;
+}
+
+.upload_item_title {
+    width: 130px;
+    display: inline-block;
+    padding-top: 10px
+}
+
+.upload_input_div {
+    display: inline-block;
+    vertical-align: top;
+}
+.upload_input_msg {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgb(184, 184, 184);
+}
+.selectPrice {
+    width: 180px;
+    height: 36px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    border: solid 1px #e1e6f0;
+}
+/*弹出框样式修改*/
+.xcConfirm .popBox .txtBox p {
+    text-align: center;
+    line-height: 150%;
+}
+.xcConfirm .popBox .btnGroup {
+    margin: 0 auto;
+    text-align: center;
+    float: none;
+}
+.xcConfirm .popBox .sgBtn {
+    float: none;
+    display: inline-block;
+}
+
+/*选择分类导航 - start*/
+.category {
+    padding-top: 0;
+    height: 20px;
+}
+.radio_label {
+    margin:0 20px 0 0;
+}
+.checkBoxWrapper{
+    width: 80px;
+    height: 20px;
+    margin-right: 16px;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+}
+input.radio_category {
+    visibility: hidden;
+    vertical-align: top;
+    width: 16px;
+    height: 0px;
+    margin-left: -10000px;
+}
+.radio_category + label.checkboxLabel{
+    display: inline-block;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    top: 4px;
+    left: 0;
+    background: url("/images/check_box_3_states.svg") left center;
+}
+.radio_category:checked + label.checkboxLabel{
+    background: url("/images/check_box_3_states.svg") -24px center;
+}
+.checkboxText{
+    position: absolute;
+    left: 16px;
+    top: 1px;
+}
+
+/*选择分类导航 - end*/
+
+.upload_input_prompt {
+    margin-top: -3px;
+    font-size: 12px;
+    color: #d3afaf;
+}
+
+.upload_type {
+    width: 60px;
+    height: 40px;
+    border: 1px solid #e8e8e8;
+    display: inline-block;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.border_blue{
+    border: 1px solid #2e64cb;
+}
+
+
+.upload_button_div {
+    margin-top: 80px;
+    border-top: solid 1px #f2f2f2;
+}
+.upload_button {
+    margin: 30px 0 98px 180px;
+    width: 100px;
+    height: 36px;
+    background-color: #2a75ed;
+    float: left;
+}
+
+.cancel_button_div{
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+.cancel_upload_button {
+    width: 100px;
+    height: 36px;
+    margin: 30px 0 98px 30px;
+}
+
+.pic_div {
+    display: inline-block;
+    width: 135px;
+    height: 100px;
+    background-color: #d8d8d8;
+    position: relative
+}
+.sign_div {
+    display: inline-block;
+    width: 150px;
+    height: 200px;
+    /*background-color: #d8d8d8;*/
+    position: relative
+}
+
+.pic_div_banner {
+    display: inline-block;
+    width: 268px;
+    height: 100px;
+    /*background-color: #d8d8d8;*/
+    position: relative
+}
+
+.pic_input {
+    position: absolute;
+    opacity: 0;
+    width: 135px;
+    height: 100px
+}
+
+.pic_input_banner {
+    position: absolute;
+    opacity: 0;
+    width: 268px;
+    height: 100px
+}
+
+.pic_close {
+    position: absolute;
+    left: 130px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.pic_upload {
+    /*position: absolute;*/
+    /*left: 130px;*/
+    /*top: 90px;*/
+    width: 32px;
+    /*height: 20px;*/
+    /*cursor: pointer;*/
+}
+
+.pic_upload_success{
+    /*position: absolute;*/
+    /*left: 130px;*/
+    /*top: 90px;*/
+    width: 32px;
+    /*height: 20px;*/
+    /*cursor: pointer;*/
+}
+
+.pic_close_banner {
+    position: absolute;
+    left: 260px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.pic_add {
+    width: 100%;
+    height: 100%;
+}
+
+.pic_show {
+    width: 100%;
+    height: 100%;
+}
+
+.price_unit{
+    margin-left: 5px;
+}
+
+/*日签*/
+.sign_close {
+    position: absolute;
+    left: 170px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.sign_add {
+    width: 150px;
+    height: 200px;
+}
+.sign_show {
+    width:150px;
+    height: 200px;
+}
+
+
+
+.desc_height{
+    height: 100px!important;
+}
+
+
+
+
+/*视频上传进度*/
+.progress_div {
+    margin-top: 10px;
+}
+
+.progress_bar {
+    width: 200px;
+    height: 8px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    display: none;
+    /*display: inline-block;*/
+}
+
+.bar {
+    width: 0px;
+    height: 8px;
+    border-radius: 5px !important;
+    background: #5EC4EA;
+    display: block;
+}
+.delete{
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 5px;
+}
+.delete:hover{
+    color:#2c9de4;
+}
+
+.upload_finish {
+    font-size: 12px;
+    display: none
+}
+/*视频上传进度*/
+
+.fileWrapper {
+    width: 500px;
+}
+.fileInputText {
+    width: 500px;
+}
+.name-progress {
+    border: 1px solid #ccc;
+}
+
+/*试听*/
+.btn_tryAudio{
+    height: 34px;
+    width: 82px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid rgb(173, 173, 173);
+}
+
+.audio_tryUrl{
+    background: none;
+    width: 500px;
+    height: 34px;
+    padding: 0 5px;
+    margin-top: 0px;
+    border-radius: 4px;
+    border: 1px solid rgb(204, 204, 204);
+    line-height: 34px;
+}
+
+.audio_noEffectUrl{
+    background: none;
+    width: 500px;
+    height: 34px;
+    padding: 0 5px;
+    margin-top: 0px;
+    border-radius: 4px;
+    border: 1px solid rgb(204, 204, 204);
+    line-height: 34px;
+}
+
+.tyr_Url{
+    padding: 0;
+    font-size: 12px;
+    border: none;
+    background: none;
+    width: 40%;
+    outline: none;
+}
+
+.btn_cancelTry{
+    margin-right: 6px;
+    float: right;
+    display: inline-block;
+    height: 34px;
+    border: none;
+    padding: 0px;
+    background: none;
+    color: blue;
+    outline: none;
+}
+
+.btn_cancelNoEffect{
+    margin-right: 6px;
+    float: right;
+    display: inline-block;
+    height: 34px;
+    border: none;
+    padding: 0px;
+    background: none;
+    color: blue;
+    outline: none;
+}
+.package_side_pay
+{
+    margin-top: 20px;
+}
+.single_pay
+{
+
+}
+.checkbox-img
+{
+    width: 14px;
+    height: 14px;
+    background: url(/images/radio_checkbox.png) -78px 0;
+    display: inline-block;
+}
+.single_price_div
+{
+    width: 200px;
+    float: right;
+    height: 36px;
+    margin-top: -8px;
+}
+.single_long
+{
+    width: 180px;
+}
+/*自定义单选按钮*/

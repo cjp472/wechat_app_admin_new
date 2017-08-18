@@ -1,0 +1,148 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: marcus
+ * Date: 2017/03/15
+ * Time: 21:34
+ */
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\MessagePush;
+use App\Http\Controllers\Tools\Utils;
+use Illuminate\Support\Facades\DB;
+
+class MessageShellController extends Controller{
+    // 脚本：生成消息推送记录
+    public function createMessageRecords(){
+
+        $time = date('Y-m-d H:i:s',time());
+        // 音频资源
+        $audio_info = DB::connection('mysql')->select("
+            SELECT t1.app_id, t1.id, t1.start_at, t1.title, t2.product_id, t2.product_name, t3.user_id, t4.wx_open_id,
+            t5.template_id, 2 as 'resource_type', t6.wx_app_id from
+                (SELECT * FROM t_audio
+                WHERE app_id in (
+                    SELECT app_id from db_ex_config.t_app_conf
+                    where wx_app_type = 1 and use_collection = 0 and version_type > 1 and bind_at !='0000-00-00 00:00:00')
+                and audio_state = 0 AND push_state = 1 AND start_at < now()
+                ) t1
+            LEFT JOIN t_pro_res_relation t2 on t1.app_id = t2.app_id AND t2.resource_type=2         and t1.id = t2.resource_id      and t2.relation_state=0
+            LEFT JOIN t_purchase t3         on t1.app_id = t3.app_id and t3.payment_type = 3        and t3.product_id = t2.product_id
+            LEFT JOIN t_users t4            on t1.app_id = t4.app_id and t3.user_id = t4.user_id    and t4.account_type = 0
+            LEFT JOIN t_template_conf t5    on t1.app_id = t5.app_id
+            LEFT JOIN db_ex_config.t_app_conf t6 on t1.app_id = t6.app_id and t6.wx_app_type = 1
+            where t3.user_id is not NULL and t5.template_id is not NULL"
+        );
+        // 视频资源
+        $video_info = DB::connection('mysql')->select("
+            SELECT t1.app_id, t1.id, t1.start_at, t1.title, t2.product_id, t2.product_name, t3.user_id, t4.wx_open_id,
+            t5.template_id, 3 as 'resource_type', t6.wx_app_id from
+                (SELECT * FROM t_video
+                WHERE app_id in (
+                    SELECT app_id from db_ex_config.t_app_conf
+                    where wx_app_type = 1 and use_collection = 0 and version_type > 1 and bind_at !='0000-00-00 00:00:00')
+                and video_state = 0 AND push_state = 1 AND start_at < now()
+                ) t1
+            LEFT JOIN t_pro_res_relation t2 on t1.app_id = t2.app_id AND t2.resource_type=3         and t1.id = t2.resource_id      and t2.relation_state=0
+            LEFT JOIN t_purchase t3         on t1.app_id = t3.app_id and t3.payment_type = 3        and t3.product_id = t2.product_id
+            LEFT JOIN t_users t4            on t1.app_id = t4.app_id and t3.user_id = t4.user_id    and t4.account_type = 0
+            LEFT JOIN t_template_conf t5    on t1.app_id = t5.app_id
+            LEFT JOIN db_ex_config.t_app_conf t6 on t1.app_id = t6.app_id and t6.wx_app_type = 1
+           where t3.user_id is not NULL and t5.template_id is not NULL"
+        );
+        // 图文资源
+        $content_info = DB::connection('mysql')->select("
+            SELECT t1.app_id, t1.id, t1.start_at, t1.title, t2.product_id, t2.product_name, t3.user_id, t4.wx_open_id,
+            t5.template_id, 1 as 'resource_type', t6.wx_app_id from
+                (SELECT * FROM t_image_text
+                WHERE app_id in (
+                    SELECT app_id from db_ex_config.t_app_conf
+                    where wx_app_type = 1 and use_collection = 0 and version_type > 1 and bind_at !='0000-00-00 00:00:00')
+                and display_state = 0 AND push_state = 1 AND start_at < now()
+                ) t1
+            LEFT JOIN t_pro_res_relation t2 on t1.app_id = t2.app_id AND t2.resource_type=1         and t1.id = t2.resource_id      and t2.relation_state=0
+            LEFT JOIN t_purchase t3         on t1.app_id = t3.app_id and t3.payment_type = 3        and t3.product_id = t2.product_id
+            LEFT JOIN t_users t4            on t1.app_id = t4.app_id and t3.user_id = t4.user_id    and t4.account_type = 0
+            LEFT JOIN t_template_conf t5    on t1.app_id = t5.app_id
+            LEFT JOIN db_ex_config.t_app_conf t6 on t1.app_id = t6.app_id and t6.wx_app_type = 1
+            where t3.user_id is not NULL and t5.template_id is not NULL"
+        );
+
+
+        $message_info = array_merge($video_info,$audio_info,$content_info);
+        $i = 0;
+        if ($message_info){
+
+            $count = count($message_info);
+
+            foreach($message_info as $v){
+
+                $data['app_id'] = $v->app_id;
+                $data['user_id'] = $v->user_id;
+                $data['user_open_id'] = $v->wx_open_id;
+                $data['template_id'] = $v->template_id;
+                $data['template_type'] = 1;
+                $data['batch_id'] = $v->id;
+
+
+                $pageUrl = AppUtils::getUrlHeader($v->app_id).$v->wx_app_id.'.'.env('DOMAIN_NAME');
+
+//                $target_url = $pageUrl.Utils::getContentUrlWithAppId(2, $v->app_id, $v->resource_type, $v->id, $v->product_id);
+                $target_url = $pageUrl.Utils::contentUrl(null, 2, $v->resource_type, $v->id, $v->product_id, $v->app_id);
+                $data['target_url'] = $target_url;
+
+
+                $json_data = [
+                    "first"=>"您订阅的内容有更新啦！",
+                    "keyword1" => $v->product_name,
+                    "keyword2" => $v->title,
+                    "keyword3" => "见内容详情",
+                    "keyword4" => $v->start_at,
+                    "remark" => "快来点击查看吧"
+                ];
+
+
+                $data['json_data'] = json_encode($json_data);
+                $data['schedule_at'] = $time;
+                $data['created_at'] = date('Y-m-d H:i:s');
+
+
+//                $insertSql = sprintf();
+                $updateSql = "";
+                if ($v->resource_type == 1) {
+                    $updateSql = "update t_image_text ";
+                } else if ($v->resource_type == 2) {
+                    $updateSql = "update t_audio ";
+
+                } else if ($v->resource_type == 3) {
+                    $updateSql = "update t_video ";
+
+                }
+                if (!empty($updateSql)) {
+                    $updateSql = $updateSql. " set push_state = 2
+                    where app_id = ? and id = ? and push_state = ? limit 1";
+                }
+                $insertSql = "insert into t_template_send set app_id = ?, batch_id = ?,user_id = ?, user_open_id = ?,
+                    template_id = ?, target_url = ?, json_data = ?, schedule_at = ?, created_at = ?";
+
+
+
+                DB::beginTransaction();
+                $insertResult = DB::connection('mysql')->insert($insertSql,
+                    [$data['app_id'],$data['batch_id'],$data['user_id'], $data['user_open_id'], $data['template_id'], $data['target_url'],
+                    $data['json_data'], $data['schedule_at'], $data['created_at']]);
+                $updateResult = DB::connection('mysql')->update($updateSql, [$data['app_id'], $v->id, 1]);
+
+                if ($insertResult) {
+                    DB::commit();
+                } else {
+                    DB::rollback();
+                }
+                $i++;
+            }
+        }
+    }
+
+}

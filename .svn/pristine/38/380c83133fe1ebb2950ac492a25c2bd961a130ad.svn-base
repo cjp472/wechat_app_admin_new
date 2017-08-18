@@ -1,0 +1,90 @@
+
+#hp0,#hp1,#hp2,#hp3,#hp4,#hp5,#hp6,#hp7,#hp8{
+    top: -50px;
+    position: relative;
+    height: 1px;
+}
+.hearder_title{
+    text-align: center;
+    margin: 30px auto;
+}
+.hp{
+    cursor: pointer !important;
+}
+.hp:hover{
+    background-color: #f0f0f0;
+}
+p{
+    font-size: 16px;
+    line-height: 28px;
+}
+.tc{
+    text-align: center;
+}
+.p0{
+    line-height: 3px;
+}
+.base_content img{
+    width: 756px;
+    /*height: 484px;*/
+    margin: 18px auto;
+}
+
+.qs, .b{
+    font-weight: bold;
+}
+
+.tn{
+    text-indent: 2px;
+}
+.mnw{
+     min-width: 100px !important;
+ }
+.mlf{
+    margin-left: 56px;
+}
+.co7{
+    color: #777; font-size: 14px;
+    position: absolute; left: 160px;
+}
+
+.po{
+    height: 1px;
+}
+
+.base_mainContent div{
+    padding: 5px 10px;
+    width:100%;
+}
+.ans{
+
+}
+
+.ei{
+     word-spacing: 5px; letter-spacing: 1px;
+}
+
+.red{
+    color: #ff4634;
+}
+
+img.phonePreview {
+    width: 320px;
+}
+
+.red_word {
+    color: #ff4634;
+}
+
+#hp5_wx_service {
+    top: -50px;
+    position: relative;
+    height: 1px;
+}
+
+.red_link {
+    height: 30px;
+    line-height: 30px;
+    color: #ff4634;
+    display: inline-block;
+}

@@ -1,0 +1,66 @@
+/*头部*/
+.header
+{
+    width: 100%;
+    height: 60px;
+    margin-top: -30px;
+}
+.header h3
+{
+    width: 96%;
+    height: 50px;
+    font:normal bold normal 14px/60px 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+    color: #3e3e3e;
+    margin-left: 10px;
+    border-bottom: 1px solid #ececec!important;
+}
+/*内容*/
+.content
+{
+    width: 98%;
+    height:300px;
+    margin-top: -22px;
+}
+
+/*输入*/
+.messageInputArea
+{
+    width: 100%;
+    margin: 0 0 30px 0;
+    height: 34px;
+}
+.messageInputLabel
+{
+    float: left;
+    width: 150px;
+    height: 100%;
+    padding-left: 10px;
+    font:normal normal normal 14px/30px 'Microsoft YaHei';
+}
+.messageInput
+{
+    float: left;
+}
+/*按钮*/
+.footer
+{
+    width: 100%;
+    height: 100px;
+    margin: 20px 0 0 10px;
+    border-top: 1px solid #ececec;
+}
+.editButton
+{
+    width: 160px;
+    height: 42px;
+    border-radius: 4px;
+    background-color: #3a7bd5;
+    border: none;
+    font: normal normal normal 16px/40px 'Microsoft YaHei';
+    color: white;
+    text-align: center;
+    letter-spacing: 2px;
+    display: block;
+    margin:40px 0 10px 140px;
+}

@@ -1,0 +1,498 @@
+<template>
+    <div class="app-design">
+        <!--左边的拖拽预览及增加模块部分-->
+        <div class="app-preview" v-show="!is_show_loading">
+            <index_part_drag
+                    :index_sort="index_sort"
+                    :index_data="index_data"
+                    :add_module_part="add_module_part"
+                    :index_local_data="index_local_data"
+                    :index_data_id="index_data_id"
+                    :version_type="version_type"
+            ></index_part_drag>
+        </div>
+        <!--模块编辑部分-->
+        <div class="app-sidebar">
+            <sidebar_part></sidebar_part>
+        </div>
+        <!--保存模块部分-->
+        <save_bar :submit_data="submit_data" v-show="!is_show_loading"></save_bar>
+        <!--浮层选择数据搜索-->
+        <choose_box></choose_box>
+        <!--全局loading-->
+        <loading v-show="is_show_loading"></loading>
+        <!--提交时全局loading-->
+        <div class="show-submit-loading" v-show="is_show_submit_loading">
+            <loading></loading>
+        </div>
+        <!--全局提示框-->
+        <top_prompt></top_prompt>
+        <notice_prompt></notice_prompt>
+    </div>
+</template>
+
+<script>
+    import NetWork from '../../libs/network';
+    import EventBus from '../../libs/eventbus';
+//    左边的拖拽预览及增加模块部分
+    import index_part_drag from './index_part_drag.vue';
+//    模块编辑部分
+    import sidebar_part from './sidebar_part.vue';
+//    保存模块部分
+    import save_bar from './save_bar.vue';
+//    浮层选择数据搜索
+    import choose_box from './choose_box/choose_box.vue';
+//    全局loading
+    import loading from '../../globalWidget/loading.vue';
+    import top_prompt from '../../globalWidget/top_prompt.vue';
+    import notice_prompt from '../../globalWidget/notice_prompt.vue';
+    //生成唯一id
+    import uuid from '../../libs/generateUUID';
+
+
+    export default{
+        data: function () {
+            return {
+                //版本 1-基础版;2-成长版;3-专业版
+                version_type:1,
+                //模块标号数组
+                index_sort: [],
+                //模块数据数组
+                index_data: [],
+                //模块唯一标识id数组
+                index_data_id:[],
+                //增加模块的数据
+                add_module_part: [],
+                submit_data:{
+                    index_sort:[],
+                    index_data:[],
+                },
+                //是否显示全局样式标识
+                is_show_loading:false,
+                //提交时显示loading的标识
+                is_show_submit_loading: false,
+                //样式显示数据
+                index_local_data: {
+                    category_part:{
+                        list:[
+                            {
+                                icon_url:"/images/admin/shopDiy/icon-1@2x.png",
+                                category_name:"分类一",
+                            },
+                            {
+                                icon_url:"/images/admin/shopDiy/icon-2@2x.png",
+                                category_name:"分类二",
+                            },
+                            {
+                                icon_url:"/images/admin/shopDiy/icon-3@2x.png",
+                                category_name:"分类三",
+                            },
+                            {
+                                icon_url:"/images/admin/shopDiy/icon-4@2x.png",
+                                category_name:"分类四",
+                            }
+                        ]
+                    },
+                    community_part:{
+                        part_title:"小社群",
+                        show_all:true,
+                        list:[
+                            {
+                                feeds_count: 'XX',
+                                member_count: 'XX',
+                                img_url:"",
+                                joinStatus:false,
+                                title:"此处显示小社群名称"
+                            },
+                            {
+                                feeds_count: 'XX',
+                                member_count: 'XX',
+                                img_url:"",
+                                joinStatus:false,
+                                title:"此处显示小社群名称"
+                            }
+                        ]
+                    },
+                    member_part:{
+                        part_title: "频道",
+                        show_all: true,
+                        list: [
+                            {
+                                img_url_compressed: "/images/admin/shopDiy/icon-pic@2x.png",
+                                //标题
+                                name: "此处显示专栏/会员名称",
+                                //简介
+                                summary: "此处显示专栏/会员简介",
+                                //是否是会员
+                                is_member: 0,
+                                //是否更新完
+                                finished_state: 0,
+                                //资源个数（0时不显示）
+                                resource_count: 'X',
+                                //购买人数（0时不显示）
+                                purchase_count: "XX",
+                                //会员未购买图标
+                                member_icon_default: "http://wxresource-10011692.file.myqcloud.com/manual/icon_member_diamond_gray.png",
+                                //会员购买图标
+                                member_icon_highlight: "http://wxresource-10011692.file.myqcloud.com/manual/icon_member_diamond.png",
+                                //购买相关信息
+                                availableInfo: {
+                                    //是否已购买
+                                    available: false,
+                                    //原价（元）
+                                    raw_price: '',
+                                    //最终购买价(元)显示价格，0时不显示
+                                    price: '价格',
+                                    //有效期
+                                    period: "",
+                                    //福利标签
+                                    bonus_price_hint: ""
+                                }
+                            },
+                            {
+                                img_url_compressed: "/images/admin/shopDiy/icon-pic@2x.png",
+                                //标题
+                                name: "此处显示专栏/会员名称",
+                                //简介
+                                summary: "此处显示专栏/会员简介",
+                                //是否是会员
+                                is_member: 0,
+                                //是否更新完
+                                finished_state: 0,
+                                //资源个数（0时不显示）
+                                resource_count: 'X',
+                                //购买人数（0时不显示）
+                                purchase_count: "XX",
+                                //会员未购买图标
+                                member_icon_default: "http://wxresource-10011692.file.myqcloud.com/manual/icon_member_diamond_gray.png",
+                                //会员购买图标
+                                member_icon_highlight: "http://wxresource-10011692.file.myqcloud.com/manual/icon_member_diamond.png",
+                                //购买相关信息
+                                availableInfo: {
+                                    //是否已购买
+                                    available: false,
+                                    //原价（元）
+                                    raw_price: '',
+                                    //最终购买价(元)显示价格，0时不显示
+                                    price: '价格',
+                                    //有效期
+                                    period: "",
+                                    //福利标签
+                                    bonus_price_hint: ""
+                                }
+                            }
+                        ]
+                    },
+                    alive_part:{
+                        part_title:"直播",
+                        show_all:true,
+                        list:[
+                            {
+                                title: '此处显示直播名称',
+                                alive_img_url:"",
+                                //显示标签
+                                start_tag:"直播时间",
+                                //价格（元），为0则不显示
+                                piece_price: '价格',
+                                //是否已购买，true则不显示价格出来
+                                available: false
+                            }
+                        ]
+                    },
+                    question_part:{
+                        part_title:"问答",
+                        list:[
+                            {
+                                img_url_compressed: "",
+                                title: "此处显示问答专区名称",
+                                desc: "此处显示问答区简介",
+                                total_num: "问题数量"
+                            }
+                        ]
+                    },
+                    recommend_part:{
+                        part_title:"最新",
+                        show_all:false,
+                        list:[
+                            {
+                                //资源类型，1-图文，2-音频 3-视频 4-直播 5-活动（活动暂时不显示在首页）
+                                srcType: 1,
+                                //标题
+                                title: "此处显示内容名称",
+                                //略缩图
+                                img_url_compressed: "",
+                                //查看人数
+                                view_count: "查看数量",
+                                //评论人数
+                                comment_count: "评论数量"
+                            },
+                            {
+                                //资源类型，1-图文，2-音频 3-视频 4-直播 5-活动（活动暂时不显示在首页）
+                                srcType: 2,
+                                //标题
+                                title: "此处显示内容名称",
+                                //略缩图
+                                img_url_compressed: "",
+                                //查看人数
+                                view_count: "查看数量",
+                                //评论人数
+                                comment_count: "评论数量"
+                            }
+                        ]
+                    },
+                    activity_part:{
+                        part_title:"活动",
+                        show_all:true,
+                        list:[
+                            {
+                                img_url_compressed:"",
+                                start_at:"此处显示活动时间",
+                                title:"此处显示活动名称"
+                            }
+                        ]
+                    }
+                },
+//                index_sort:[1, 2, 3, 4, 5, 6, 7],
+//                index_data:[
+//                    {
+//                        list:[
+//                            {
+//                                id:"1",
+//                                title:"1",
+//                                image_url:"",
+//                                img_url_compressed:"",
+//                                //跳转类型，0-不跳转， 1-图文，2-音频，3-视频，4-圈子贴子，5-url, 6-专栏
+//                                skip_type:"",
+//                                //跳转目的地,如果不是直接跳转的链接，就都是相应资源id
+//                                skip_target:"",
+//                                skip_title:""
+//                            },
+//                            {
+//                                id:"2",
+//                                title:"2",
+//                                image_url:"",
+//                                img_url_compressed:"",
+//                                //跳转类型，0-不跳转， 1-图文，2-音频，3-视频，4-圈子贴子，5-url, 6-专栏
+//                                skip_type:"",
+//                                //跳转目的地,如果不是直接跳转的链接，就都是相应资源id
+//                                skip_target:"",
+//                                skip_title:""
+//                            },
+//                            {
+//                                id:"3",
+//                                title:"3",
+//                                image_url:"",
+//                                img_url_compressed:"",
+//                                //跳转类型，0-不跳转， 1-图文，2-音频，3-视频，4-圈子贴子，5-url, 6-专栏
+//                                skip_type:"",
+//                                //跳转目的地,如果不是直接跳转的链接，就都是相应资源id
+//                                skip_target:"",
+//                                skip_title:""
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        list:[]
+//                    },
+//                    {
+//                        part_title:"小社群",
+//                        //0则使用默认配置
+//                        status:1,
+//                        list:[
+//                            {
+//                                id:"",
+//                                img_url_compressed:"",
+//                                title:""
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        part_title:"会员",
+//                        //0则使用默认配置
+//                        status:1,
+//                        list:[
+//                            {
+//                                id:"1",
+//                                img_url_compressed:"http://wechatapppro-1252524126.file.myqcloud.com/image/5f901770e1d8b9d71ca9003dd2a66b77.jpg",
+//                                title:"频道一",
+//                                is_member: 0
+//                            },
+//                            {
+//                                id:"1",
+//                                img_url_compressed:"http://wechatapppro-1252524126.file.myqcloud.com/image/5f901770e1d8b9d71ca9003dd2a66b77.jpg",
+//                                title:"频道二",
+//                                is_member: 1
+//                            },
+//                            {
+//                                id:"1",
+//                                img_url_compressed:"http://wechatapppro-1252524126.file.myqcloud.com/image/5f901770e1d8b9d71ca9003dd2a66b77.jpg",
+//                                title:"频道三",
+//                                is_member: 0
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        list:[]
+//                    },
+//                    {
+//                        part_title:"直播",
+//                        //0则使用默认配置
+//                        status:1,
+//                        list:[
+//                            {
+//                                id:"1",
+//                                img_url_compressed:"http://wechatapppro-1252524126.file.myqcloud.com/image/5f901770e1d8b9d71ca9003dd2a66b77.jpg",
+//                                title:"直播一"
+//                            },
+//                            {
+//                                id:"2",
+//                                img_url_compressed:"http://wechatapppro-1252524126.file.myqcloud.com/image/5f901770e1d8b9d71ca9003dd2a66b77.jpg",
+//                                title:"直播二"
+//                            },
+//                            {
+//                                id:"3",
+//                                img_url_compressed:"http://wechatapppro-1252524126.file.myqcloud.com/image/5f901770e1d8b9d71ca9003dd2a66b77.jpg",
+//                                title:"直播三"
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        list:[]
+//                    },
+//                    {
+//                        list:[]
+//                    }
+//                ],
+            }
+        },
+        created:function () {
+            let that = this;
+            that.is_show_loading = true;
+            NetWork.request("load_diy_setting",{},function (data) {
+                if(parseInt(data.code) === 0){
+
+                    let version_type = data.data.version_type;
+                    let index_sort = data.data.index_sort;
+                    let index_data = data.data.index_data;
+
+                    //不是专业版且没有轮播图模块，手动加一个空模块
+                    if(version_type !== 3 && index_sort.indexOf(1)<0){
+                        index_sort.unshift(1);
+                        let add_data = {
+                            list:[]
+                        };
+                        index_data.unshift(add_data);
+
+                    }
+
+                    if(version_type !== 3){
+                        EventBus.$emit('is_show_notice_prompt',{text:'专业版用户可拥有增删模块、模块排序、自定义模块内容等更多高级功能',url:'/upgrade_account',button:'立即升级'})
+                    }
+
+                    that.index_sort = index_sort;
+                    that.index_data = data.data.index_data;
+                    that.add_module_part = data.data.add_module_part;
+                    that.is_show_loading = false;
+                    that.version_type = version_type;
+
+                    let index_data_id = [];
+                    for(let i=0,j=that.index_sort.length;i<j;i++){
+                        index_data_id.push(uuid.init());
+                    }
+                    that.index_data_id = index_data_id;
+                }else{
+                    that.is_show_loading = false;
+                    EventBus.$emit('show_alert_tip_text','读取配置错误，请刷新页面重试');
+//                    alert('读取配置错误，请刷新页面重试');
+                }
+            });
+
+            //监听提交数据的改变
+            EventBus.$on('watch_submit',this.watchSubmit);
+            //提交数据时显示loading
+            EventBus.$on('is_show_submit_loading',function (bool) {
+                that.is_show_submit_loading = bool;
+            });
+        },
+        methods: {
+            //监听拖拽模块的数据变化，同步给保存提交模块
+            watchSubmit:function (dragArr) {
+//                console.log("watchSubmit");
+
+                //还原成可提交的数据格式
+                let index_sort = [];
+                let index_data = [];
+
+                for(let i=0,j=dragArr.length;i<j;i++){
+                    let tmp_sort = dragArr[i].index_sort;
+                    let tmp_data = {};
+                    if(
+                        tmp_sort == 1 ||
+                        tmp_sort == 3 ||
+                        tmp_sort == 4 ||
+                        tmp_sort == 6
+                    ){
+                        tmp_data =  dragArr[i].index_data;
+                    }
+
+                    index_sort.push(tmp_sort);
+                    index_data.push(tmp_data)
+                }
+
+                let result = {
+                    index_sort:index_sort,
+                    index_data:index_data,
+                };
+                this.submit_data = result;
+            }
+        },
+        components: {
+            index_part_drag,
+            sidebar_part,
+            choose_box,
+            save_bar,
+            loading,
+            top_prompt,
+            notice_prompt,
+        }
+    }
+</script>
+
+<style>
+    .app-design {
+        position: relative;
+        width: 100%;
+        background-color: #fff;
+        overflow: hidden;
+        padding-top: 30px;
+        padding-bottom: 70px;
+        min-height: 670px;
+    }
+    .app-preview {
+        position: relative;
+        float: left;
+        width: 375px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        background: #fff;
+        margin-left: 60px;
+    }
+    .app-sidebar {
+        position: relative;
+        float: left;
+        width: 580px;
+        margin-left: 10px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        background: #fff;
+    }
+    .show-submit-loading {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+</style>

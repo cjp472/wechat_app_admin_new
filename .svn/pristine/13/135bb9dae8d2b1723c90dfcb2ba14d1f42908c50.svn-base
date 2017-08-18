@@ -1,0 +1,60 @@
+{{--推广记录--}}
+
+<div id="records" class="recordsContent">
+    <div class="searchContent pull-right">
+        <div class="searchArea">
+            <input id="search_content" class="inputDefault my-input" type="text" placeholder="搜索商品名称"  value="{{$search}}" >
+            <div data-url="/chosen/records" id="searchBtn" class="goodsSearchBtn btnMid xeBtnDefault">搜索</div>
+        </div>
+    </div>
+    <div class="table_Content">
+        <table cellpadding="0"  class="recordTable">
+            <thead>
+            <tr>
+                <th class="record_left">订单序号</th>
+                <th class="record_center order_name">商品名称</th>
+                <th class="record_center">商品单价(元)</th>
+                <th class="record_center">渠道商</th>
+                <th class="record_center">分类比例</th>
+                <th class="record_center">分成金额(元)</th>
+                <th class="record_center">成交时间</th>
+                <th class="record_center">结算状态</th>
+            </tr>
+            </thead>
+            {{--dump($ListInfo)--}}
+            <tbody>
+            @foreach($ListInfo as $key=>$value)
+                <tr class="order_info">
+                    <td class="order_left">{{$value->order_id}}</td>
+                    <td class="order_img">
+                        <img class="img" src="{{$value->img_url_compressed}}" >
+                        <span class="distribute_name">{{$value->distribute_name}}</span>
+                    </td>
+                    <td class="record_center">￥{{$value->price/100, 2}}</td>
+                    <td class="record_center">{{$value->wx_name}}</td>
+                    <td class="record_center">{{$value->distribute_percent}}%</td>
+                    <td class="record_center">￥{{$value->distribute_price/100, 2}}</td>
+                    <td class="record_center">{{$value->created_at}}</td>
+                    @if($value->status)
+                        <td class="record_right">已结算</td>
+                    @else
+                        <td class="record_right orange-color">待结算</td>
+                    @endif
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+
+        @if(count($ListInfo)==0)
+            <div class="contentNoneTip">没有相应的数据</div>
+        @endif
+
+        {{--页标--}}
+        @if(!empty($ListInfo))
+            <div class="list-page">
+                <?php echo $ListInfo->appends(array('search' => $search))->render(); ?>
+            </div>
+        @endif
+
+    </div>
+</div>

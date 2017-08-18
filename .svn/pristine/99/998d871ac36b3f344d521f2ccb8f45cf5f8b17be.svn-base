@@ -1,0 +1,11 @@
+.content{
+    width: 320px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top:55%;
+    margin: -200px 0 0 -160px;
+}
+input{
+    line-height: 40px;
+}

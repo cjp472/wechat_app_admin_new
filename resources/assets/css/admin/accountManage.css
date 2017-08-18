@@ -1,0 +1,214 @@
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+    background-color: #efeff4;
+}
+/********************************************共用标题区************************************/
+
+/*每个块*/
+.content
+{
+    width: 100%;
+
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+/*块内的标题部分*/
+.contentTitle
+{
+    width: 100%;
+    height: 50px;
+    font:normal normal normal 16px/50px 'Microsoft YaHei';
+    color: #243042;
+    border-bottom: 1px solid #f2f2f2;
+    padding-left: 20px;
+}
+/****************************************展示信息***************************************/
+.infoArea
+{
+    width: 100%;
+    height: 34px;
+    margin-top: 10px;
+    font:normal normal normal 14px/34px 'Microsoft YaHei';
+}
+.infoLabel
+{
+    width: 130px;
+    float: left;
+    margin-left: 30px;
+}
+.infoValue
+{
+    float: left;
+    margin-right: 20px;
+}
+.editName{
+    width: 200px;
+}
+.editName[readonly]{
+    border: none;
+    background: #fff;
+    padding-left: 0;
+}
+
+.editContent{
+    display: none;
+    margin-left: 20px;
+}
+.editContent button:first-child{ 
+    vertical-align: top;
+}
+/*新增管理员和编辑管理员共用按钮*/
+.greenButton
+{
+    width: 100px;
+    height: 36px;
+    border: none;
+    border-radius: 2px;
+    background-color: #2A75ED;
+    color: #fff;
+    text-align: center;
+    font:normal normal normal 14px/30px 'Microsoft YaHei';
+    margin: 20px 0 20px 20px;
+    outline: none;
+}
+.pageFoot{
+    margin-bottom:25px;
+}
+/*新增子账号按钮*/
+#addAdminUser
+{
+    margin:20px 0 0 20px;
+}
+/***************************************Modal里的输入*******************************************/
+.inputArea
+{
+    width: 100%;
+    height: 34px;
+    margin-top: 30px;
+}
+.inputLabel
+{
+    width: 100px;
+    float: left;
+    line-height: 34px;
+    margin-left: 50px;
+}
+/*检验账户唯一性的图片*/
+.checkImg
+{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 9px;
+    right: 26px;
+}
+
+/*修改弹窗与样式*/
+
+.editBox{
+    width: 500px;
+    position: fixed;
+    height: 400px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding:0 30px;
+    z-index:400;
+    border-radius: 15px;
+}
+.boxTitle{
+    text-align: center;
+    margin:35px auto;
+    font-size:16px;
+}
+.bodyPage{
+    height:210px;
+}
+.boxFooter{
+    padding:20px 0;
+    margin:0 auto;
+    width:220px;
+}
+.boxFooter .btnBlue{
+    margin-left:15px;
+}
+.leftTitle{
+    width:120px;
+    line-height: 36px;
+    display: inline-block;
+}
+#editCode .inputDefault{
+    width:300px;
+}
+.lostCode{
+    position: relative;
+}
+.lostCode a{
+    position: absolute;
+    right: 20px;
+    top: 7px;
+}
+.boxItem{
+    padding-bottom:12px;
+    position: relative;
+}
+.redMsg{
+    display:none;
+    color:red;
+    position: absolute;
+    top: 35px;
+    left: 125px;
+    font-size: 12px;
+}
+
+
+/*登录账号样式*/
+#loginBox .inputDefault{
+    width:300px;
+}
+#loginBox .editBox{
+    height:340px;
+}
+#loginBox .bodyPage{
+    height:150px;
+}
+
+
+/*手机号验证弹窗样式*/
+.changeBtn{/*更换管理员按钮*/
+    float:right;
+    padding:0 20px;
+}
+#phoneCheck .inputDefault{
+    width:240px;
+}
+#phoneCheck .editBox{
+    height:280px;
+}
+#phoneCheck .bodyPage{
+    height:95px;
+}
+#phoneCheck .leftTitle{
+    width:95px;
+}
+input.borderRed{
+    border: 1px solid red !important;
+}
+.preventClickBtn{
+    background: #ecedef;
+    color: #888888;
+    border:1px solid #e5e7eb;
+}
+.currentCode .successTip,.errorTip{
+    position: absolute;
+    display: none;
+    right: 107px;
+    bottom: 20px;
+    width: 20px;
+    height: 20px
+}

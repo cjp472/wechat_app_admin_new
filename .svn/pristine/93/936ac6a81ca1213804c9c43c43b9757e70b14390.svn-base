@@ -1,0 +1,106 @@
+<template>
+    <div class="index-part-drag">
+        <div class="navigation-bar">
+            <img src="/images/admin/shopDiy/navigation-bar@2x.png"/>
+        </div>
+        <draggable class="drag-group" element="div" v-model="list" :options="dragOptions" :move="onMove"
+                   @start="isDragging=true" @end="isDragging=false">
+            <transition-group type="transition" :name="'flip-list'">
+                <div class="drag-group-item" v-for="element in list" :key="element.order">
+                    <banner v-if="element.index_sort == 1"></banner>
+                    <category v-else-if="element.index_sort == 2" :category_part="index_local_data.category_part"></category>
+                    <community v-else-if="element.index_sort == 3" :community_part="index_local_data.community_part"></community>
+                    <member v-else-if="element.index_sort == 4" :member_part="index_local_data.member_part"></member>
+                    <question v-else-if="element.index_sort == 5" :question_part="index_local_data.question_part"></question>
+                    <alive v-else-if="element.index_sort == 6" :alive_part="index_local_data.alive_part"></alive>
+                    <recommend v-else-if="element.index_sort == 7" :recommend_part="index_local_data.recommend_part"></recommend>
+                </div>
+            </transition-group>
+        </draggable>
+    </div>
+</template>
+
+<script>
+    import draggable from 'vuedraggable';
+    import banner from './banner_part/banner.vue';
+    import category from './category_part/category.vue';
+    import community from './community_part/community.vue';
+    import member from './member_part/member.vue';
+    import alive from './alive_part/alive.vue';
+    import question from './question_part/question.vue';
+    import recommend from './recommend_part/recommend.vue';
+
+    export default {
+        props: ['index_sort', 'index_data', 'index_local_data'],
+        data () {
+            return {
+                list: this.index_sort.map((item, index) => {
+                    return {index_sort: item, order: index + 1, index_data: this.index_data[index]};
+                }),
+                isDragging: false,
+                delayedDragging: false
+            }
+        },
+        methods: {
+            onMove: function () {
+                console.log('onMove');
+            }
+        },
+        computed: {
+            dragOptions () {
+                return {
+                    animation: 150,
+                    group: 'description',
+                    ghostClass: 'ghost'
+                };
+            }
+        },
+        watch: {
+            isDragging (newValue) {
+                if (newValue) {
+                    this.delayedDragging = true;
+                    return
+                }
+                this.$nextTick(() => {
+                    this.delayedDragging = false;
+                    console.log(this.list);
+                })
+            }
+        },
+        components: {
+            draggable,
+            banner,
+            category,
+            community,
+            member,
+            alive,
+            question,
+            recommend,
+        }
+    }
+</script>
+
+<style>
+    .index-part-drag {
+        width: 100%;
+        background-color: #efeff4;
+    }
+
+    .navigation-bar img {
+        width: 100%;
+        height: 65px;
+    }
+
+    .flip-list-move {
+        transition: transform 0.5s;
+    }
+
+    .ghost {
+        opacity: .5;
+        background: #C8EBFB;
+    }
+
+    .drag-group-item {
+        cursor: move;
+    }
+</style>

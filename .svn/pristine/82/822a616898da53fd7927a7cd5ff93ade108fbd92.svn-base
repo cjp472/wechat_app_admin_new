@@ -1,0 +1,113 @@
+<template>
+    <div class="choose-box-part" v-show="is_show_box">
+        <div class="choose-box-mb"></div>
+        <div class="choose-box-main">
+            <div class="choose-box-title">添加商品
+                <img class="choose-box-close" @click="closeChooseBox" src="/images/admin/shopDiy/icon-close@2x.png"/>
+            </div>
+            <search_part></search_part>
+            <tab_part :tab_index="tab_index"></tab_part>
+            <resource_item></resource_item>
+        </div>
+    </div>
+</template>
+
+<script>
+    import EventBus from '../../../libs/eventbus';
+    import search_part from './search_part.vue';
+    import tab_part from './tab_part.vue';
+    import resource_item from './resource_item.vue';
+    export default {
+        data: function () {
+            return {
+                is_show_box: false,
+                tab_index:[],
+            }
+        },
+        created: function () {
+            EventBus.$on('is_show_choose_box',this.showChooseBox);
+            EventBus.$on('get_input_word',this.toSearch);
+            EventBus.$on('change_tab',this.loadData);
+        },
+        methods: {
+            closeChooseBox: function () {
+                this.is_show_box = false;
+            },
+            showChooseBox: function (obj) {
+                this.is_show_box = true;
+                if(obj.type === 'alive'){
+                    this.tab_index = ['直播'];
+                }else if(obj.type === 'member') {
+                    this.tab_index = ['专栏','会员'];
+                }
+            },
+            toSearch: function (word) {
+
+            },
+            loadData: function (index) {
+
+            }
+        },
+        components: {
+            search_part,
+            tab_part,
+            resource_item
+        }
+    }
+</script>
+
+<style>
+    .choose-box-part {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        z-index: 999;
+    }
+    .choose-box-mb{
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 999;
+    }
+    .choose-box-main {
+        background-color: #ffffff;
+        width: 640px;
+        height: 630px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: auto;
+        top: 50%;
+        transform: translate(0, -50%);
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+    .choose-box-title {
+        position: relative;
+        width: 100%;
+        height: 52px;
+        line-height: 52px;
+        font-size: 16px;
+        color: #353535;
+        border-radius: 10px;
+        background-color: #fafbfc;
+        padding-left: 30px;
+    }
+    .choose-box-close {
+        position: absolute;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        top: 50%;
+        right: 20px;
+        margin-top: -6px;
+        cursor: pointer;
+    }
+</style>

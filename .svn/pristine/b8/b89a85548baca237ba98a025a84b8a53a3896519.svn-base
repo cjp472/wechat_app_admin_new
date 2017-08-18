@@ -1,0 +1,29 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Neo
+ * Date: 2017/6/15
+ * Time: 下午3:37
+ */
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\StringConstants;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Tools\Utils;
+
+class ShopDiyControlle extends Controller{
+
+
+    public function shopIndexDiy(){
+        return View('admin.shopDiy.diyIndex');
+    }
+
+    public function shopTest(){
+        return 1;
+    }
+}

@@ -1,0 +1,89 @@
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+    background-color: #efeff4;
+}
+/***********************************************内容***************************************************/
+.content
+{
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden;
+}
+/*标题*/
+h4
+{
+    font:normal bold normal 16px/1em 'Microsoft YaHei';
+    padding-left: 30px;
+    margin:30px 0 30px 0;
+    color: #3e3e3e;
+}
+
+/*输入包裹*/
+.settingInputArea
+{
+    width: 100%;
+    height: 34px;
+    margin-bottom: 20px;
+}
+.settingLabel
+{
+    float: left;
+    padding-left: 30px;
+    font:normal normal normal 14px/34px 'Microsoft YaHei';
+    width: 150px;
+    height: 100%;
+    margin-right: 30px;
+}
+.bigFont
+{
+    font-size: 14px;
+}
+
+/*每一个checkbox和文字的块*/
+.checkArea
+{
+    width: 100px;
+    height: 34px;
+    float: left;
+    margin-left: 30px;
+}
+/*多选框*/
+.mycheckbox
+{
+    float: left;
+    margin-top: 6px;
+    margin-right: 5px;
+}
+/*文字*/
+.mytext
+{
+    float: left;
+    margin-top: 6px;
+}
+/*检验账号唯一性的图片*/
+.checkImg
+{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top:6px;
+    left:450px;
+}
+/*新增账户*/
+#finish
+{
+    width: 160px;
+    height: 42px;
+    border-radius: 4px;
+    background-color: #3a7bd5;
+    border: none;
+    font: normal normal normal 16px/40px 'Microsoft YaHei';
+    color: white;
+    text-align: center;
+    letter-spacing: 2px;
+    display: block;
+    margin: 30px 10px 10px 30px;
+    cursor: pointer;
+}

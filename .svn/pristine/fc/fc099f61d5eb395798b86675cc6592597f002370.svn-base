@@ -1,0 +1,371 @@
+.base_mainContent{
+    padding: 0;
+}
+.formDisabled{
+    background-color: #eee;
+}
+.btn-default{
+    margin: 0;
+}
+input[type=checkbox], input[type=radio]{
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+}
+label{
+    cursor: pointer;
+}
+
+.acitvityHeader{
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px solid #f2f2f2;
+    background-color: #fafbfc;
+    padding-left: 20px;
+    font-size: 16px;
+}
+.createActivity{
+    padding: 10px 40px;
+}
+.baseInfoTitle{
+    line-height: 40px;
+    height: 40px;
+    border-bottom: 1px solid #f2f2f2;
+    font-size: 14px;
+    font-weight: 700;
+    position: relative;
+    margin-left: -10px;
+    text-indent: 10px;
+}
+.baseInfoTitle:before{
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background-color: #3078EA;
+    content: "";
+    left: 0;
+    top: 10px;
+}
+.requiedTag{
+    color: #ff0000;
+    margin-left: -8px;
+}
+.baseInfoWrapper{
+    margin: 30px 0;
+}
+.baseInfoLeftTitle,.tableLeftPart{
+    height: 34px;
+    line-height: 34px;
+    float: left;
+}
+.baseInfoLeftTitle{
+    width: 140px;
+}
+.tableLeftPart{
+    width: 190px;
+}
+
+.baseInfoText{
+    width: 520px;
+}
+.tableInfoText{
+    width: 470px;
+}
+/*时间选择*/
+.infoDateWrapper>span{
+    padding: 9px;
+}
+.baseInfoDate{
+    width: 240px;
+}
+
+.baseInfoRightContent{
+    float: left;
+}
+.chooseTimeWrapper{
+    margin-bottom: 8px;
+}
+
+.previewPic{
+    width: 200px;
+    height: 150px;
+    float: left;
+    overflow: hidden;
+}
+.previewPic .picWrapper{
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: relative;
+}
+.picPreview{
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.pic_close{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 4px;
+    top: 4px;
+    cursor: pointer;
+}
+.noPicPreview{
+    width: 100%;
+    height: 100%;
+    background: url('/images/admin/activity/icon_addpic.png') center center no-repeat;
+    background-color: #eff1f4;
+}
+.uploadPicWrapper{
+    float: left;
+    margin-left: 20px;
+}
+.uploadPicButton{
+    position: relative;
+    width: 60px;
+    height: 36px;
+    overflow: hidden;
+}
+.uploadPicButton input{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+.uploadTips{
+    color: #c3c3c3;
+    margin-top: 10px;
+}
+.contactTitle{
+    margin: 20px 0;
+}
+.requiedTagChoose{
+    float: left;
+    width: 60px;
+}
+.tableTitle{
+    float: left;
+    width: 120px;
+}
+.tableInfoTitle{
+    text-indent: 10px;
+}
+.activityTableLeft{
+    width: 720px;
+    float: left;
+}
+.activityTableRight{
+    float: left;
+}
+.addTableWrapper{
+    padding: 20px;
+    width: 210px;
+    border: 1px #dcdcdc dashed;
+    margin-top: 70px;
+}
+.addTableArea{
+    border: 1px solid #dcdcdc;
+    background-color: #fcfcfc;
+    height: 30px;
+    line-height: 30px;
+    text-indent: 10px;
+    margin-top: 20px;
+    position: relative;
+    cursor: pointer;
+}
+.addTableArea img{
+    float: right;
+    margin: 10px;
+}
+.activityCheck{
+    height: 34px;
+    line-height: 34px;
+}
+.deleteTable{
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+.saveButtonWrapper{
+   border-top: 1px solid #f2f2f2;
+    padding: 30px 0 30px 140px;
+}
+.saveButton{
+    width: 100px;
+    height: 36px;
+    display: inline-block;
+    line-height: 36px;
+    text-align: center;
+    color: white;
+    background: #2a75ed;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.otherInfoTips{
+    color: #949494;
+}
+.noPicPreview input{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+.infoTablePlaceholder{
+    color: #aaa;
+}
+
+/*********************** 票务信息 - start *************************/
+
+.activityTicket {
+
+}
+.activityTicket .baseInfoRightContent{
+    width: 800px;
+}
+.activityTicket .feeTip{
+    line-height: 34px;
+    margin-bottom: 10px;
+    color: #c3c3c3;
+}
+.activityTicket .newTicket{
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    line-height: 36px;
+    color: #3078EA;
+    border: dashed 1px #ccc;
+}
+.activityTicket .newTicket .add{
+    display: inline-block;
+    vertical-align: bottom;
+    line-height: 36px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+.ticketTable{
+    width: 800px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+.payTicketTable {
+    border-bottom: none;
+}
+.payTicketTableBody {
+    border-bottom: 1px solid #EEEEEE;
+}
+.payTicketInfo {
+    height: 60px;
+}
+.ticketTable ul {
+    margin: 0;
+    padding: 0;
+}
+.ticketTable ul li {
+    display: block;
+    list-style: none;
+    line-height: 60px;
+    overflow: hidden;
+    padding: 0;
+}
+.ticketTable ul li .ticketItem{
+    float: left;
+    width: 25%;
+    margin: 0;
+    text-align: center;
+}
+.ticketTable ul li .ticketItemOperate{
+    border-left: 1px solid #EEEEEE;
+}
+.freeTicketItem, .payTicketItem {
+    border: 1px solid #dcdcdc;
+    float: left;
+    width: 150px;
+    margin: 12px 22px 0 25px;
+    text-align: center;
+    padding: 0;
+}
+
+.freeTicketDesc {
+    display: block;
+    margin-top: 10px;
+}
+.ticketExplanationWrapper {
+    height: 72px;
+    margin: 0 0 20px 0;
+}
+.ticketExplanation {
+    float: left;
+    width: 134px;
+    padding-left: 25px;
+    height: 20px;
+    line-height: 20px;
+}
+.ticketTextArea {
+    float: left;
+    width: 455px;
+    height: 72px;
+    line-height: 24px;
+}
+.ticketCheckWrapper {
+    margin: 0 0 10px 0;
+    height: 25px;
+}
+.ticketCheckWrapper input {
+    float: left;
+}
+.ticketCheckWrapper label {
+    line-height: 20px;
+    height: 20px;
+    float: left;
+    padding-left: 7px;
+}
+
+.payTicketDesc {
+    display: block;
+    margin-top: 16px;
+}
+
+.ticketTable ul li.tableHead{
+    line-height: 50px;
+    background: #f6f8fa;
+    border-bottom: 1px solid #eeeeee;
+}
+.ticketTable ul li.tableHead .ticketItem{
+    font-weight: bold;
+}
+.ticketTable .toolBox ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.ticketTable .toolBox ul li{
+    cursor: pointer;
+    color: #2a75ed;
+    display: inline;
+}
+.ticketTable .toolBox ul li:first-child{
+    margin-right: 10px;
+}
+/*********************** 票务信息 - end *************************/
+
+.setPackageTip {
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: #b2b2b2;
+    margin: -20px 0 30px 138px;
+}
+select[disabled] {
+    background: #eee;
+    color: #ccc;
+}
+
+
+
+
+

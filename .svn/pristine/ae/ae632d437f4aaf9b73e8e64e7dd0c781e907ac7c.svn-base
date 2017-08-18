@@ -1,0 +1,115 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'exerciseSystem';
+$pageData['barTitle'] = '作业本';
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--弹窗--}}
+    <link type=text/css rel="stylesheet" href="../css/external/jquery-alert.css" />
+    <link type=text/css rel="stylesheet" href="../css/admin/exercise/manageExerciseBook.css?{{env('timestamp')}}"/>
+@stop
+
+@section('page_js')
+    {{--弹窗--}}
+    <script type="text/javascript" src="../js/external/jquery-alert.js?"></script>
+    <script type="text/javascript" src="../js/admin/exercise/manageExerciseBook.js?{{env('timestamp')}}"></script>
+@stop
+
+@section('base_mainContent')
+
+    <header class="mainHeader">
+        <a class="go_back" href="/exercise/exercise_book_list">作业本</a>
+        &nbsp;&gt;&nbsp;
+        @if($page_type == 0)新建作业本@else编辑作业本@endif
+    </header>
+
+    <main class="mainContent clearfix">
+        <div class="singleItem clearfix">
+            <div class="itemTitle">
+                作业本名称<span class="startKey">*</span>
+            </div>
+            <div class="itemContent">
+                <input class="inputDefault exerciseBookNameInput" id="exerciseBookName" placeholder="请输入名称">
+            </div>
+        </div>
+        <div class="singleItem clearfix">
+            <div class="itemTitle">
+                关联课程<span class="startKey">*</span>
+            </div>
+            <div class="itemContent">
+                <div class="relevantCourseTip">
+                    1个课程（专栏/课程）只能创建1个作业本，老师可以发布和该课程相关的作业；老师一旦布置作业后不可更改
+                </div>
+                <div class="selectorWrapper clearfix">
+                    <select class="resTypeSelector">
+                        <option value="-1">请选择类型</option>
+                        <option value="1">图文</option>
+                        <option value="2">音频</option>
+                        <option value="3">视频</option>
+                        <option value="4">直播</option>
+                        <option value="5">专栏</option>
+                    </select>
+                    <select class="resItemSelector">
+                        <option value="-1">请选择具体课程</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="singleItem clearfix">
+            <div class="itemTitle">
+                关联社群
+            </div>
+            <div class="itemContent">
+                <div class="relevantCourseTip">
+                    关联社群后，老师布置的作业将在社群内作为带作业标签的动态显示
+                </div>
+                <select class="communitySelector">
+                    <option>请选择具体社群</option>
+                </select>
+            </div>
+        </div>
+        <div class="singleItem clearfix">
+            <div class="itemTitle">
+                作业提醒<span class="startKey">*</span>
+            </div>
+            <div class="itemContent">
+                <div class="relevantCourseTip">
+                    折飞机地方Jeri法国家乐福个Jeri哦干劲儿破防
+                </div>
+                <div class="remindRadioWrapper">
+                    <div class="remindRadio" id="exerciseRemind">
+                        <span class="circleRadio radioActive"></span>
+                        <span>提醒</span>
+                    </div>
+                    <div class="remindRadio" id="exerciseNotRemind">
+                        <span class="circleRadio"></span>
+                        <span>不提醒</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mainFooter">
+        <div class="relevantCourseTip">
+            创建后，请继续完成人员（老师/助教）管理。老师可以布置和点评作业，助教可以帮助老师点评作业
+        </div>
+        <div class="footerBtnWrapper">
+            <div class="xeBtnDefault btnMid cancelSaveExerciseBtn" id="cancelSaveExercise">取消</div>
+            <div class="btnBlue btnMid confirmSaveExerciseBtn" id="confirmSaveExercise">确定</div>
+        </div>
+    </footer>
+
+@stop
+
+
+
+
+
+
+
+
+
+

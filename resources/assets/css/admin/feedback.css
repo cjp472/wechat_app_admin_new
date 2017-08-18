@@ -1,0 +1,89 @@
+/*头部*/
+.header {
+    height: 76px;
+    padding: 20px 20px 0;
+}
+/*搜索*/
+.searchArea {
+    height: 36px;
+    float: right;
+}
+.appTypeSelector {
+    float: left;
+    width: 100px;
+    margin-right: 10px;
+}
+.rulerSelector {
+    float: left;
+    width: 100px;
+    margin-right: 10px;
+}
+.searchContentInput {
+    float: left;
+    width: 200px;
+    margin-right: 10px;
+}
+.searchFeedbackBtn {
+    float: left;
+    width: 80px;
+}
+
+/*table*/
+.content
+{
+    margin: 0 20px;
+}
+/*头像及昵称*/
+th:nth-child(1),td:nth-child(1)
+{
+    text-align: left;
+}
+.avatar
+{
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+    /*margin: 10px 11px 10px 0;*/
+    cursor: pointer;
+}
+.nickname
+{
+    font:normal normal normal 14px/1.5em 'Microsoft YaHei';
+    letter-spacing: -0.3px;
+}
+
+
+
+
+.model_type{
+    width: 60px;
+    height: 35px;
+    border: 1px solid #e8e8e8;
+    display: inline-block;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.border_blue{
+    border: 1px solid #2e64cb;
+}
+.edit_model{
+    width: 80px;
+    height: 34px;
+    border: 1px solid #e8e8e8;
+    display: inline-block;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #2e64cb;
+    color: white;
+    margin-top: 8px;
+    float: left;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+

@@ -1,0 +1,107 @@
+<?php
+$pageData = [];
+$pageData['sideActive'] = 'communityOperate';
+$pageData['barTitle'] = '作业本';
+
+dump($exercise_list);
+dump($user_wx_nickname);
+
+?>
+@extends('admin.baseLayout',$pageData)
+
+@section('page_css')
+    {{--弹窗--}}
+    <link type=text/css rel="stylesheet" href="../css/external/jquery-alert.css" />
+    <link type=text/css rel="stylesheet" href="../css/admin/exercise/exerciseList.css?{{env('timestamp')}}"/>
+@stop
+
+@section('page_js')
+    {{--弹窗--}}
+    <script type="text/javascript" src="../js/external/jquery-alert.js?"></script>
+    <script type="text/javascript" src="../js/admin/exercise/exerciseList.js?{{env('timestamp')}}"></script>
+@stop
+
+@section('base_mainContent')
+
+    <header class="mainHeader">
+        <div class="pageTopTitle">
+            <a href="/exercise/exercise_book_list">作业本</a>
+            &gt;
+            作业列表
+        </div>
+        <div class="headerContent">
+            <span class="exerciseBookName">{{$user_wx_nickname}}</span>
+            <span class="exerciseBookTeacherName">老师：{{$user_wx_nickname}}</span>
+            <form class="submitSearchPart" action="/exercise/exercise_list" method="GET">
+                <input class="inputDefault searchContentInput" name="search_content" type="search"
+                       placeholder="请输入作业内容" value="{{trim($search_content)}}">
+                <button class="btnMid xeBtnDefault submitSearchBtn" type="submit">搜索</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="mainContent">
+        <div class="tableHeader">
+            <div>作业内容</div>
+            <div>布置时间</div>
+            <div>关联课程</div>
+            <div>回答数</div>
+            <div>当前状态</div>
+            <div>操作</div>
+        </div>
+        <div class="tableContent">
+            @foreach($exercise_list as $key => $value)
+                <?php
+                /*********** 关联课程 ***********/
+                $relevantRes = "";
+                switch ($value->resource_type) {
+                    case 1:
+                        $relevantRes= "图文：".$value->resource_name;
+                        break;
+                    case 2:
+                        $relevantRes= "音频：".$value->resource_name;
+                        break;
+                    case 3:
+                        $relevantRes= "视频：".$value->resource_name;
+                        break;
+                    case 4:
+                        $relevantRes= "直播：".$value->resource_name;
+                        break;
+                    case 5:
+                        $relevantRes= "专栏：".$value->resource_name;
+                        break;
+                    default:
+                        $relevantRes= "--";
+                        break;
+                }
+                ?>
+                <div class="singleExerciseItem">
+                     <div>{{$value->content}}</div>
+                     <div>{{$value->created_at}}</div>
+                     <div title="{{$relevantRes}}">{{$relevantRes}}</div>
+                     <div>123</div>
+                     <div>士大夫</div>
+                     <div>士大夫</div>
+                </div>
+            @endforeach
+        </div>
+    </main>
+
+@stop
+
+
+@section("base_modal")
+
+
+@stop
+
+
+
+
+
+
+
+
+
+
+

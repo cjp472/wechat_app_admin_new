@@ -1,0 +1,130 @@
+
+li {
+    list-style: none;
+}
+
+
+.mainHeader {
+    width: 100%;
+    height: 76px;
+    padding: 20px;
+    margin-top: 50px;
+}
+.createExerciseBookBtn {
+    float: left;
+    margin-right: 20px;
+}
+.exerciseHelpDoc {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+    color: blue;
+}
+.submitSearchPart {
+    height: 36px;
+    float: right;
+}
+.searchContentInput {
+    width: 200px;
+    float: left;
+    margin-right: 20px;
+}
+.submitSearchBtn {
+    float: left;
+}
+
+
+.mainContent {
+    width: 100%;
+    padding: 0 20px 50px;
+    height: auto;
+}
+.tableHeader {
+    width: 100%;
+    height: 50px;
+    background: #cccccc;
+}
+.tableHeader > div {
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    float: left;
+}
+.tableHeader > div:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+.tableHeader > div:nth-child(4) {
+    width: 10%;
+}
+.tableHeader > div:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+.tableHeader > div:nth-child(6) {
+    text-align: center;
+}
+
+.tableContent {
+    width: 100%;
+    padding: 0;
+}
+.exerciseBookItem {
+    width: 100%;
+    height: 70px;
+    padding: 20px 0;
+    line-height: 30px;
+    border-bottom: 1px solid #cccccc;
+}
+.exerciseBookItem > div {
+    width: 20%;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    text-align: left;
+}
+.exerciseBookItem > div:nth-child(1) {
+    text-align: left;
+    padding-left: 20px;
+}
+.exerciseBookItem > div:nth-child(4) {
+    width: 10%;
+}
+.exerciseBookItem > div:nth-child(5) {
+    width: 10%;
+    text-align: center;
+}
+
+/*********************** 操作部分 -start *************************/
+.exerciseBookItem .exerciseBookOperateArea {
+    text-align: center;
+}
+.operateList {
+    height: 30px;
+    width: 185px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+.operateList > li {
+    float: left;
+}
+.operateList > li.operate {
+    color: blue;
+    cursor: pointer;
+}
+.operateList > li.verticalGapLine {
+    color: #cccccc;
+}
+
+/*********************** 操作部分 -end*************************/
+
+
+
+
+
+
+
+
+
+

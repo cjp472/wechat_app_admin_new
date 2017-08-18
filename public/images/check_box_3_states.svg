@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="36px" height="12px" viewBox="0 0 36 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_Check</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="12" height="12" rx="2"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="12" height="12" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon_Check">
+            <use id="Combined-Shape" stroke="#C1C4CA" mask="url(#mask-2)" stroke-width="2" xlink:href="#path-1"></use>
+            <path d="M12,2.0085302 C12,0.899249601 12.9019504,0 14.0085302,0 L21.9914698,0 C23.1007504,0 24,0.901950359 24,2.0085302 L24,9.9914698 C24,11.1007504 23.0980496,12 21.9914698,12 L14.0085302,12 C12.8992496,12 12,11.0980496 12,9.9914698 L12,2.0085302 Z M21.5477891,4.34086271 L20.9416976,3.73477118 L17.3051484,7.37132034 L17.91124,7.97741187 L21.5477891,4.34086271 Z M15.4868738,5.55304576 L14.8807823,6.15913729 L17.3051484,8.5835034 L17.91124,7.97741187 L15.4868738,5.55304576 Z" id="Combined-Shape" fill="#C1C4CA"></path>
+            <path d="M24,2.0085302 C24,0.899249601 24.9019504,0 26.0085302,0 L33.9914698,0 C35.1007504,0 36,0.901950359 36,2.0085302 L36,9.9914698 C36,11.1007504 35.0980496,12 33.9914698,12 L26.0085302,12 C24.8992496,12 24,11.0980496 24,9.9914698 L24,2.0085302 Z M33.5477891,4.34086271 L32.9416976,3.73477118 L29.3051484,7.37132034 L29.91124,7.97741187 L33.5477891,4.34086271 Z M27.4868738,5.55304576 L26.8807823,6.15913729 L29.3051484,8.5835034 L29.91124,7.97741187 L27.4868738,5.55304576 Z" id="Combined-Shape-Copy" fill="#2A75ED"></path>
+        </g>
+    </g>
+</svg>

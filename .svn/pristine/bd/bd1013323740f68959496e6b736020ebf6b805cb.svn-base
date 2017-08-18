@@ -1,0 +1,576 @@
+
+._mainContentPart {
+    padding: 0 20px;
+}
+
+.base_right {
+    min-width: 1120px;
+}
+img {
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+
+
+._chosenShopDescPart {
+    width: 100%;
+    height: 190px;
+    padding: 20px 20px 0;
+
+
+}
+._chosenShopDescWrapper {
+    width: 100%;
+    height: 170px;
+    border-radius: 2px;
+    background-color: #f6f8fa;
+    border: solid 1px #eceff1;
+}
+._chosenShopIntro {
+    min-width: 1000px;
+    width: 85%;
+    margin: 20px 20px 0;
+    float: left;
+}
+._chosenShopTitle {
+    width: 100%;
+    height: 22px;
+    line-height: 22px;
+    font-size: 16px;
+    color: #353535;
+}
+._chosenShopTitle>a {
+    color: #2a75ed;
+    margin-left: 10px;
+    font-size: 14px;
+}
+._chosenShopDetail {
+    width: 100%;
+    height: 72px;
+    margin-top: 10px;
+    line-height: 24px;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    color: #353535;
+}
+._chosenShopHelpDoc {
+    height: 17px;
+    line-height: 17px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #2a75ed;
+    cursor: pointer;
+}
+
+
+/*********************** 开关按钮样式 - start *************************/
+._switchOperateArea {
+    float: right;
+    height: 78px;
+    margin: 46px 10px 0 0;
+}
+
+._verticalGapLine {
+    display: none;
+    width: 1px;
+    height: 40px;
+    margin: 19px 20px 0 0;
+    background-color: #dcdcdc;
+    float: left;
+}
+
+._functionSwitch {
+    width: 80px;
+    height: 40px;
+    margin: 19px 0 0;
+    float: left;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: .2s all ease;
+    -webkit-transition: .2s all ease;
+}
+._functionSwitchOn {
+    background-color: #2FCE6F;
+}
+._functionSwitchOff {
+    background-color: #c2c2c2;
+}
+
+._switchDescText {
+    width: 30px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    font-size: 14px;
+    color: #fff;
+    position: relative;
+    top: 0;
+    transition: .1s all ease;
+    -webkit-transition: .1s all ease;
+}
+._switchDescTextOn {
+    left: 9px;
+}
+._switchDescTextOff {
+    left: 44px;
+}
+
+._switchButtonIcon {
+    width: 36px;
+    height: 36px;
+    margin: 2px;
+    background-color: white;
+    border-radius: 18px;
+    position: relative;
+    top: 0;
+    transition: .2s all ease;
+    -webkit-transition: .2s all ease;
+}
+._switchButtonIconOn {
+    left: 40px;
+}
+._switchButtonIconOff {
+    left: 0;
+}
+/*********************** 开关按钮样式 - end *************************/
+
+/*********************** 切换部分 - start *************************/
+._tabSelectArea {
+    padding: 20px 20px 0;
+}
+._contentTabWrapper {
+    width: 100%;
+    height: 50px;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #eeeeee;
+}
+._contentTabWrapper li {
+    float: left;
+    width: 80px;
+    margin: 0 10px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+li._activeTab {
+    border-bottom: 2px solid #2a75ed;
+    color: #2a75ed;
+}
+/*********************** 切换部分 - end*************************/
+
+._mainContentWrapper {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+._mainContentPart {
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+
+/*********** 加载动画 - start ***********/
+.loadingS {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 1000;
+    background: hsla(0, 0%, 100%, .9);
+}
+.loadingSContent {
+    position: absolute;
+    width: 100px;
+    height: 90px;
+    top: 200px;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    background: hsla(0,0%,100%,.9);
+}
+.loadingS .loadingText {
+    text-align: center;
+    color: #20a0ff;
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+.loadingS .circular {
+    width: 42px;
+    height: 42px;
+    -webkit-animation: loading-rotate 2s linear infinite;
+    -moz-animation: loading-rotate 2s linear infinite;
+    animation: loading-rotate 2s linear infinite;
+}
+
+.loadingS .path {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #20a0ff;
+    stroke-linecap: round;
+    -webkit-animation: loading-dash 1.5s ease-in-out infinite;
+    -moz-animation: loading-dash 1.5s ease-in-out infinite;
+    animation: loading-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@-moz-keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@-webkit-keyframes loading-dash {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -40px;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -120px;
+    }
+}
+
+@keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@-webkit-keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@-moz-keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+/*********** 加载动画 - end ***********/
+
+/*********** 添加推广商品 - start ***********/
+
+._addDistributeGoodsWindow {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 640px;
+    height: 630px;
+    margin-top: -320px;
+    margin-left: -315px;
+    z-index: 10000;
+    background-color: #fff;
+}
+._HeaderText_3 {
+    height: 52px;
+    line-height: 52px;
+    float: left;
+    font-size: 16px;
+    margin-left: 30px;
+}
+._addGoodsWindowContent {
+    width: 100%;
+    margin-bottom: 30px;
+}
+._windowSearchPart {
+    width: 100%;
+    height: 76px;
+    position: relative;
+}
+._windowSearchPart>img {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 30px;
+    left: 40px;
+}
+._searchDistributeGoodsInput {
+    width: 240px;
+    margin: 20px 0 0 30px;
+    padding-left: 30px;
+    float: left;
+}
+._searchDistributeGoodsBtn {
+    margin: 20px 0 0 10px;
+    float: left;
+}
+._addGoodsWindowTablePart {
+    width: 100%;
+    height: auto;
+    padding: 0 30px 0;
+}
+._addGoodsWindowTableHeader {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 15px;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #eeeeee;
+}
+._addGoodsWindowTableBodyWrapper {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+._addGoodsWindowTableBody {
+    width: 100%;
+    height: 365px;
+    overflow: auto;
+    padding-bottom: 50px;
+    border-bottom: 1px solid #f2f2f2;
+}
+._addGoodsWindowTableItem {
+    width: 100%;
+    height: 72px;
+    border-bottom: 1px solid #f2f2f2;
+}
+._addGoodsWindowTableItem:hover {
+    background-color: #f6faff;
+}
+input._selectSingleDistributeGoods {
+    width: 12px;
+    height: 12px;
+    float: left;
+    margin: 30px 20px 0 0;
+}
+._singleDistributeGoodsCover {
+    width: 40px;
+    height: 30px;
+    float: left;
+    margin: 22px 10px 0 0;
+}
+._singleDistributeGoodsTitle {
+    width: 320px;
+    height: 72px;
+    line-height: 72px;
+    font-size: 14px;
+    color: #666666;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+}
+._singleDistributeGoodsTime {
+    width: 150px;
+    height: 72px;
+    line-height: 72px;
+    float: left;
+    font-size: 14px;
+    color: #666666;
+}
+
+._cancelAddDistributeGoodsBtn {
+    margin-left: 210px;
+    float: left;
+}
+._confirmAddDistributeGoods {
+    margin-left: 20px;
+    float: left;
+}
+
+/*********** 添加推广商品 - end***********/
+
+/*********** 设置商品梯度 - start ***********/
+._setGoodsGradientWindow {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 480px;
+    height: 396px;
+    margin-top: -240px;
+    margin-left: -198px;
+    z-index: 10000;
+    background-color: #fff;
+}
+._Header {
+    width: 100%;
+    height: 52px;
+    background-color: #fafbfc;
+    border-bottom: solid 1px #f2f2f2;
+}
+._HeaderText_1 {
+    height: 52px;
+    padding-left: 10px;
+    line-height: 52px;
+    float: left;
+    font-size: 16px;
+}
+._HeaderIconTip {
+    position: relative;
+    width: 14px;
+    height: 24px;
+    margin: 19px 0 0 5px;
+    padding: 0 0 10px 0;
+    float: left;
+}
+
+._HeaderIconTip:hover ._chosenShopHoverBox {
+    display: block;
+}
+._chosenShopHoverBox {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 480px;
+    line-height: 22px;
+    padding: 15px;
+    font-size: 14px;
+    border: 1px solid #eee;
+    background-color: #fcf4e3;
+    color: #353535;
+    box-shadow: 5px 5px 10px 0 rgba(0,0,0,.3);
+}
+
+._HeaderText_2 {
+    height: 52px;
+    padding-left: 10px;
+    line-height: 52px;
+    float: left;
+    font-size: 14px;
+    color: #f77849;
+}
+._HeaderIcon {
+    width: 20px;
+    height: 20px;
+    margin: 15px 15px 0 0;
+    float: right;
+    cursor: pointer;
+}
+._windowContent {
+    width: 100%;
+    margin: 40px 0 20px;
+}
+._windowLeftPart {
+    width: 190px;
+    height: 208px;
+    margin-left: 50px;
+    float: left;
+}
+._windowPartTitle {
+    width: 100%;
+    height: 20px;
+    margin-bottom: 10px;
+    line-height: 20px;
+    font-size: 14px;
+    letter-spacing: -0.2px;
+    color: #243042;
+    text-align: center;
+}
+
+._windowValueItem {
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    margin-bottom: 20px;
+}
+._windowShowValue {
+    width: 80px;
+    display: inline-block;
+    text-align: center;
+    float: left;
+}
+._windowGapLine {
+    width: 30px;
+    display: inline-block;
+    text-align: center;
+    float: left;
+}
+._windowEditableValue {
+    width: 80px;
+    float: left;
+    text-align: center;
+}
+._windowEditableValue.disabled {
+    background: rgba(204, 204, 204, 0.41);
+    border: 1px solid #ccc;
+}
+._windowRightPart {
+    width: 110px;
+    height: 208px;
+    margin-left: 86px;
+    float: left;
+}
+._windowRatioItem {
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    margin-bottom: 20px;
+}
+._windowMark {
+    margin-left: 10px;
+}
+._windowCancelBtn {
+    float: left;
+    margin-left: 130px;
+}
+._windowConfirmBtn {
+    float: left;
+    margin-left: 20px;
+}
+
+/*********** 设置商品梯度 - end***********/
+
+.contentNoData {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

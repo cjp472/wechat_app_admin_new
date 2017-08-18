@@ -1,0 +1,203 @@
+/****************************先除去base_mainContent的padding和设置背景********************/
+.base_mainContent
+{
+    padding:0;
+    background-color: #efeff4;
+}
+/***********************************************内容***************************************************/
+.content
+{
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden;
+}
+/*标题*/
+h4
+{
+    font:normal bold normal 16px/1em 'Microsoft YaHei';
+    padding-left: 30px;
+    margin:30px 0 30px 0;
+    color: #3e3e3e;
+}
+h4.leftBold{
+    position: relative;
+}
+h4.leftBold:after{
+    position: absolute;
+    left:20px;
+    content: '';
+    height:14px;
+    top:50%;
+    margin-top:-7px;
+    background-color: #2a75ed;
+    width:2px;
+}
+
+/*输入包裹*/
+.settingInputArea
+{
+    width: 100%;
+    height: 34px;
+    margin-bottom: 20px;
+    padding-bottom:16px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    position: relative;
+}
+.settingInputArea input{
+    height:34px;
+    line-height:34px;
+    padding-top:0;
+    padding-bottom:0;
+}
+.settingInputArea:after{
+    display: block;
+    clear: both;
+}
+.settingInputArea .checkArea:first-child{
+    margin-left:40px;
+}
+[type=checkbox]:checked+label:before{
+    left:0;
+    top:0;
+}
+.settingInputArea .checkArea:first-child label{
+    font-weight:bold;
+    font-size: 14px!important;
+}
+
+.defaltTips{
+    line-height:20px;
+    position:absolute;
+    left:0;
+    font-size:12px;
+    line-height:16px;
+    bottom:0;
+    color: red;
+    left:210px;
+    margin:0;
+    opacity:0;
+    visibility: hidden;
+}
+.defaltTips.active{
+    opacity:1;
+    visibility: visible;
+}
+.submitBox{
+    position: relative;
+    padding-top:70px;
+
+}
+.submitBox:after{
+    content:'';
+    position:absolute;
+    left:30px;
+    right:30px;
+    border-bottom:1px solid #eee;
+    top:45px;
+
+}
+.settingLabel
+{
+    float: left;
+    padding-left: 30px;
+    font:normal normal normal 14px/34px 'Microsoft YaHei';
+    width: 150px;
+    height: 100%;
+    margin-right: 30px;
+}
+.settingLabel span{
+    color: #e64340;
+}
+.bigFont
+{
+    font-size: 14px;
+}
+
+/*每一个checkbox和文字的块*/
+.checkArea
+{
+    width: 120px;
+    height: 34px;
+    line-height:34px;
+    float: left;
+}
+/*多选框*/
+.mycheckbox
+{
+    float: left;
+    margin-top: 6px;
+    margin-right: 5px;
+}
+/*文字*/
+.mytext
+{
+    cursor: pointer;
+    margin-left:-20px;
+    padding-left:20px;
+    font-size:12px!important;
+    position:relative;
+    top:-2px;
+    color:#353535;
+}
+.mytext:before{
+    width:9px!important;
+    height:9px!important;
+}
+/*检验账号唯一性的图片*/
+.checkImg
+{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top:6px;
+    left:500px;
+}
+/*新增账户*/
+#finish
+{
+    width: 160px;
+    height: 42px;
+    border-radius: 4px;
+    background-color: #3a7bd5;
+    border: none;
+    font: normal normal normal 16px/40px 'Microsoft YaHei';
+    color: white;
+    text-align: center;
+    letter-spacing: 2px;
+    display: block;
+    margin: 30px 10px 10px 30px;
+    cursor: pointer;
+}
+
+/*禁止编辑*/
+.forbidEdit{
+    background:#eee;
+}
+
+/*复选样式修正*/
+[type=checkbox].filled-in:checked+label:after{
+    width:14px;
+    height:14px;
+}
+[type=checkbox].filled-in:not(:checked)+label:after{
+    width:14px;
+    height:14px;
+    top:11px;
+}
+[type=checkbox].filled-in:checked+label:before{
+    top: 10px;
+    left: -1px;
+}
+
+.checkArea label:after,.checkArea label:before{
+     -webkit-box-sizing: border-box!important;
+     -moz-box-sizing: border-box!important;
+     box-sizing: border-box!important;
+
+
+ }
+[type=checkbox].filled-in:checked+label:after{
+    top:11px;
+}

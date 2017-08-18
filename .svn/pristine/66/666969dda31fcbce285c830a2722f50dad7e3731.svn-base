@@ -1,0 +1,86 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: breeze
+ * Date: 29/03/2017
+ * Time: 16:28
+ */
+
+namespace App\Http\Controllers\Tools;
+
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+
+class LogUtils
+{
+    /**
+     * 插入操作日志
+     * @param $request
+     */
+    public static function insertOperateLog($request) {
+        $logData['app_id'] = session('app_id', '');                 //获取业务id
+        $logData['open_id'] = AppUtils::getOpenId();                //获取账号openid
+        $logData['super_open_id'] = AppUtils::getSuperOpenId();    //获取超级管理员openid
+        $logData['sub_name'] = AppUtils::getSubName();             //获取子账号
+        $logData['scan_open_id'] = AppUtils::getScanOpenid();       //扫码微信id
+
+        $server = $request->server();
+        $logData['server_ip'] = $server['SERVER_ADDR'];
+        $logData['ip'] = $request->getClientIp();
+        $logData['method'] = $request->method();
+        $logData['target_url'] = $request->url();
+        $logData['referer'] = $request->headers->get('referer');
+        $logData['agent'] = $request->header('user-agent');
+        $logData['created_at'] = Utils::getTime();
+        $logData['params'] = \GuzzleHttp\json_encode(Input::all());
+        $logData['client'] = 0;
+
+        //每月一张新表
+        $logsDateTable = 't_admin_log_' . date('Y_m', time());
+
+        try {
+            DB::connection('mysql_log')->table($logsDateTable)->insertGetId($logData);
+        } catch (\Exception $e) {
+            try {
+                $createTableSql = "
+CREATE TABLE `$logsDateTable` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `app_id` varchar(64) DEFAULT NULL COMMENT '应用id',
+  `open_id` varchar(64) DEFAULT NULL COMMENT '账号openid',
+  `super_open_id` varchar(64) DEFAULT NULL COMMENT '账号openid',
+  `sub_name` varchar(64) DEFAULT NULL COMMENT '子账号名称',
+  `scan_open_id` varchar(64) DEFAULT NULL COMMENT '扫码openid',
+  `target_url` varchar(512) DEFAULT NULL COMMENT '访问的接口',
+  `method` varchar(64) DEFAULT NULL COMMENT '请求类型',
+  `server_ip` varchar(64) DEFAULT NULL COMMENT '服务器的内网ip',
+  `referer` varchar(512) DEFAULT NULL,
+  `ip` varchar(64) DEFAULT NULL COMMENT '用户的ip',
+  `agent` varchar(512) DEFAULT NULL COMMENT '客户端信息',
+  `params` text COMMENT '参数',
+  `client` int(2) NOT NULL DEFAULT '0' COMMENT '来源端（0-pc端；1-手机端微信）',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `key_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='管理台操作日志'
+";
+                DB::connection('mysql_log')->statement($createTableSql);
+                DB::connection('mysql_log')->table($logsDateTable)->insertGetId($logData);
+            } catch (\Exception $e) {}
+        }
+    }
+
+    /**
+     * 打印数据库慢日志
+     * @param $sqlReuslt
+     */
+    public static function insertSlowQueryLog($sqlReuslt) {
+        if ($sqlReuslt && !empty($sqlReuslt)) {
+            foreach ($sqlReuslt as $item) {
+                if ($item['time'] >= env('SLOW_QUERY_TIME', 1000)) {
+                    Utils::logFrom(print_r($item, 1), 'SlowQueryLog.log');
+                }
+            }
+        }
+    }
+}

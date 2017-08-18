@@ -1,0 +1,769 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Tools\AppUtils;
+use App\Http\Controllers\Tools\MessagePush;
+use App\Http\Controllers\Tools\Utils;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use League\Flysystem\Exception;
+
+class VideoController extends Controller
+{
+	private $request;
+	private $app_id;
+
+	public function __construct (Request $request)
+	{
+		$this->request = $request;
+		$this->app_id  = AppUtils::getAppID();
+	}
+
+	//创建视频页面
+	public function createVideo ()
+	{
+		//获取所有的产品包
+		$package_list = $this->getAllPackages();
+		$video_upload = Utils::getVideoUpload($this->app_id);
+		$uploadmax    = Utils::getVideoMax();
+		$isHadSetTemp = MessagePush::isHadSetTemp($this->app_id);
+
+		return view('admin.uploadVideo', compact('package_list', 'video_upload', 'uploadmax', 'isHadSetTemp'));
+	}
+
+	//编辑视频页面
+
+	public function getAllPackages ()
+	{
+		//查询所有的包
+		$package_list = \DB::table('t_pay_products')
+			->where('app_id', '=', AppUtils::getAppID())->where('state', '<', '2')
+			->orderby('created_at', 'desc')
+			->get();
+
+		return $package_list;
+	}
+
+
+	//拉取视频列表
+
+	public function editVideo ()
+	{
+		$resource_id = Input::get('id', '');
+		$video       = \DB::table('t_video')
+			->where('id', '=', $resource_id)
+			->where('app_id', '=', AppUtils::getAppID())
+			->first();
+
+		$single_sale = 0;
+
+		if ($video->payment_type != 1)//若为单卖,则判断其是否为专栏外单卖
+		{
+
+			//TODO:在关系表t_pro_res_realtion中查找该resource_id的记录
+			$is_exist = \DB::table('t_pro_res_relation')
+				->where('resource_id', '=', $resource_id)
+				->where('app_id', '=', AppUtils::getAppID())
+				->where('resource_type', '=', 3)
+				->where('relation_state', '=', 0)
+				->first();
+			if (count($is_exist)) {
+				if ($video->payment_type == 2) {
+					$single_sale = 1;
+				}
+				$video->product_id   = $is_exist->product_id;
+				$video->product_name = $is_exist->product_name;
+			}
+		}
+
+		//获取所有的产品包
+		$package_list = $this->getAllPackages();
+		$isHadSetTemp = MessagePush::isHadSetTemp($this->app_id);
+
+		return view('admin.editVideo', compact('video', 'package_list', 'single_sale', 'isHadSetTemp'));
+	}
+
+	//上传资源
+
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+	 */
+	public function getVideoList ()
+	{
+		//视频列表
+		$resource_attr  = Input::get('resource_attr', 'title');
+		$search_content = Input::get('search_content', '');
+		$app_id         = AppUtils::getAppID();
+		if (empty($search_content)) {
+			$videos = \DB::table('t_video')
+				->where('app_id', '=', $app_id)
+				->where('video_state', '!=', 2)
+				->orderby('start_at', 'desc')
+				->paginate(10);
+		} else {
+			$videos = \DB::table('t_video')
+				->where('app_id', '=', $app_id)
+				->where('video_state', '!=', 2)
+				->where($resource_attr, 'like', '%' . $search_content . '%')
+				->orderby('start_at', 'desc')
+				->paginate(10);
+		}
+
+		if ($videos) {
+			if (session('wxapp_join_statu') == 1 || session('is_collection') == 1) {
+				if (session('is_collection') == 0) {
+					$pageUrl = AppUtils::getUrlHeader($app_id) . session('wx_app_id') . '.' . env('DOMAIN_NAME');
+				} else {
+					$pageUrl = AppUtils::getUrlHeader($app_id) . env('DOMAIN_DUAN_NAME');
+				}
+				foreach ($videos as $key => $video) {
+					$video->pageurl = $pageUrl . Utils::getContentUrl(2, 3, $video->id, $video->product_id);
+				}
+			}
+			foreach ($videos as $key2 => $video2) {
+
+				//  查询每一条视频在关系表中的状态
+				$relation = \DB::table('t_pro_res_relation')
+					->where('app_id', '=', $app_id)
+					->where('resource_id', '=', $video2->id)
+					->where('resource_type', '=', 3)
+					->where('relation_state', '！=', 1)
+					->first();
+				if (empty($relation) || empty($relation->product_id) || empty($relation->product_name)) {
+					//  查不到数据，单卖
+					$videos[ $key2 ]->product_id   = '';
+					$videos[ $key2 ]->product_name = '';
+				} else {
+					//  查到数据，专栏内单卖
+					$videos[ $key2 ]->product_id   = $relation->product_id;
+					$videos[ $key2 ]->product_name = $relation->product_name;
+				}
+			}
+		}
+		//查询总数
+		$total = \DB::select("select count(1) as count from t_video where app_id = '$app_id'")[0];
+
+		$video_upload = Utils::getVideoUpload($app_id);
+		$uploadmax    = Utils::getVideoMax();
+
+		return view('admin.videoList', compact('videos', 'resource_attr', 'search_content', 'total', 'video_upload', 'uploadmax'));
+	}
+
+	//保存资源编辑
+
+	public function uploadResource ()
+	{
+		$video_upload = Utils::getVideoUpload(AppUtils::getAppID());
+		$uploadmax    = Utils::getVideoMax();
+		if ($video_upload > $uploadmax) {
+			return response()->json(['code' => -1, 'msg' => "新增失败,限量每天新增 $uploadmax 个视频，敬请明天再传！"]);
+		}
+
+		$resource_type = Input::get('resource_type', 'video');
+		$params        = Input::get('params', '');
+
+		if (array_key_exists('payment_type', $params)
+			&& array_key_exists('piece_price', $params)
+			&& $params['payment_type'] == 2
+			&& $params['piece_price'] == 0) {
+			return response()->json(['code' => -521, 'msg' => '上传失败，单价需大于0元!']);
+		}
+
+		//若客户使用的是"个人运营模式"即use_collection=1,则限制其piece_price不能超过200元
+		$model_result = \DB::connection("mysql_config")->table("t_app_conf")
+			->where("app_id", "=", AppUtils::getAppIdByOpenId(AppUtils::getOpenId()))
+			->where("wx_app_type", "=", 1)->first();
+
+		if ($model_result->use_collection == 1) {
+			if (array_key_exists('piece_price', $params) && $params['piece_price'] > 100000) {
+				//TODO:返回操作失败,个人运营模式下 定价不能超过1000元
+				return response()->json(['code' => -521, 'msg' => '上传失败，单价不能超过1000元!']);
+			}
+		}
+
+		$relation_at = 0;//资源关系更新参数
+		$addpackage  = 1; //资源包新增参数
+		if ($resource_type == 'video') {
+			$externalParams   = Input::get('resource_params', '');
+			$public_file_id   = $externalParams['public_video'];
+			$public_size_text = $externalParams['public_size_text'];
+			$public_size_text = explode("M", $public_size_text)[0]; //去掉M
+
+			$params['file_id']    = $public_file_id;
+			$params['video_size'] = $public_size_text;
+			$params['video_url']  = ''; //暂时置空,转码后获取url
+
+			//判断是否上传了视频贴片,如果没上传用视频封面做贴片
+			if (!array_key_exists('patch_img_url', $params)) {
+				$params['patch_img_url']            = $params['img_url'];
+				$params['patch_img_url_compressed'] = $params['img_url_compressed'];
+			}
+
+			//转码之前,视频置为下架
+			$params['video_state'] = 1;
+			$addpackage            = 0; //资源包新增参数
+
+		}
+
+		//分离descrb
+		$params['descrb'] = $this->sliceUE($params['descrb']);
+		if ($params['descrb'] == false) {
+			//编辑器内容有问题 给前端返回提示信息并取消上传
+			return response()->json(['code' => -2, 'msg' => '上传失败，复制的内容有问题，请尝试分开复制，或记录复制内容并联系技术小哥']);
+		}
+		//插入当前时间
+		$app_id               = AppUtils::getAppID();
+		$current_time         = Utils::getTime();
+		$params['created_at'] = $current_time;
+		$params['updated_at'] = $current_time;
+
+		$table_name = 't_video';
+		$id         = Utils::getUniId('v_');
+		//      $this->videoDeal($params['video_url'], $id);
+
+		$params['id'] = $id;
+
+		$params['app_id'] = $app_id;
+
+		//更新资源关系
+		if ($params['payment_type'] == 3) {
+			$relation_at               = 1;
+			$relation['app_id']        = $app_id;
+			$relation['product_id']    = $params['product_id'];
+			$relation['product_name']  = $params['product_name'];
+			$relation['resource_type'] = '3';
+			$relation['resource_id']   = $id;
+			$relation['created_at']    = Utils::getTime();
+
+			// 如果用户开启了消息推送
+			if (!empty($params['push_state'])) {
+				if ($params['push_state'] == 1) $params['push_state'] = 1;
+			}
+
+			//属于该专栏的该音频资源可以单卖
+			$is_single_sale = Input::get('is_single_sale', 0);
+			//在表t_pro_res_relation中插入该关系
+			//                $result_relation = \DB::table('t_pro_res_relation')->insert($relation);
+			if ($is_single_sale == 1) $params['payment_type'] = 2;
+
+		}
+
+		$result = \DB::table($table_name)->insert(
+			$params
+		);
+
+		//获取资源中所有图片大小,并更新至image_size_total中
+		$item = \DB::table($table_name)->where('app_id', '=', $app_id)->where('id', '=', $id)->first();
+		if ($item) {
+			Utils::updateVideoImgTotalSize($item);
+		}
+
+		//新增资源默认为上架状态情况下
+		if ($result && $addpackage) //资源包新增参数
+		{
+			//产品包资源数加1
+			if ($resource_type != 'package' && $params['payment_type'] == 3) {
+				$product_id    = $params['product_id'];
+				$update_result = \DB::update("UPDATE t_pay_products SET resource_count=resource_count+1 WHERE id='$product_id' and app_id = '$app_id'");
+			}
+		}
+
+		if ($result) {
+			//图片压缩
+			if (array_key_exists('img_url', $params)) $this->imageDeal($params['img_url'], $table_name, $id);//,160,120,60);
+			if (array_key_exists('patch_img_url', $params)) $this->imageDealo($params['patch_img_url'], $table_name, $id, 750, 420, 60, 'patch_img_url_compressed');
+
+		}
+
+		if ($result > 0 || $result) {
+			if ($relation_at) {
+				$relation_add = \DB::table("t_pro_res_relation")->insert($relation);
+			}
+
+			return response()->json(['code' => 0, 'msg' => '新增成功']);
+		} else {
+			return response()->json(['code' => -1, 'msg' => '新增失败']);
+		}
+	}
+
+	//保存快捷编辑////上下架删除资源等操作时 同步更新专栏期数值
+
+	public function sliceUE ($html)
+	{
+		$content = [];
+		$out     = explode('<', $html);
+		for ($i = 0; $i < count($out); $i++) {
+			$in = explode('>', $out[ $i ]);
+			for ($j = 0; $j < count($in); $j++) {
+				$length = count($content);
+				if (strstr($in[ $j ], 'img')) {
+					$content[ $length ]["type"] = 1;
+					try {
+						if (!isset(explode('src="', $in[ $j ])[1])) {
+							throw new Exception("复制的内容有问题，请尝试分开复制，或记录复制内容并联系技术小哥");
+						} else {
+							$content[ $length ]["value"] = explode('"', explode('src="', $in[ $j ])[1])[0];
+						}
+					} catch (Exception $e) {
+						//var_dump($e->getMessage());
+						return false;
+					}
+
+				} else {
+					//                    $text=str_replace(array("\r", "\n", "\r\n"),'',$in[$j]);
+					//                    $text = $in[$j];
+					//                    if(!empty($text))
+					//                    {
+					//                        $content[$length]["type"]=0;
+					//                        $content[$length]["value"]=$text;
+					//                    }
+					$content[ $length ]["type"]  = 0;
+					$content[ $length ]["value"] = $in[ $j ];
+				}
+			}
+		}
+
+		return json_encode($content, JSON_UNESCAPED_UNICODE);
+	}
+
+	//查询所有的专栏
+
+	/**
+	 *图片处理
+	 *
+	 * @param $image_url
+	 * @param $table_name
+	 * @param $image_id
+	 */
+	public function imageDeal ($image_url, $table_name, $image_id)
+	{
+		$host_url = env('HOST_URL');
+		$app_id   = AppUtils::getAppID();
+
+		Utils::asyncThread($host_url . '/downloadImage?image_id=' . $image_id . '&app_id='
+			. $app_id . '&table_name=' . $table_name . '&file_url=' . $image_url);
+
+		Utils::log("async of out");
+	}
+
+	/**
+	 *图片处理
+	 *
+	 * @param $image_url
+	 * @param $table_name
+	 * @param $image_id
+	 * @param $image_width   压缩尺寸 宽度
+	 * @param $image_height  压缩尺寸 高度
+	 * @param $image_quality 压缩参数 质量值
+	 * @param $compressed    缩略图存储字段
+	 */
+	public function imageDealo ($image_url, $table_name, $image_id, $image_width, $image_height, $image_quality, $compressed)
+	{
+		$host_url = env('HOST_URL');
+		$app_id   = AppUtils::getAppID();
+
+		Utils::asyncThread($host_url . '/downloadImaged?image_id=' . $image_id . '&app_id='
+			. $app_id . '&table_name=' . $table_name . '&file_url=' . $image_url
+			. '&image_width=' . $image_width . '&image_height=' . $image_height . '&image_quality=' . $image_quality
+			. '&compressed=' . $compressed);
+
+		Utils::log("asyncoo of out");
+	}
+
+	public function updateResource ()
+	{
+		$resource_type  = Input::get('resource_type', 'video');
+		$resource_id    = Input::get('id', '');
+		$params         = Input::get('params', '');
+		$externalParams = Input::get('resource_params', '');
+
+		$is_single_sale = Input::get('is_single_sale', -1);
+
+		//若为单笔,则价格不能为零
+		if (array_key_exists('payment_type', $params)
+			&& array_key_exists('piece_price', $params)
+			&& $params['payment_type'] == 2
+			&& $params['piece_price'] == 0) {
+			return response()->json(['code' => -521, 'msg' => '上传失败，单价需大于0元!']);
+		}
+
+		//若客户使用的是"个人运营模式"即use_collection=1,则限制其piece_price不能超过200元
+		$model_result = \DB::connection("mysql_config")->table("t_app_conf")
+			->where("app_id", "=", AppUtils::getAppIdByOpenId(AppUtils::getOpenId()))
+			->where("wx_app_type", "=", 1)->first();
+
+		if ($model_result->use_collection == 1) {
+			if (array_key_exists('piece_price', $params) && $params['piece_price'] > 100000) {
+				//TODO:返回操作失败,个人运营模式下 定价不能超过1000元
+				return response()->json(['code' => -521, 'msg' => '编辑失败，"个人运营模式"下单价不能超过1000元!']);
+			}
+		}
+
+		if (!empty($externalParams)) {
+			$public_file_id   = $externalParams['public_video'];
+			$public_size_text = $externalParams['public_size_text'];
+			$public_size_text = explode("M", $public_size_text)[0]; //去掉M
+
+			$params['file_id']    = $public_file_id;
+			$params['video_size'] = $public_size_text;
+			//                $params['video_url'] = ''; //暂时置空,转码后获取url
+		}
+		//如果改了视频,先置为1
+		$editPackage = 0;
+		if (array_key_exists("file_id", $params)) {
+			$params['video_state']  = 1;
+			$params['is_transcode'] = 0;
+			$editPackage            = 1; //产品包操作参数
+		}
+
+		//分离descrb
+		if (array_key_exists('descrb', $params)) {
+			$params['descrb'] = $this->sliceUE($params['descrb']);
+			if ($params['descrb'] == false) {
+				//编辑器内容有问题 给前端返回提示信息并取消上传
+				return response()->json(['code' => -2, 'msg' => '上传失败，复制的内容有问题，请尝试分开复制，或记录复制内容并联系技术小哥']);
+			}
+		}
+		//插入当前时间
+		$app_id               = AppUtils::getAppID();
+		$current_time         = Utils::getTime();
+		$params['updated_at'] = $current_time;
+
+		$table_name = 't_video';
+		//资源关系表更新\新增
+		$relation_at  = 0;
+		$relation_add = 0;
+		$resourceType = [
+			'article' => '1',
+			'audio'   => '2',
+			'video'   => '3',
+			'alive'   => '4',
+		];
+		$old          = \DB::select("select * from " . $table_name . " where app_id = ? and id = ?", [$app_id, $resource_id]);
+
+		/****************消息推送***************/
+		if (!empty($old['push_state'])) {
+			if ($old['push_state'] == 2 || $params['push_state'] == 2) {
+				Utils::array_remove($params, 'push_state');
+			}
+		}
+
+		//当payment_type发生改变时
+		if (array_key_exists('payment_type', $params)) {
+			$oldType = $old[0]->payment_type;
+			$newType = $params['payment_type'];
+
+			//如果改了视频,先置为1 ：自动改为下架
+			if ($editPackage) {
+				//如果是专栏资源数要减一
+				if ($oldType == 3) {
+					$dec = \DB::update("update t_pay_products set resource_count=resource_count-1 where app_id = ? and id = ?",
+						[$app_id, $old[0]->product_id]);
+
+					//重置video_state旧值
+					if ($dec) {
+						$old[0]->video_state = 1;
+					}
+				}
+			}
+			$editPackage = $old[0]->video_state;
+
+			$old_is_single_sale = 0;
+
+			//判断是否为专栏外单卖
+			if ($oldType == 2) {
+				$is_exist = \DB::select("select * from t_pro_res_relation where app_id = ? and resource_type = 3 and resource_id = ? and relation_state=0", [$app_id, $resource_id]);
+				if (count($is_exist)) {
+					$old_is_single_sale = 1;
+				}
+			}
+
+			//单个变为产品包
+			if ($oldType != 3 && $newType == 3) {
+				//资源关系
+				//$relation_add = 1;
+				//TODO:检测该resource_id在资源关系表中是否存在记录,若有则更新专栏信息,若无则标志新增关系
+				$is_exist = \DB::select("select * from t_pro_res_relation where app_id = ? and resource_type = 3 and resource_id = ? ", [$app_id, $resource_id]);
+				if (count($is_exist)) {
+					$relation_at                = 1; //更新
+					$relation['updated_at']     = Utils::getTime();
+					$relation['relation_state'] = 0;
+
+				} else {
+					$relation_add            = 1;
+					$relation['created_at']  = Utils::getTime();
+					$relation['app_id']      = $app_id;
+					$relation['resource_id'] = $resource_id;
+				}
+
+				$relation['product_id']    = $params['product_id'];
+				$relation['resource_type'] = '3';
+				$relation['product_name']  = $params['product_name'];
+
+				if ($is_single_sale == 1)//该资源可以专栏外单卖
+				{
+					$params['payment_type'] = 2;
+				}
+			} //产品包变为单个
+			else if (($oldType == 3 || $old_is_single_sale == 1) && $newType != 3) {
+				$old_relation = \DB::select("select * from t_pro_res_relation where app_id = ? and product_id = ? and resource_type=$resourceType[$resource_type] and resource_id = ? and relation_state =0",
+					[$app_id, $old[0]->product_id, $resource_id]);
+				if ($old_relation) {
+					$relation_at = 2; //更新
+					//                    $relation['relation_state'] = 0;
+					//                    $relation['updated_at'] = Utils::getTime();
+
+					//清除params中有关专栏的信息
+					//                    $params['product_name'] = "";
+					//                    $params['product_id'] = "";
+				}
+			} //产品包之间转换
+			else if ($oldType == 3 && $newType == 3) {
+				//+1
+				//资源关系
+				//                $relation_add = 1;
+				//-1
+				$old_relation = \DB::select("select * from t_pro_res_relation where app_id = ? and resource_type=$resourceType[$resource_type] and resource_id = ?",
+					[$app_id, $resource_id]);
+				if ($old_relation) {
+					$relation_at                = 1; //更新
+					$relation['updated_at']     = Utils::getTime();
+					$relation['relation_state'] = 0;
+				} else {
+					$relation_add       = 1;
+					$relation['app_id'] = $app_id;
+
+					$relation['resource_id'] = $resource_id;
+					$relation['created_at']  = Utils::getTime();
+				}
+
+				$relation['product_id']    = $params['product_id'];
+				$relation['resource_type'] = '3';
+				$relation['product_name']  = $params['product_name'];
+
+				if ($is_single_sale == 1)//该资源可以专栏外单卖
+				{
+					$params['payment_type'] = 2;
+				}
+			}
+
+			//资源为上架状态，更新相关产品包计数
+			if ($editPackage == 0) {
+				//单个变为产品包
+				if ($oldType != 3 && $newType == 3) {
+					$updateCount = \DB::update("update t_pay_products set resource_count=resource_count+1 
+                where app_id = ? and id = ?", [$app_id, $params['product_id']]);
+				} //产品包变为单个
+				else if ($oldType == 3 && $newType != 3) {
+					$updateCount = \DB::update("update t_pay_products set resource_count=resource_count-1 
+                where app_id = ? and id = ?", [$app_id, $old[0]->product_id]);
+					//将资源的专栏id 和 专栏名称 置空
+					$updateResource = \DB::update("update " . $table_name . " set product_id=null,product_name=null 
+                where app_id = ? and id = ?", [$app_id, $resource_id]);
+				} //产品包之间转换
+				else if ($oldType == 3 && $newType == 3) {
+					//+1
+					$updateCount = \DB::update("update t_pay_products set resource_count=resource_count+1 
+                where app_id = ? and id = ?", [$app_id, $params['product_id']]);
+					//-1
+					$updateCount = \DB::update("update t_pay_products set resource_count=resource_count-1 
+                where app_id = ? and id = ?", [$app_id, $old[0]->product_id]);
+				}
+			}
+
+		}
+
+		$result = \DB::table($table_name)
+			->where('id', '=', $resource_id)
+			->where('app_id', '=', $app_id)
+			->update($params);
+
+		//获取资源中所有图片大小,并更新至image_size_total中
+		$item = \DB::table($table_name)->where('app_id', '=', $app_id)->where('id', '=', $resource_id)->first();
+		if ($item) {
+			Utils::updateVideoImgTotalSize($item);
+		}
+
+		//图片压缩
+		if ($result) {
+			if (array_key_exists('img_url', $params)) $this->imageDeal($params['img_url'], $table_name, $resource_id);//,160,120,60);
+			if (array_key_exists('patch_img_url', $params)) $this->imageDealo($params['patch_img_url'], $table_name, $resource_id, 750, 420, 60, 'patch_img_url_compressed');
+		}
+
+		if ($result >= 0 || $result) {
+			//资源关系更新
+			if ($relation_at == 1) {
+				$relation_at = \DB::table('t_pro_res_relation')
+					->where('app_id', '=', $app_id)
+					->where('resource_type', '=', $resourceType[ $resource_type ])
+					->where('resource_id', '=', $resource_id)
+					//                    ->where('relation_state','=','0')
+					->update($relation);
+			}
+			//删除关系
+			if ($relation_at == 2) {
+				//解除旧的资源关系 一对多不指定专栏//->where('product_id','=',$old[0]->product_id)
+				$relation_at = \DB::table("t_pro_res_relation")
+					->where('app_id', '=', $app_id)
+					->where('resource_type', '=', $resourceType[ $resource_type ])
+					->where('resource_id', '=', $resource_id)
+					->update(['relation_state' => '1']);
+			}
+			if ($relation_add) {
+				$relation_time = Utils::getTime();
+				/*//$package = array('$params[product_id]');
+				if(count(package)){foreach($package as $product_id){}}
+				 */
+				$relation_add = \DB::connection('mysql')->insert("
+                    insert into t_pro_res_relation SET app_id = '$app_id', product_id = '$params[product_id]',product_name='$params[product_name]', 
+                    resource_type = '3', resource_id = '$resource_id', created_at = '$relation_time'on duplicate key update 
+                    relation_state = '0' ,updated_at = '$relation_time'");
+			}
+
+			return response()->json(['code' => 0, 'msg' => '修改成功']);
+		} else {
+			return response()->json(['code' => -1, 'msg' => '修改失败']);
+		}
+	}
+
+	public function saveVideoEdit ()
+	{
+		$resource_type = Input::get('resource_type', 'video');
+		$resource_id   = Input::get('id', '');
+
+		$params = Input::get('params', '');
+
+		//        //资源关系表更新\新增
+		//        $relation_at = 0;$relation_add = 0;
+		//        $resourceType = array(
+		//            'article' => '1',
+		//            'audio' => '2',
+		//            'video' => '3',
+		//            'alive' => '4'
+		//        );
+
+		$externalParams = Input::get('resource_params', '');
+		if (!empty($externalParams)) {
+			$public_file_id   = $externalParams['public_video'];
+			$public_size_text = $externalParams['public_size_text'];
+			$public_size_text = explode("M", $public_size_text)[0]; //去掉M
+
+			$params['file_id']    = $public_file_id;
+			$params['video_size'] = $public_size_text;
+			//                $params['video_url'] = ''; //暂时置空,转码后获取url
+		}
+
+		//插入当前时间
+		$app_id               = AppUtils::getAppID();
+		$current_time         = Utils::getTime();
+		$params['updated_at'] = $current_time;
+
+		$table_name = 't_video';
+
+		if (array_key_exists('video_state', $params)) {
+			$resourceInfo = \DB::select("select * from " . $table_name . " where app_id = ? and id = ?", [$app_id, $resource_id]);
+			$editPackage  = $resourceInfo[0]->video_state;
+			$params_state = $params['video_state'];
+		}
+
+		$result = \DB::table($table_name)
+			->where('id', '=', $resource_id)
+			->where('app_id', '=', $app_id)
+			->update($params);
+
+		////上下架删除资源等操作 需同步更新专栏期数值
+		if (array_key_exists('video_state', $params)) {
+			//$result && $resourceInfo[0]->payment_type == 3
+			if ($result) {
+				////下架资源操作时 同步相关专栏期数值
+				if ($params_state == 1) {
+					if ($editPackage == 0) {
+						$updatePackage = \DB::update("update t_pay_products set resource_count=resource_count-1
+                  where app_id = ? and id = ?", [$app_id, $resourceInfo[0]->product_id]);
+					} else {
+						$updatePackage = 1;
+					}
+
+					if ($updatePackage) return response()->json(['code' => 0, 'msg' => '下架成功']);
+				}
+				////上架架资源操作时 同步相关专栏期数值
+				if ($params_state == 0) {
+					$updatePackage = \DB::update("update t_pay_products set resource_count=resource_count+1
+                  where app_id = ? and id = ?", [$app_id, $resourceInfo[0]->product_id]);
+
+					if ($updatePackage) return response()->json(['code' => 0, 'msg' => '上架成功']);
+				}
+				////删除资源操作state == 2 需同步更新专栏期数值
+				if ($params_state == 2) {
+					if ($editPackage == 0) {
+						$updatePackage = \DB::update("update t_pay_products set resource_count=resource_count-1
+                  where app_id = ? and id = ?", [$app_id, $resourceInfo[0]->product_id]);
+					} else {
+						$updatePackage = 1;
+					}
+
+					//更新资源关系表中记录为删除状态
+					if ($resourceInfo[0]->payment_type != 1) {
+						//检测在资源表中是否存在记录
+						$is_exist = \DB::select("select * from t_pro_res_relation where app_id = ? and resource_type = 3 and resource_id = ? and relation_state=0", [$app_id, $resource_id]);
+						if (count($is_exist)) {
+							$relation_at = \DB::table("t_pro_res_relation")
+								->where('app_id', '=', $app_id)
+								->where('resource_type', '=', 3)
+								->where('resource_id', '=', $resource_id)
+								->update(['relation_state' => '1']);
+						}
+					}
+
+					if ($updatePackage) return response()->json(['code' => 0, 'msg' => '删除成功' . $editPackage]);
+
+				}
+			}
+		}
+
+		if ($result >= 0 || $result) {
+			return response()->json(['code' => 0, 'msg' => '修改成功']);
+		} else {
+			return response()->json(['code' => -1, 'msg' => '修改失败']);
+		}
+	}
+
+	//分隔文本编辑器的内容
+
+	/**
+	 * 视频处理
+	 *
+	 * @param $video_url
+	 * @param $video_id
+	 */
+	public function videoDeal ($video_url, $video_id)
+	{
+		$host_url = env('HOST_URL');
+		$app_id   = AppUtils::getAppID();
+
+		Utils::asyncThread($host_url . '/downloadVideo?video_id=' . $video_id . '&app_id=' . $app_id . '&file_url=' . $video_url);
+		//        Utils::asyncThread($host_url.'/downloadVideo');
+		Utils::log("async of out");
+	}
+
+	// 用户服务号所属行业设置（教育/培训） 生成模板id
+
+	public function isGetIndustry ()
+	{
+		$app_id = AppUtils::getAppID();
+
+		$result = MessagePush::getIndustry($app_id);
+
+		return $result;
+
+	}
+}
+
+
+
+
+
+
+
+

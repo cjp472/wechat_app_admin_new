@@ -1,0 +1,123 @@
+$blue: #2a75ed;
+$black: #353535;
+$bgGrey: #fafbfc;
+$grey: #666666;
+$fontSize: 14px;
+
+body {
+  color: $black;
+  font-size: $fontSize;
+}
+
+.Header {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0px 20px;
+  text-align: left;
+  background: $bgGrey;
+  border: 1px solid #eeeeee;
+  a {
+    color: $grey;
+  }
+  span {
+    cursor: pointer;
+  }
+}
+
+//修改密码
+.content {
+  height: auto;
+  margin-top: 30px;
+  margin-left: 40px;
+  .contentHeader {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+
+    &:before {
+      content: "";
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      position: relative;
+      top: 0;
+      left: 0;
+      background: $blue;
+    }
+
+  }
+  .contentPart {
+    padding: 28px 0 10px 0;
+    border-bottom:1px solid #f2f2f2;
+    .contentSection{
+      margin: 17px 0 33px 0;
+      height: 36px;
+      & > div{
+        float: left;
+        line-height:36px;
+      }
+      .sectionTitle {
+        width: 130px;
+        text-align: left;
+      }
+      .sectionContent{
+        position: relative;
+        & >div,& >input{
+          float: left;
+        }
+        .identifyCodeInput{
+          width:400px;
+        }
+        .successTip,.errorTip{
+          position: absolute;
+          display: none;
+          left: 370px;
+          top: 8px;
+          width: 20px;
+          height: 20px
+        }
+        .passwordInput,.passwordInputAgain{
+          width: 520px;
+        }
+
+        .borderRed{
+          border-color:red;
+        }
+
+        .errorMsgFirst,.errorMsgSecond{
+          position: absolute;
+          color: red;
+          top: 32px;
+          left: 1px;
+          font-size: 12px;
+        }
+        .getCodeBtn{
+          position: relative;
+          margin-left:20px;
+          color: white;
+          background: $blue;
+          border: 1px solid #dcdcdc;
+        }
+
+        .preventClickBtn{
+          background: #ecedef;
+          color: #888888;
+          border:1px solid #e5e7eb;
+        }
+      }
+    }
+
+  }
+  .confirmBtn{
+     float: left;
+    margin-left: 170px;
+    margin-top:30px
+  }
+  .cancelBtn{
+    float: left;
+    margin-top: 30px;
+    margin-left: 20px;
+  }
+}
+

@@ -1,0 +1,49 @@
+<template>
+    <div class="choose-tab-part">
+        <div class="tab-part-title" v-for="(item, index) in tab_index"
+             :class="{ 'activate': active==index}"
+             @click="tabClick(index)"
+        >{{item}}
+        </div>
+    </div>
+</template>
+
+<script>
+    import EventBus from '../../../libs/eventbus';
+    export default {
+        props: ['tab_index'],
+        data: function(){
+            return {
+                active:0
+            };
+        },
+        methods: {
+            tabClick: function(index){
+                this.active = index;
+                EventBus.$emit('change_tab', index);
+            }
+        }
+    }
+</script>
+
+<style>
+    .choose-tab-part {
+        height: 40px;
+        line-height: 40px;
+        margin: 0 30px;
+        background-color: #fafbfc;
+        font-size: 0;
+    }
+    .tab-part-title {
+        display: inline-block;
+        width: 100px;
+        text-align: center;
+        font-size: 16px;
+        color: #353535;
+        cursor: pointer;
+    }
+    .activate {
+        color: #2a75ed;
+        border-bottom: 2px solid #2a75ed;
+    }
+</style>
